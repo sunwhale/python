@@ -27,38 +27,38 @@ def get_files(path):
             fns.append( [ root , fn ] )
     return fns
 #==============================================================================
-# is_text_file
+# is_suffix_file
 #==============================================================================
-def is_text_file(filename):
+def is_suffix_file(filename,suffixs=[]):
     b = False
-    suffixs = ['txt','dat','log']
     for suffix in suffixs:
         if filename.split('.')[-1] == suffix:
             b = True
     return b
+#==============================================================================
+# is_text_file
+#==============================================================================
+def is_text_file(filename):
+    return is_suffix_file(filename,suffixs=['txt','dat','log'])
 #==============================================================================
 # is_csv_file
 #==============================================================================
 def is_csv_file(filename):
-    b = False
-    suffixs = ['csv']
-    for suffix in suffixs:
-        if filename.split('.')[-1] == suffix:
-            b = True
-    return b
-    
-AbaqusTempDirectory = 'F:\\Temp\\IN7183\\'
-AbaqusOutputDirectory = 'F:\\Temp\\IN718_Sim\\'
-if not os.path.isdir(AbaqusOutputDirectory):
-    os.makedirs(AbaqusOutputDirectory)
-    print 'Create new directory:',AbaqusOutputDirectory
-            
-filenames = get_files(AbaqusTempDirectory)
-for filename in filenames:
-    if is_csv_file(filename[1]):
-        print filename
-        fullname = filename[0] + '\\' + filename[1]
-        shutil.copy(fullname, AbaqusOutputDirectory)
+    return is_suffix_file(filename,suffixs=['csv'])
+#==============================================================================
+# copy_suffix_files
+#==============================================================================
+def copy_suffix_files(input_directory,output_directory,suffixs=[]):
+    if not os.path.isdir(output_directory):
+        os.makedirs(output_directory)
+        print 'Create new directory: ',output_directory
+    filenames = get_files(input_directory)
+    for filename in filenames:
+        if is_suffix_file(filename[1],suffixs=suffixs):
+            fullname = filename[0] + '\\' + filename[1]
+            shutil.copy(fullname, output_directory)
+            print 'copy %-s  to  %-s' % (fullname,output_directory)
+#copy_suffix_files('F:\\Temp\\IN7183\\','F:\\Temp\\IN718_Sim\\',suffixs=['csv'])
 #==============================================================================
 # obtain_masing_curve
 #==============================================================================

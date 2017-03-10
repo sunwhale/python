@@ -9,14 +9,17 @@ import numpy as np
 from scipy.optimize import fsolve
 
 class Node:
-    def __init__(self, nodelabel=1, dimension=3, time=[], coordinate=[], displacement=[], stress=[], strain=[]):
+    def __init__(self, nodelabel=1, dimension=3, time=[], coordinate=[], 
+                 displacement=[], stress=[], strain=[], temperature=[]):
         self.nodelabel = nodelabel
         self.dimension = dimension
-        self.time_list = time
+        self.time_list = [t for t in time]
+        self.temperature_list = [t for t in temperature]
         self.coordinate_list = [[i for i in c[:dimension]] for c in coordinate]
         self.displacement_list = [[i for i in d[:dimension]] for d in displacement]
         self.strain_list = [[i[:dimension] for i in s[:dimension]] for s in strain]
         self.stress_list = [[i[:dimension] for i in s[:dimension]] for s in stress]
+        
     def __str__(self):
         return 'node %s at time %s' % (str(int(self.nodelabel)),str(self.time))
         
@@ -120,6 +123,13 @@ class Node:
         
     def sigmaNmax(self, transformation):
         return max(self.normalStress(transformation))
+    
+    def temperatureAtSigmaNmax(self, transformation):
+        normalstress_list = self.normalStress(transformation)
+        max_normalstress = max(normalstress_list)
+        max_normalstress_index = normalstress_list.index(max_normalstress)
+        temperature_at_sigma_nmax = self.temperature_list[max_normalstress_index]
+        return temperature_at_sigma_nmax
         
     def tauNmax(self, transformation):
         return max(self.shearStressEqv(transformation))
@@ -185,12 +195,14 @@ class Node:
         delta_epsilon_critical_plane = self.deltaEpsilon(transformation_critical_plane)
         tau_nmax_critical_plane = self.tauNmax(transformation_critical_plane)
         delta_tau_critical_plane = self.deltaTau(transformation_critical_plane)
+        temperature_at_sigma_nmax_critical_plane = self.temperatureAtSigmaNmax(transformation_critical_plane)
         
         line_format = '%-40s'
         line_format_strain = line_format + '%.4f%%'
         line_format_stress = line_format + '%.2fMPa'
         line_format_coefficient = line_format + '%.6f'
         line_format_life = line_format + '%d'
+        line_format_temperature = line_format + '%.1fC'
         
         print line_format_strain % ('delta_gamma_max',delta_gamma_max*100)
         print line_format_stress % ('sigma_nmax_critical_plane',sigma_nmax_critical_plane)
@@ -198,6 +210,7 @@ class Node:
         print line_format_strain % ('delta_epsilon_critical_plane',delta_epsilon_critical_plane*100)
         print line_format_stress % ('tau_nmax_critical_plane',tau_nmax_critical_plane)
         print line_format_stress % ('delta_tau_critical_plane',delta_tau_critical_plane)
+        print line_format_temperature % ('temperature_at_sigma_nmax_critical_plane',temperature_at_sigma_nmax_critical_plane)
 
         fs_coefficient=delta_gamma_max/2.0*(1.0+k*sigma_nmax_critical_plane/yield_stress)
         

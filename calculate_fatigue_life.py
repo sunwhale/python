@@ -34,10 +34,12 @@ def calculate_fatigue_life(name,material=material_in718()):
     period = float(experiment_log.obtainItem(name,'period',regular)[0])
     axial_temperature_phase = float(experiment_log.obtainItem(name,'axial_temperature_phase',regular)[0])
     
+    exp = ExperimentData()
     sim = SimulationData(AbaqusTempDirectory+name+'//'+name+'.csv',period)
     nodelabel = sim.node_label[0]
     nth = sim.axial_count_index_list[-2]
     time = sim.obtainNthCycle('runing_time',nth)
+    temperature = sim.obtainNthCycle('temperature',nth)
     length = len(time)
     s11 = sim.obtainNthCycle('axial_stress',nth)
     s22 = np.zeros(length)
@@ -51,23 +53,30 @@ def calculate_fatigue_life(name,material=material_in718()):
     e12 = sim.obtainNthCycle('shear_strain',nth)/2.0
     e13 = np.zeros(length)
     e23 = np.zeros(length)
-
+    
     stress=[]
     strain=[]
     for i in range(len(time)):
         stress.append([[s11[i],s12[i],s13[i]],[s12[i],s22[i],s23[i]],[s13[i],s23[i],s33[i]]])
         strain.append([[e11[i],e12[i],e13[i]],[e12[i],e22[i],e23[i]],[e13[i],e23[i],e33[i]]])
     
-    node = Node(nodelabel=nodelabel, dimension=2, time=time, coordinate=[], displacement=[], stress=stress, strain=strain)
+    node = Node(nodelabel=nodelabel, dimension=2, time=time, coordinate=[], 
+                displacement=[], stress=stress, strain=strain, temperature=temperature)
 
     fatigue_life = node.fatigueLifeFSModel(material)
     
-    resultfile = open('out0.dat', 'w')
+#    resultfile = open('out0.dat', 'w')
     line = ''
     line += '%s    ' % (node.nodelabel)
     line += '%s'     % (fatigue_life)
-    print >>resultfile, line
-    resultfile.close()
+#    print >>resultfile, line
+#    resultfile.close()
     
+#for csv_files in all_files[:]:
+#    resultfile = open(OutputDirectiory+csv_files[0]+'.csv', 'w')
+#    Headers = 'Number of Cycles to Failure N\-(f),Mises Equivalent Strain Amplitude \i(\g(De))\-(eq)/2,Stress Amplitude e \i(\g(Ds))/2,Specimen,Critical Plane,sigma_n_max,delta_sigma,delta_epsilon,tau_n_max,delta_tau,delta_gamma,Predicted Fatigue Lifetime N\-(p),Fatigue Coefficient,Temperature'
+#    Units = 'cycles,mm/mm,Mpa,-,deg,Mpa,Mpa,mm/mm,Mpa,Mpa,mm/mm,cycles,-,C'
+#    print >>resultfile, Headers
+#    print >>resultfile, Units
 name = '7037'
 calculate_fatigue_life(name)

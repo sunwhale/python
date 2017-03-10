@@ -408,7 +408,8 @@ class Job:
         os.chdir(self.AbaqusWorkDirectory)
         cmd ='AutoPostProc'
         os.system(cmd)
-
+        copy_suffix_files(self.AbaqusWorkDirectory,SimulationDirectiory,suffixs=['csv'])
+        
     def show(self):
         print 'PythonDirectiory:',PythonDirectiory
         print 'InputDirectiory:',InputDirectiory

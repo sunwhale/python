@@ -24,12 +24,15 @@ class ExperimentData:
     def __init__(self, filename):
         """
         读取csv文件，表头和单位如下：
+        
         ['Axial Segment Count' 'Running Time' 'Temperature' 'Axial Displacement'
          'Axial Force' 'Axial Strain' 'Axial Stress' 'Rotation' 'Torque'
          'Angle Strain' 'Shear Stress' 'Equivalent Plastic Strain' 'Thermal Strain'
          'Axial Total Strain']
+         
         ['cycles' 'sec' 'C' 'mm' 'N' 'mm/mm' 'Mpa' 'deg' 'N*m' '-' 'Mpa' '-'
          'mm/mm' 'mm/mm']
+         
         文件大于200MB的时候，32位系统中，np.genfromtxt()函数会造成内存溢出。
         这时候使用自定义的read_exp_files()函数
         """

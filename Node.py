@@ -222,10 +222,14 @@ class Node:
                 tau_f/shear_modulus*(2*x0)**b0 + gamma_f*(2*x0)**c0-fs_coefficient
             ]
         
+        fatigue_coefficient = fs_coefficient
         result = fsolve(f, [1])
         fatigue_life = int(result[0])
         print line_format_life % ('fatigue_life',fatigue_life)
-        return fatigue_life
+        return [phi_critical_plane,sigma_nmax_critical_plane,delta_sigma_critical_plane,
+                delta_epsilon_critical_plane,tau_nmax_critical_plane,
+                delta_tau_critical_plane,delta_gamma_max,fatigue_life,
+                fatigue_coefficient,temperature_at_sigma_nmax_critical_plane]
 
     def test(self):
         theta_deg=90.0

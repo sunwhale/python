@@ -43,11 +43,11 @@ xylabels = {'axial_count':'N, cycle',\
 'axial_true_stress':'Axial True Stress $\sigma$, MPa',\
 }
 
-tmf_files = []
-tmf_files.append(['IP Uniaxial',['7031.csv','7047.csv','7030.csv','7018.csv']])
-tmf_files.append(['OP Uniaxial',['7033.csv','7048.csv','7032.csv','7017.csv']])
-tmf_files.append(['IP Proportional',['7040.csv','7029.csv','7039.csv','7038.csv']])
-tmf_files.append(['IP Diamond',['7036.csv','7034.csv','7045.csv','7046.csv','7028.csv','7037.csv']])
+tmf_tests = []
+tmf_tests.append(['TC-IP',['7031','7047','7030','7018']])
+tmf_tests.append(['TC-OP',['7033','7048','7032','7017']])
+tmf_tests.append(['PRO-IP',['7040','7029','7039','7038']])
+tmf_tests.append(['NPR-IP',['7036','7034','7045','7046','7028','7037']])
 
 #xylabels = {'axial_count':'N [cycle]',\
 #'runing_time':'Running Time [s]',\

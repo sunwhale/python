@@ -206,7 +206,7 @@ class Node:
         self.outputFatigueLife(delta_gamma_max,sigma_nmax_critical_plane,
                           delta_sigma_critical_plane,delta_epsilon_critical_plane,
                           tau_nmax_critical_plane,delta_tau_critical_plane,
-                          temperature_at_sigma_nmax_critical_plane,fs_coefficient,fatigue_life)
+                          temperature_at_sigma_nmax_critical_plane,fatigue_coefficient,fatigue_life)
         
         return [phi_critical_plane,sigma_nmax_critical_plane,delta_sigma_critical_plane,
                 delta_epsilon_critical_plane,tau_nmax_critical_plane,
@@ -259,7 +259,7 @@ class Node:
         self.outputFatigueLife(delta_gamma_max,sigma_nmax_critical_plane,
                           delta_sigma_critical_plane,delta_epsilon_critical_plane,
                           tau_nmax_critical_plane,delta_tau_critical_plane,
-                          temperature_at_sigma_nmax_critical_plane,fs_coefficient,fatigue_life)
+                          temperature_at_sigma_nmax_critical_plane,fatigue_coefficient,fatigue_life)
         
         return [phi_critical_plane,sigma_nmax_critical_plane,delta_sigma_critical_plane,
                 delta_epsilon_critical_plane,tau_nmax_critical_plane,

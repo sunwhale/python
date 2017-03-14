@@ -133,29 +133,8 @@ class Node:
         
     def tauNmax(self, transformation):
         return max(self.shearStressEqv(transformation))
-        
-    def fatigueLifeFSModel(self,Material):
-        print '=========================FS model ========================='
-        k=1.0
-        
-        temperature = Material.temperature
-        youngs_modulus = Material.youngs_modulus
-        poisson_ratio = Material.poisson_ratio
-        shear_modulus = Material.shear_modulus
-        yield_stress = Material.yield_stress
-        K = Material.K
-        n = Material.n
-        K_cyclic = Material.K_cyclic
-        n_cyclic = Material.n_cyclic
-        sigma_f = Material.sigma_f
-        b = Material.b
-        epsilon_f = Material.epsilon_f
-        c = Material.c
-        tau_f = Material.tau_f
-        b0 = Material.b0
-        gamma_f = Material.gamma_f
-        c0 = Material.c0
-        
+    
+    def initialValues(self):
         delta_gamma_max = 0.0
         theta_critical_plane = 0.0
         phi_critical_plane = 0.0
@@ -167,23 +146,38 @@ class Node:
         if self.dimension == 2:
             theta_deg_list = [90]
             phi_deg_list = range(0,180,1)
+            
+        return (delta_gamma_max,theta_critical_plane,phi_critical_plane,
+                transformation_critical_plane,theta_deg_list,phi_deg_list)
+                
+    def calcTransformation(self,theta,phi):
+        transformation=[
+        [np.sin(theta)*np.cos(phi) ,np.sin(theta)*np.sin(phi) ,np.cos(theta)],
+        [-np.sin(phi)              ,np.cos(phi)               ,0            ],
+        [-np.cos(theta)*np.cos(phi),-np.cos(theta)*np.sin(phi),np.sin(theta)]
+        ]
+        transformation=[t[:self.dimension] for t in transformation[:self.dimension]]
+        return transformation
+        
+    def fatigueLifeFSModel(self,Material):
+        print '=========================FS model ========================='
+        k=1.0
+
+        (delta_gamma_max,theta_critical_plane,phi_critical_plane,
+         transformation_critical_plane,theta_deg_list,phi_deg_list) = self.initialValues()
         
         for theta_deg in theta_deg_list:
             theta=np.radians(theta_deg)
             for phi_deg in phi_deg_list:
                 phi=np.radians(phi_deg)
-                transformation=[
-                [np.sin(theta)*np.cos(phi) ,np.sin(theta)*np.sin(phi) ,np.cos(theta)],
-                [-np.sin(phi)              ,np.cos(phi)               ,0            ],
-                [-np.cos(theta)*np.cos(phi),-np.cos(theta)*np.sin(phi),np.sin(theta)]
-                ]
-                transformation=[t[:self.dimension] for t in transformation[:self.dimension]]
+                transformation = self.calcTransformation(theta,phi)
                 delta_gamma_theta_phi = self.deltaGamma(transformation)
                 if delta_gamma_theta_phi > delta_gamma_max:
                     delta_gamma_max = delta_gamma_theta_phi
                     theta_critical_plane = theta_deg
                     phi_critical_plane = phi_deg
                     transformation_critical_plane = transformation
+                    
         if self.dimension == 3:
             print 'theta_critical_plane',theta_critical_plane
             print 'phi_critical_plane',phi_critical_plane
@@ -197,13 +191,91 @@ class Node:
         delta_tau_critical_plane = self.deltaTau(transformation_critical_plane)
         temperature_at_sigma_nmax_critical_plane = self.temperatureAtSigmaNmax(transformation_critical_plane)
         
+        fs_coefficient=delta_gamma_max/2.0*(1.0+k*sigma_nmax_critical_plane/Material.yield_stress)
+                
+        def f(x):
+            x0 = float(x[0])
+            return [
+                Material.tau_f/Material.shear_modulus*(2*x0)**Material.b0 + Material.gamma_f*(2*x0)**Material.c0-fs_coefficient
+            ]
+        
+        fatigue_coefficient = fs_coefficient
+        result = fsolve(f, [1])
+        fatigue_life = int(result[0])
+        
+        self.outputFatigueLife(delta_gamma_max,sigma_nmax_critical_plane,
+                          delta_sigma_critical_plane,delta_epsilon_critical_plane,
+                          tau_nmax_critical_plane,delta_tau_critical_plane,
+                          temperature_at_sigma_nmax_critical_plane,fs_coefficient,fatigue_life)
+        
+        return [phi_critical_plane,sigma_nmax_critical_plane,delta_sigma_critical_plane,
+                delta_epsilon_critical_plane,tau_nmax_critical_plane,
+                delta_tau_critical_plane,delta_gamma_max,fatigue_life,
+                fatigue_coefficient,temperature_at_sigma_nmax_critical_plane]
+                
+    def fatigueLifeSWTModel(self,Material):
+        print '=========================SWT model ========================='
+
+        (delta_gamma_max,theta_critical_plane,phi_critical_plane,
+         transformation_critical_plane,theta_deg_list,phi_deg_list) = self.initialValues()
+        
+        for theta_deg in theta_deg_list:
+            theta=np.radians(theta_deg)
+            for phi_deg in phi_deg_list:
+                phi=np.radians(phi_deg)
+                transformation = self.calcTransformation(theta,phi)
+                delta_gamma_theta_phi = self.deltaGamma(transformation)
+                if delta_gamma_theta_phi > delta_gamma_max:
+                    delta_gamma_max = delta_gamma_theta_phi
+                    theta_critical_plane = theta_deg
+                    phi_critical_plane = phi_deg
+                    transformation_critical_plane = transformation
+                    
+        if self.dimension == 3:
+            print 'theta_critical_plane',theta_critical_plane
+            print 'phi_critical_plane',phi_critical_plane
+        if self.dimension == 2:
+            print 'phi_critical_plane',phi_critical_plane
+        
+        sigma_nmax_critical_plane = self.sigmaNmax(transformation_critical_plane)
+        delta_sigma_critical_plane = self.deltaSigma(transformation_critical_plane)
+        delta_epsilon_critical_plane = self.deltaEpsilon(transformation_critical_plane)
+        tau_nmax_critical_plane = self.tauNmax(transformation_critical_plane)
+        delta_tau_critical_plane = self.deltaTau(transformation_critical_plane)
+        temperature_at_sigma_nmax_critical_plane = self.temperatureAtSigmaNmax(transformation_critical_plane)
+        
+        swt_coefficient = sigma_nmax_critical_plane*delta_epsilon_critical_plane/2.0
+    
+        def f(x):
+            x0 = float(x[0])
+            return [
+                Material.sigma_f*Material.sigma_f/Material.youngs_modulus*(2*x0)**(2*Material.b) + Material.sigma_f*Material.epsilon_f*(2*x0)**(Material.b+Material.c)-swt_coefficient
+            ]
+                
+        fatigue_coefficient = swt_coefficient
+        result = fsolve(f, [1])
+        fatigue_life = int(result[0])
+        
+        self.outputFatigueLife(delta_gamma_max,sigma_nmax_critical_plane,
+                          delta_sigma_critical_plane,delta_epsilon_critical_plane,
+                          tau_nmax_critical_plane,delta_tau_critical_plane,
+                          temperature_at_sigma_nmax_critical_plane,fs_coefficient,fatigue_life)
+        
+        return [phi_critical_plane,sigma_nmax_critical_plane,delta_sigma_critical_plane,
+                delta_epsilon_critical_plane,tau_nmax_critical_plane,
+                delta_tau_critical_plane,delta_gamma_max,fatigue_life,
+                fatigue_coefficient,temperature_at_sigma_nmax_critical_plane]
+                
+    def outputFatigueLife(self,delta_gamma_max,sigma_nmax_critical_plane,
+                          delta_sigma_critical_plane,delta_epsilon_critical_plane,
+                          tau_nmax_critical_plane,delta_tau_critical_plane,
+                          temperature_at_sigma_nmax_critical_plane,fs_coefficient,fatigue_life):
         line_format = '%-40s'
         line_format_strain = line_format + '%.4f%%'
         line_format_stress = line_format + '%.2fMPa'
         line_format_coefficient = line_format + '%.6f'
         line_format_life = line_format + '%d'
         line_format_temperature = line_format + '%.1fC'
-        
         print line_format_strain % ('delta_gamma_max',delta_gamma_max*100)
         print line_format_stress % ('sigma_nmax_critical_plane',sigma_nmax_critical_plane)
         print line_format_stress % ('delta_sigma_critical_plane',delta_sigma_critical_plane)
@@ -211,26 +283,9 @@ class Node:
         print line_format_stress % ('tau_nmax_critical_plane',tau_nmax_critical_plane)
         print line_format_stress % ('delta_tau_critical_plane',delta_tau_critical_plane)
         print line_format_temperature % ('temperature_at_sigma_nmax_critical_plane',temperature_at_sigma_nmax_critical_plane)
-
-        fs_coefficient=delta_gamma_max/2.0*(1.0+k*sigma_nmax_critical_plane/yield_stress)
-        
         print line_format_coefficient % ('fs_coefficient',fs_coefficient)
-        
-        def f(x):
-            x0 = float(x[0])
-            return [
-                tau_f/shear_modulus*(2*x0)**b0 + gamma_f*(2*x0)**c0-fs_coefficient
-            ]
-        
-        fatigue_coefficient = fs_coefficient
-        result = fsolve(f, [1])
-        fatigue_life = int(result[0])
         print line_format_life % ('fatigue_life',fatigue_life)
-        return [phi_critical_plane,sigma_nmax_critical_plane,delta_sigma_critical_plane,
-                delta_epsilon_critical_plane,tau_nmax_critical_plane,
-                delta_tau_critical_plane,delta_gamma_max,fatigue_life,
-                fatigue_coefficient,temperature_at_sigma_nmax_critical_plane]
-
+        
     def test(self):
         theta_deg=90.0
         phi_deg=0.0

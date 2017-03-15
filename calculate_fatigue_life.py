@@ -15,7 +15,7 @@ from Work import *
 #==============================================================================
 # calculate_data_fatigue_life
 #==============================================================================
-def calculate_data_fatigue_life(data,material,model):
+def calculate_data_fatigue_life(data,material,fatigue_model):
     nodelabel = data.node_label[0]
     nth = data.axial_count_index_list[-2]
     time = data.obtainNthCycle('runing_time',nth)
@@ -40,33 +40,42 @@ def calculate_data_fatigue_life(data,material,model):
         strain.append([[e11[i],e12[i],e13[i]],[e12[i],e22[i],e23[i]],[e13[i],e23[i],e33[i]]])
     node = Node(nodelabel=nodelabel, dimension=2, time=time, coordinate=[], 
                 displacement=[], stress=stress, strain=strain, temperature=temperature)
-    if model == 'FS':
+    if fatigue_model == 'FS':
         fatigue_data = node.fatigueLifeFSModel(material,k=1.0)
-    if model == 'SWT':
+    if fatigue_model == 'SWT':
         fatigue_data = node.fatigueLifeSWTModel(material)
-    if model == 'BM':
+    if fatigue_model == 'BM':
         fatigue_data = node.fatigueLifeBMModel(material,S=0.36)
-    if model == 'Liu1':
+    if fatigue_model == 'Liu1':
         fatigue_data = node.fatigueLifeLiu1Model(material)
-    if model == 'Liu2':
+    if fatigue_model == 'Liu2':
         fatigue_data = node.fatigueLifeLiu2Model(material)
-    if model == 'Chu':
+    if fatigue_model == 'Chu':
         fatigue_data = node.fatigueLifeChuModel(material)
     return fatigue_data
+
 #==============================================================================
 # calculate_fatigue_life
 #==============================================================================
-def calculate_fatigue_life(material=material_in718()):
+def calculate_fatigue_life(fatigue_model,material=material_in718()):
     material.show()
     experiment_log = ExperimentLog(ExperimentLogFile)
     
-    OutputDirectiory = 'F:\\Database\\IN718\\Fatigue\\'
+    OutputDirectiory = 'F:\\Database\\Fatigue\\%s\\' % fatigue_model
 
+    if not os.path.isdir(OutputDirectiory):
+        os.makedirs(OutputDirectiory)
+        print 'Create new directory:',OutputDirectiory
+            
     headers = 'Number of Cycles to Failure N\-(f),Mises Equivalent Strain Amplitude \i(\g(De))\-(eq)/2,Stress Amplitude e \i(\g(Ds))/2,Specimen,Critical Plane,sigma_n_max,delta_sigma,delta_epsilon,tau_n_max,delta_tau,delta_gamma,Predicted Fatigue Lifetime N\-(p),Fatigue Coefficient,Temperature'
-    units = 'cycles,mm/mm,Mpa,-,deg,Mpa,Mpa,mm/mm,Mpa,Mpa,mm/mm,cycles,-,C'   
+    units = 'cycles,mm/mm,MPa,-,deg,MPa,MPa,mm/mm,MPa,MPa,mm/mm,cycles,-,C'
     
-    workbook = xlsxwriter.Workbook(OutputDirectiory + 'FS' + '.xlsx') # write to excel
+    workbook = xlsxwriter.Workbook(OutputDirectiory + fatigue_model + '.xlsx') # write to excel
     
+    allresultfile = open(OutputDirectiory + fatigue_model + '.csv', 'w') # write to csv all
+    print >>allresultfile, headers + ',Load Type' # write to csv all
+    print >>allresultfile, units + ',-' # write to csv all
+        
     for tmf_test in tmf_tests:
         resultfile = open(OutputDirectiory + tmf_test[0] + '.csv', 'w') # write to csv
         print >>resultfile, headers # write to csv
@@ -90,7 +99,7 @@ def calculate_fatigue_life(material=material_in718()):
 #            sim = SimulationData(AbaqusTempDirectory+name+'//'+name+'.csv',period)
             sim = SimulationData(SimulationDirectiory+name+'.csv',period)
             exp = ExperimentData(ExperimentDirectiory+name+'.csv')
-            data = calculate_data_fatigue_life(sim,material,'Liu1')
+            data = calculate_data_fatigue_life(sim,material,fatigue_model)
             
             line = '' # write to csv
             line += '%s,' % (expriment_life) # write to csv
@@ -99,13 +108,19 @@ def calculate_fatigue_life(material=material_in718()):
             line += '%s,' % (name) # write to csv
             for d in data: # write to csv
                 line += '%s,' % (d) # write to csv
-            print >>resultfile, line # write to csv
+            print >>resultfile, line[:-1] # write to csv, ignore the last comma
+            
+            line += '%s' % (tmf_test[0]) # write to csv all
+            print >>allresultfile, line # write to csv all
             
             data_list = [expriment_life,equivalent_strain,0,name] + data # write to excel
             worksheet.write_row('A'+str(row_number), data_list); row_number += 1 # write to excel
             
         resultfile.close() # write to csv
         
+    allresultfile.close() # write to csv all
     workbook.close() # write to excel
 
-calculate_fatigue_life()
+fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
+for fatigue_model in fatigue_model_list:
+    calculate_fatigue_life(fatigue_model)

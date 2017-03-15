@@ -14,6 +14,7 @@ from Functions import (obtain_masing_curve,obtain_youngs_modulus,
                       obtain_kinematic_hardening_parameters,linear_interpolation,
                       osgood_interpolation,obtain_plastic_strain_by_stress)
 from Constants import *
+
 #==============================================================================
 # ExperimentData
 #==============================================================================
@@ -126,44 +127,6 @@ class ExperimentData:
                 valley.append(minitem)
         return cycle,peak,valley
         
-#name = '7115'
-#exp_full_name = ExperimentDirectiory + name + '.csv'
-#if os.path.exists(exp_full_name):
-#    exp = ExperimentData(exp_full_name)
-#    cycles = []
-#    youngs_modulus = []
-#    for i in range(2,5):
-#        strain=exp.obtainNthCycle('axial_strain',i)
-#        stress=exp.obtainNthCycle('axial_stress',i)
-#        masing_curve = obtain_masing_curve(strain,stress)
-##        plt.plot(masing_curve[0],masing_curve[1])
-##        cycles.append(i)
-##        youngs_modulus.append( obtain_youngs_modulus(masing_curve[0],masing_curve[1]) )
-##    plt.plot(cycles,youngs_modulus)
-##    plt.show()
-#    cycle,peak,valley = exp.obtainPeakValley('axial_stress')
-#    plt.plot(cycle,peak)
-#    plt.plot(cycle,valley)
-#    plt.show()
-
-#name = '7102'
-#exp_full_name = ExperimentDirectiory + name + '.csv'
-#if os.path.exists(exp_full_name):
-#    exp1 = ExperimentData(exp_full_name)
-#    
-#name = '7213'
-#exp_full_name = ExperimentDirectiory + name + '.csv'
-#if os.path.exists(exp_full_name):
-#    exp2 = ExperimentData(exp_full_name)
-#
-#monotonic_curve = [exp1.axial_log_strain,exp1.axial_true_stress]
-#cyclic_curve = [exp2.obtainNthCycle('axial_strain',190),exp2.obtainNthCycle('axial_stress',190)]
-#seg,zeta,r0,ri = obtain_kinematic_hardening_parameters(monotonic_curve,cyclic_curve)
-#print seg
-#print zeta
-#print r0
-#print ri
-
 #==============================================================================
 # SimulationData
 #==============================================================================
@@ -353,18 +316,52 @@ class ExperimentLog:
         elif len(result_list) >= 1:
             return result_list
 
-#name = '7037'
-#experiment_log= ExperimentLog('F:\\Database\\IN718\\Timed\\Inconel718_test_log.csv')
-#experiment_log.output(name)
-#regular = r'\d+\.?\d*'
-#temperature_mode = experiment_log.obtainItem(name,'temperature_mode',regular)
-#if len(temperature_mode) == 1:
-#    temperature_list = [float(temperature_mode[0]), float(temperature_mode[0])]
-#if len(temperature_mode) == 2:
-#    temperature_list = [float(temperature_mode[0]), float(temperature_mode[1])]
-#d_out = float(experiment_log.obtainItem(name,'d_out',regular)[0])
-#gauge_length = float(experiment_log.obtainItem(name,'gauge_length',regular)[0])
-#axial_strain = float(experiment_log.obtainItem(name,'axial_strain',regular)[0])
-#angel_strain = float(experiment_log.obtainItem(name,'angel_strain',regular)[0])
-#equivalent_strain = float(experiment_log.obtainItem(name,'equivalent_strain',regular)[0])
-#period = float(experiment_log.obtainItem(name,'period',regular)[0])
+#==============================================================================
+# FatigueData
+#==============================================================================
+class FatigueData:
+    """
+    Read and analyze fatigue data.
+    """
+    def __init__(self, filename):
+        """
+        ['Number of Cycles to Failure N\\-(f)', 'Mises Equivalent Strain Amplitude \\i(\\g(De))\\-(eq)/2', 
+        'Stress Amplitude e \\i(\\g(Ds))/2', 'Specimen', 'Critical Plane', 'sigma_n_max', 'delta_sigma', 
+        'delta_epsilon', 'tau_n_max', 'delta_tau', 'delta_gamma', 'Predicted Fatigue Lifetime N\\-(p)', 
+        'Fatigue Coefficient', 'Temperature', 'Load Type']
+        """
+        data = np.genfromtxt(filename, delimiter=',', skip_header=0, dtype=None)
+        self.header = [i for i in data[0]]
+        self.unit = [i for i in data[1]]
+        del data
+        
+        data = np.genfromtxt(filename, delimiter=',', skip_header=2, dtype=float)
+        self.experimental_life = data[:,0]
+        self.equivalent_strain_amplitude = data[:,1]
+        self.stress_amplitude = data[:,2]
+        self.specimen = data[:,3]
+        self.critical_plane = data[:,4]
+        self.sigma_n_max = data[:,5]
+        self.delta_sigma = data[:,6]
+        self.delta_epsilon = data[:,7]
+        self.tau_n_max = data[:,8]
+        self.delta_tau = data[:,9]
+        self.delta_gamma = data[:,10]
+        self.predicted_life = data[:,11]
+        self.fatigue_coefficient = data[:,12]
+        self.temperature = data[:,13]
+        del data
+        
+        data = np.genfromtxt(filename, delimiter=',', skip_header=2, dtype=str)
+        self.load_type = data[:,14]
+        del data
+
+    def loadTypeFilter(self,load_type):
+        numbers = np.where(self.load_type == load_type)[0]
+        sub_experimental_life = []
+        sub_predicted_life = []
+        for number in numbers:
+            sub_experimental_life.append(self.experimental_life[number])
+            sub_predicted_life.append(self.predicted_life[number])
+        return sub_experimental_life,sub_predicted_life
+        

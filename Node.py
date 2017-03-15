@@ -503,7 +503,7 @@ class Node:
             phi_deg_list = range(0,180,5)
         if self.dimension == 2:
             theta_deg_list = [90]
-            phi_deg_list = range(0,180,5)
+            phi_deg_list = range(0,180,1)
             
         return (delta_gamma_max,
                 delta_epsilon_max,

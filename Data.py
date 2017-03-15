@@ -42,6 +42,7 @@ class ExperimentData:
             data = read_exp_files(filename, n=2)
             
         self.filename = filename
+        self.nodelabel = [36] # 试验对应的有限元模型节点为36号
         
         self.axial_count = data[:,0]
         self.runing_time = data[:,1]

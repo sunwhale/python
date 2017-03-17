@@ -47,12 +47,12 @@ def work(name,loading_cycles=None):
 #==============================================================================
 # experiment
 #==============================================================================
-    exp_full_name = ExperimentDirectiory + name + '.csv'
-    if os.path.exists(exp_full_name):
-        exp = ExperimentData(exp_full_name)
-        experimental_life = exp.total_axial_count
-    else:
-        print ('%s is not existed' % exp_full_name)
+#    exp_full_name = ExperimentDirectiory + name + '.csv'
+#    if os.path.exists(exp_full_name):
+#        exp = ExperimentData(exp_full_name)
+#        experimental_life = exp.total_axial_count
+#    else:
+#        print ('%s is not existed' % exp_full_name)
 #==============================================================================
 # load
 #==============================================================================
@@ -133,14 +133,14 @@ def work(name,loading_cycles=None):
 # Job
 #==============================================================================
     job = Job(JobName=name, UMAT=umat, Step=step, Load=load)
-    job.allProc()
+#    job.allProc()
 #    job.createDirectory()
 #    job.copyFiles()
 #    job.creatBatchFile()
 #    job.createAbaqusCAE()
 #    job.createAbaqusInput()
 #    job.run()
-#    job.autoPostProc()
+    job.autoPostProc()
 #==============================================================================
 # SimulationData
 #==============================================================================

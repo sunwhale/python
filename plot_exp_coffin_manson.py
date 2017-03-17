@@ -12,10 +12,17 @@ from matplotlib.ticker import MultipleLocator,ScalarFormatter,FormatStrFormatter
 from Data import FatigueData
 from Constants import *
 from plot_format import plot_format
-from Material import material_in718
+from Material import material_in718,material_in718_NASA,material_in718_BHU
 
+life_NASA = [33,35,200,515,830,1072,1785,1850,2868,4323,8903,13332,13762]
+strain_amplitude_NASA = [1.75,1.75,0.85,0.85,0.575,0.5,0.507,0.575,0.398,0.402,0.329,0.323,0.328] # %
+stess_amplitude_NASA = [873.5,873.5,726.6,726.6,636.8,601,605,636.8,538,541,480,474,479] # MPa
 
-def plot_exp_fatigue_life(fatigue_data,figure_name=None,figure_path=None,save_types=[]):
+life_BHU = [100000,48745,50900,35940,12980,6300,2220,678,515]
+strain_amplitude_BHU = [0.4,0.42,0.43,0.45,0.47,0.5,0.6,0.8,1.0] # %
+stess_amplitude_BHU = [621,638,607,606,653,646,749,756,779] # MPa
+
+def plot_exp_coffin_manson(fatigue_data,figure_name=None,figure_path=None,save_types=[]):
 #==============================================================================
 # title
 #==============================================================================
@@ -39,8 +46,8 @@ def plot_exp_fatigue_life(fatigue_data,figure_name=None,figure_path=None,save_ty
 #==============================================================================
 # x,y limite
 #==============================================================================
-    plt.xlim(1E1,1E4)
-    plt.ylim(0.4,1.1)
+    plt.xlim(1E1,2E6)
+    plt.ylim(0.3,1.8)
 #==============================================================================
 # x,y label
 #==============================================================================
@@ -60,23 +67,37 @@ def plot_exp_fatigue_life(fatigue_data,figure_name=None,figure_path=None,save_ty
 #==============================================================================
 # http://stackoverflow.com/questions/21920233/matplotlib-log-scale-tick-label-number-formatting
 #==============================================================================
-    ax.yaxis.set_major_locator(MultipleLocator(0.1))
-    ax.yaxis.set_minor_locator(MultipleLocator(0.01))
+    ax.yaxis.set_major_locator(MultipleLocator(0.3))
+    ax.yaxis.set_minor_locator(MultipleLocator(0.03))
     ax.yaxis.set_major_formatter(ScalarFormatter())
 #==============================================================================
 # plot lines
 #==============================================================================
     i = 0
     marker_list = ['s','o','^','D','<']
-    for load_type in ['TC-IP','TC-OP','PRO-IP','NPR-IP','TC-90']:
+    for load_type in ['TC-IF']:
         experimental_life = fatigue_data.loadTypeFilter(load_type,'experimental_life')
         equivalent_strain_amplitude = fatigue_data.loadTypeFilter(load_type,'equivalent_strain_amplitude')
-        plt.plot(experimental_life, equivalent_strain_amplitude, label=load_type, linewidth=2, linestyle='',
+        plt.plot(experimental_life, equivalent_strain_amplitude, label='Tsinghua', linewidth=2, linestyle='',
                      marker=marker_list[i], markersize=12)
         i += 1
+    plt.plot(life_NASA, strain_amplitude_NASA, label='NASA', linewidth=2, linestyle='',
+                     marker=marker_list[i], markersize=12)
+    i += 1
+    plt.plot(life_BHU, strain_amplitude_BHU, label='G.S. Mahobia 2014', linewidth=2, linestyle='',
+                     marker=marker_list[i], markersize=12)
+                     
     material = material_in718()
     life,epsilon_amplitude = material.plotMansonCoffinAxial()
-    plt.plot(life,epsilon_amplitude*100,label='TC-IF',linewidth=1.5,color='black')
+    plt.plot(life,epsilon_amplitude*100,linewidth=1.5,color='blue')
+    
+    material = material_in718_NASA()
+    life,epsilon_amplitude = material.plotMansonCoffinAxial()
+    plt.plot(life,epsilon_amplitude*100,linewidth=1.5,color='green')
+    
+    material = material_in718_BHU()
+    life,epsilon_amplitude = material.plotMansonCoffinAxial()
+    plt.plot(life,epsilon_amplitude*100,linewidth=1.5,color='red')
 #==============================================================================
 # show legend
 #==============================================================================
@@ -95,4 +116,4 @@ def plot_exp_fatigue_life(fatigue_data,figure_name=None,figure_path=None,save_ty
 ArticleFigureDirectiory = 'F:\\Articles\\Fatigue\\Figs\\'
 fatigue_file = '%s%s.csv' % (FatigueDirectiory,'BM')
 fatigue_data = FatigueData(fatigue_file)
-plot_exp_fatigue_life(fatigue_data,figure_path=ArticleFigureDirectiory,figure_name='NF-TMF',save_types=['.pdf'])
+plot_exp_coffin_manson(fatigue_data,figure_path=ArticleFigureDirectiory,figure_name='plot_exp_coffin_manson',save_types=['.pdf'])

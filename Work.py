@@ -11,7 +11,7 @@ import os
 import shutil
 from Constants import *
 from Data import SimulationData,ExperimentData,ExperimentLog
-from Functions import write_umat_output_file
+from Functions import write_umat_output_file,copy_suffix_files
 
 #==============================================================================
 # class Step

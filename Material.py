@@ -88,6 +88,11 @@ class Material:
         self.b0 = b0
         self.gamma_f = gamma_f
         self.c0 = c0
+        if tau_f == None:
+            self.tau_f = self.sigma_f/np.sqrt(3)
+            self.b0 = self.b
+            self.gamma_f = self.epsilon_f*np.sqrt(3)
+            self.c0 = self.c
 
     def calculateRambergOsgood(self,x,y):
         def func(x,p):
@@ -167,7 +172,12 @@ class Material:
         return int(result[0])
     
     def plotMansonCoffinAxial(self):
-        life = np.arange(1E1, 1E5, 10)
+        life_list = []
+        seg = 10
+        for i in range(1,8):
+            for j in range(1,seg):
+                life_list.append(float(j)/float(seg)*10**i)
+        life = np.array(life_list)
         epsilon_amplitude = self.sigma_f/self.youngs_modulus*(2*life)**self.b + self.epsilon_f*(2*life)**self.c
 #        plt.plot(life,epsilon)
 #        plt.show()
@@ -181,8 +191,26 @@ def material_in718():
     material.setName(name='IN718')
     material.setTemperature(temperature=650.0)
     material.setMonotonic(youngs_modulus=167100.0,poisson_ratio=0.2886,yield_stress=1064.0)
-    material.setCyclicAxial(sigma_f=1034.0,b=-0.04486,epsilon_f=0.11499,c=-0.52436)
-    material.setCyclicTorsion(tau_f=1034.0/np.sqrt(3),b0=-0.04486,gamma_f=0.11499*np.sqrt(3),c0=-0.52436)
+    material.setCyclicAxial(sigma_f=1034.0,b=-0.04486,epsilon_f=0.11499,c=-0.52436,K_cyclic=1406.0,n_cyclic=0.10527)
+    material.setCyclicTorsion()
+    return material
+    
+def material_in718_NASA():
+    material = Material()
+    material.setName(name='IN718')
+    material.setTemperature(temperature=650.0)
+    material.setMonotonic(youngs_modulus=162600.0,poisson_ratio=0.2886,yield_stress=1064.0)
+    material.setCyclicAxial(sigma_f=1348.0,b=-0.10052,epsilon_f=0.12445,c=-0.55218,K_cyclic=1827.0,n_cyclic=0.16723)
+    material.setCyclicTorsion()
+    return material
+    
+def material_in718_BHU():
+    material = Material()
+    material.setName(name='IN718')
+    material.setTemperature(temperature=650.0)
+    material.setMonotonic(youngs_modulus=177200.0,poisson_ratio=0.2886,yield_stress=1064.0)
+    material.setCyclicAxial(sigma_f=985.0,b=-0.03917,epsilon_f=0.24721,c=-0.55682,K_cyclic=1420.0,n_cyclic=0.11332)
+    material.setCyclicTorsion()
     return material
 #==============================================================================
 # material ss304 at 20

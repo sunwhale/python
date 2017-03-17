@@ -19,7 +19,7 @@ ExperimentDirectiory = 'F:\\Database\\IN718\\Timed\\'
 
 SimulationDirectiory = 'F:\\Temp\\IN718_Sim\\'
 
-ExperimentLogFile = ExperimentDirectiory + 'Inconel718_test_log.csv'
+ExperimentLogFile = 'Inconel718_test_log.csv'
 
 FatigueDirectiory = 'F:\\Database\\Fatigue\\'
 

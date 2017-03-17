@@ -51,7 +51,7 @@ experiment_type_list.append(['TC-OP',['7033','7048','7032','7017']])
 experiment_type_list.append(['PRO-IP',['7040','7029','7039','7038']])
 experiment_type_list.append(['NPR-IP',['7036','7034','7045','7046','7028','7037']])
 experiment_type_list.append(['TC-90',['7025']])
-experiment_type_list.append(['TC-IF',['7110','7111','7112','7113','7114','7115','7116']])
+experiment_type_list.append(['TC-IF',['7110','7111','7112','7113','7114','7115']])
 
 #xylabels = {'axial_count':'N [cycle]',\
 #'runing_time':'Running Time [s]',\

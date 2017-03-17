@@ -9,6 +9,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import fsolve
 from scipy.optimize import leastsq
+from Data import ExperimentData
+from Constants import ExperimentDirectiory
 
 class Material:
     def __init__(self):
@@ -109,12 +111,48 @@ class Material:
         
     def calculateCyclicStrengthCoefficient(self,epsilon,sigma):
         epsilon_p = epsilon - sigma/self.youngs_modulus
+        epsilon_p_list = []
+        sigma_list = []
+        for i in range(len(epsilon_p)):
+            if epsilon_p[i]>0.0005:
+                epsilon_p_list.append(epsilon_p[i])
+                sigma_list.append(sigma[i])
+        epsilon_p = np.array(epsilon_p_list)
+        sigma = np.array(sigma_list)
         self.K_cyclic = self.calculateRambergOsgood(epsilon_p,sigma)[0]
         self.n_cyclic = self.calculateRambergOsgood(epsilon_p,sigma)[1]
+#        plt.plot(epsilon_p,sigma)
+#        plt.plot(epsilon_p,self.K*epsilon_p**self.n)
+#        plt.show()
 
     def calculateStrengthCoefficient(self,epsilon,sigma):
-        self.K = self.calculateRambergOsgood(epsilon,sigma)[0]
-        self.n = self.calculateRambergOsgood(epsilon,sigma)[1]
+        epsilon_p = epsilon - sigma/self.youngs_modulus
+        epsilon_p_list = []
+        sigma_list = []
+        for i in range(len(epsilon_p)):
+            if epsilon_p[i]>0.0005:
+                epsilon_p_list.append(epsilon_p[i])
+                sigma_list.append(sigma[i])
+        epsilon_p = np.array(epsilon_p_list)
+        sigma = np.array(sigma_list)
+        self.K = self.calculateRambergOsgood(epsilon_p,sigma)[0]
+        self.n = self.calculateRambergOsgood(epsilon_p,sigma)[1]
+
+    def plotStrengthCoefficient(self):
+        epsilon_p = np.arange(0,0.1,0.00001)
+        sigma = self.K*epsilon_p**self.n
+        epsilon = sigma/self.youngs_modulus + epsilon_p
+#        plt.plot(epsilon_p,sigma)
+#        plt.show()
+        return epsilon,sigma
+    
+    def plotCyclicStrengthCoefficient(self):
+        epsilon_p = np.arange(0,0.1,0.00001)
+        sigma = self.K_cyclic*epsilon_p**self.n_cyclic
+        epsilon = sigma/self.youngs_modulus + epsilon_p
+#        plt.plot(epsilon_p,sigma)
+#        plt.show()
+        return epsilon,sigma
         
     def calculateMansonCoffinAxial(self,epsilon,life):
         sigma = []
@@ -190,7 +228,13 @@ def material_in718():
     material = Material()
     material.setName(name='IN718')
     material.setTemperature(temperature=650.0)
-    material.setMonotonic(youngs_modulus=167100.0,poisson_ratio=0.2886,yield_stress=1064.0)
+    material.setMonotonic(youngs_modulus=167100.0,poisson_ratio=0.2886,yield_stress=1064.0,K=1433.0,n=0.048958)
+#    name = '7102'
+#    exp_full_name = ExperimentDirectiory + name + '.csv'
+#    exp = ExperimentData(exp_full_name)
+#    epsilon = exp.axial_strain
+#    sigma = exp.axial_stress
+#    material.calculateStrengthCoefficient(epsilon,sigma)
     material.setCyclicAxial(sigma_f=1034.0,b=-0.04486,epsilon_f=0.11499,c=-0.52436,K_cyclic=1406.0,n_cyclic=0.10527)
     material.setCyclicTorsion()
     return material
@@ -199,7 +243,7 @@ def material_in718_NASA():
     material = Material()
     material.setName(name='IN718')
     material.setTemperature(temperature=650.0)
-    material.setMonotonic(youngs_modulus=162600.0,poisson_ratio=0.2886,yield_stress=1064.0)
+    material.setMonotonic(youngs_modulus=162600.0,poisson_ratio=0.2886,yield_stress=1064.0,K=1260.0,n=0.05030)
     material.setCyclicAxial(sigma_f=1348.0,b=-0.10052,epsilon_f=0.12445,c=-0.55218,K_cyclic=1827.0,n_cyclic=0.16723)
     material.setCyclicTorsion()
     return material
@@ -234,4 +278,4 @@ def material_ss304():
     return material
     
 #material = material_in718()
-#material.plotMansonCoffinAxial()
+#material.show()

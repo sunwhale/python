@@ -7,13 +7,14 @@ Created on Thu Jan 05 11:50:47 2017
 
 import numpy as np
 import os
-import matplotlib as mpl
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MultipleLocator,ScalarFormatter,FormatStrFormatter 
 from Data import FatigueData
 from Constants import *
 from plot_format import plot_format
+from Material import material_in718,material_in718_NASA,material_in718_BHU
 
-def plot_fatigue_life(fatigue_data,figure_name=None,figure_path=None,save_types=[]):
+def plot_exp_coffin_manson(fatigue_data,figure_name=None,figure_path=None,save_types=[]):
 #==============================================================================
 # title
 #==============================================================================
@@ -22,8 +23,7 @@ def plot_fatigue_life(fatigue_data,figure_name=None,figure_path=None,save_types=
 # figure format
 # http://matplotlib.org/users/customizing.html?highlight=rcparams
 #==============================================================================
-    plot_format()
-    fig, ax = plt.subplots()
+    plot_format()   
 #==============================================================================
 # grid set up
 #==============================================================================
@@ -38,56 +38,53 @@ def plot_fatigue_life(fatigue_data,figure_name=None,figure_path=None,save_types=
 #==============================================================================
 # x,y limite
 #==============================================================================
-    plt.xlim(1E1,1E4)
-    plt.ylim(1E1,1E4)
+    plt.xlim(0,1.5)
+    plt.ylim(0,1200.0)
 #==============================================================================
 # x,y label
 #==============================================================================
-    plt.xlabel(r'Experimental Fatigue Lifetime $N_{\rm{f}}$')
-    plt.ylabel(r'Predicted Fatigue Lifetime $N_{\rm{p}}$')
-#==============================================================================
-# xy axial equal
-#==============================================================================
-    plt.gca().set_aspect('equal')
-    plt.gca().set_aspect('auto')
+    plt.xlabel(xylabels['axial_strain_amplitude'])
+    plt.ylabel(xylabels['axial_stress_amplitude'])
 #==============================================================================
 # xy log scale
 #==============================================================================
-    plt.xscale('log')
-    plt.yscale('log')
+#    plt.xscale('log')
+#    plt.yscale('log')
 #==============================================================================
-# print arrow
+# xy axial equal
 #==============================================================================
-#plt.annotate('local max', xy = (100, 400), xytext = (100, 100),arrowprops = dict(facecolor = 'black', shrink = 0.1))
-#plt.arrow(100,180,0,270,head_width=10)
+    ax = plt.gca()
+    ax.set_aspect('equal')
+    ax.set_aspect('auto')
+#==============================================================================
+# http://stackoverflow.com/questions/21920233/matplotlib-log-scale-tick-label-number-formatting
+#==============================================================================
+#    ax.yaxis.set_major_locator(MultipleLocator(0.5))
+#    ax.yaxis.set_minor_locator(MultipleLocator(0.05))
+#    ax.yaxis.set_major_formatter(ScalarFormatter())
 #==============================================================================
 # plot lines
 #==============================================================================
     i = 0
-    marker_list = ['s','o','^','D']
-    for load_type in ['TC-IP','TC-OP','PRO-IP','NPR-IP']:
+    marker_list = ['s','o','^','D','<']
+    for load_type in ['TC-IF']:
         experimental_life = fatigue_data.loadTypeFilter(load_type,'experimental_life')
-        predicted_life = fatigue_data.loadTypeFilter(load_type,'predicted_life')
-        plt.plot(experimental_life, predicted_life, label=load_type, linewidth=2, linestyle='',
+        equivalent_strain_amplitude = fatigue_data.loadTypeFilter(load_type,'equivalent_strain_amplitude')
+        plt.plot(experimental_life, equivalent_strain_amplitude, label='Tsinghua', linewidth=2, linestyle='',
                      marker=marker_list[i], markersize=12)
         i += 1
-#==============================================================================
-# plot 2x lines
-#==============================================================================
-    linewidth = 0.5
-    plt.plot([20,1e4],[10,5e3],color='black',linewidth=linewidth)
-    plt.plot([10,5e3],[20,1e4],color='black',linewidth=linewidth)
-#==============================================================================
-# plot 5x lines
-#==============================================================================
-    plt.plot([50,1e4],[10,2e3],color='black',linewidth=linewidth)
-    plt.plot([10,2e3],[50,1e4],color='black',linewidth=linewidth)
+                     
+    material = material_in718()
+    epsilon,sigma = material.plotStrengthCoefficient()
+    plt.plot(epsilon*100,sigma,linewidth=1.5,color='blue')
+
+    epsilon,sigma = material.plotCyclicStrengthCoefficient()
+    plt.plot(epsilon*100,sigma,linewidth=1.5,color='red')
 #==============================================================================
 # show legend
 #==============================================================================
-    plt.legend(loc=2)
+    plt.legend(loc=0)
 #    plt.legend(loc=0,fontsize='small',frameon=True,numpoints=1,title='Temperature')
-#    plt.legend(loc=0,fontsize='small',frameon=True,numpoints=1,title='$\gamma/\sqrt{3}$')
 #==============================================================================
 # save figures
 #==============================================================================
@@ -95,13 +92,9 @@ def plot_fatigue_life(fatigue_data,figure_name=None,figure_path=None,save_types=
         for save_type in save_types:
             plt.savefig(figure_path + figure_name + save_type, dpi=150)
             print 'save as', figure_path + figure_name + save_type
-
-#    plt.show()
+    plt.show()
     plt.close()
 
-fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
-
-for fatigue_model in fatigue_model_list:
-    fatigue_file = '%s%s.csv' % (FatigueDirectiory,fatigue_model)
-    fatigue_data = FatigueData(fatigue_file)
-    plot_fatigue_life(fatigue_data,figure_path=ArticleFigureDirectiory,figure_name='NF-NP-'+fatigue_model,save_types=['.pdf'])
+fatigue_file = '%s%s.csv' % (FatigueDirectiory,'BM')
+fatigue_data = FatigueData(fatigue_file)
+plot_exp_coffin_manson(fatigue_data,figure_path=ArticleFigureDirectiory,figure_name='plot_exp_coffin_manson',save_types=['.pdf'])

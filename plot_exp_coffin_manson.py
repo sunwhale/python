@@ -47,7 +47,7 @@ def plot_exp_coffin_manson(fatigue_data,figure_name=None,figure_path=None,save_t
 # x,y limite
 #==============================================================================
     plt.xlim(1E1,2E6)
-    plt.ylim(0.3,1.8)
+    plt.ylim(0.2,2.0)
 #==============================================================================
 # x,y label
 #==============================================================================
@@ -67,8 +67,8 @@ def plot_exp_coffin_manson(fatigue_data,figure_name=None,figure_path=None,save_t
 #==============================================================================
 # http://stackoverflow.com/questions/21920233/matplotlib-log-scale-tick-label-number-formatting
 #==============================================================================
-    ax.yaxis.set_major_locator(MultipleLocator(0.3))
-    ax.yaxis.set_minor_locator(MultipleLocator(0.03))
+    ax.yaxis.set_major_locator(MultipleLocator(0.5))
+    ax.yaxis.set_minor_locator(MultipleLocator(0.05))
     ax.yaxis.set_major_formatter(ScalarFormatter())
 #==============================================================================
 # plot lines
@@ -113,7 +113,6 @@ def plot_exp_coffin_manson(fatigue_data,figure_name=None,figure_path=None,save_t
     plt.show()
     plt.close()
 
-ArticleFigureDirectiory = 'F:\\Articles\\Fatigue\\Figs\\'
 fatigue_file = '%s%s.csv' % (FatigueDirectiory,'BM')
 fatigue_data = FatigueData(fatigue_file)
 plot_exp_coffin_manson(fatigue_data,figure_path=ArticleFigureDirectiory,figure_name='plot_exp_coffin_manson',save_types=['.pdf'])

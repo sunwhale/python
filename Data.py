@@ -72,6 +72,7 @@ class ExperimentData:
         self.total_runing_time = self.runing_time[-1]
         # 总循环数
         self.total_axial_count = int(self.axial_count[-1])
+        self.half_life_cycle = self.total_axial_count/2
         # 初始温度
         self.initial_temperature = self.temperature[0]
         
@@ -95,6 +96,9 @@ class ExperimentData:
                 self.axial_count_end_index[int(self.axial_count[i])] = i # 当前循环结尾为i-1,这里用i,因为[a:b]中截取a到b-1
                 self.axial_count_begin_index[int(self.axial_count[i+1])] = i # 下一循环的开头为i
         self.axial_count_index_list = list(self.axial_count_begin_index.keys()) # 所有存在的循环列表
+        for c in self.axial_count_index_list:
+            if abs(c-int(self.total_axial_count/2.0))<=abs(self.half_life_cycle-int(self.total_axial_count/2.0)):
+                self.half_life_cycle = c
                 
     def obtainNthCycle(self,item,begin_cycle,end_cycle=None):
         """

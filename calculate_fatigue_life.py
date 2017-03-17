@@ -61,37 +61,38 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
     material.show()
     experiment_log = ExperimentLog(ExperimentLogFile)
     
-    OutputDirectiory = 'F:\\Database\\Fatigue\\%s\\' % fatigue_model
+    FatigueDirectiory = 'F:\\Database\\Fatigue\\%s\\' % fatigue_model
+    FatigueDirectiory = 'F:\\Database\\Fatigue\\'
 
-    if not os.path.isdir(OutputDirectiory):
-        os.makedirs(OutputDirectiory)
-        print 'Create new directory:',OutputDirectiory
+    if not os.path.isdir(FatigueDirectiory):
+        os.makedirs(FatigueDirectiory)
+        print 'Create new directory:',FatigueDirectiory
             
     headers = 'Number of Cycles to Failure N\-(f),Mises Equivalent Strain Amplitude \i(\g(De))\-(eq)/2,Stress Amplitude e \i(\g(Ds))/2,Specimen,Critical Plane,sigma_n_max,delta_sigma,delta_epsilon,tau_n_max,delta_tau,delta_gamma,Predicted Fatigue Lifetime N\-(p),Fatigue Coefficient,Temperature'
     units = 'cycles,mm/mm,MPa,-,deg,MPa,MPa,mm/mm,MPa,MPa,mm/mm,cycles,-,C'
     
-    workbook = xlsxwriter.Workbook(OutputDirectiory + fatigue_model + '.xlsx') # write to excel
+    workbook = xlsxwriter.Workbook(FatigueDirectiory + fatigue_model + '.xlsx') # write to excel
     
-    allresultfile = open(OutputDirectiory + fatigue_model + '.csv', 'w') # write to csv all
+    allresultfile = open(FatigueDirectiory + fatigue_model + '.csv', 'w') # write to csv all
     print >>allresultfile, headers + ',Load Type' # write to csv all
     print >>allresultfile, units + ',-' # write to csv all
         
-    for tmf_test in tmf_tests:
-        resultfile = open(OutputDirectiory + tmf_test[0] + '.csv', 'w') # write to csv
-        print >>resultfile, headers # write to csv
-        print >>resultfile, units # write to csv
+    for experiment_type in experiment_type_list:
+#        resultfile = open(FatigueDirectiory + experiment_type[0] + '.csv', 'w') # write to csv
+#        print >>resultfile, headers # write to csv
+#        print >>resultfile, units # write to csv
         
-        worksheet = workbook.add_worksheet(tmf_test[0]) # write to excel
+        worksheet = workbook.add_worksheet(experiment_type[0]) # write to excel
         bold = workbook.add_format({'bold': 1}) # write to excel
         row_number = 1 # write to excel
         header_list = headers.split(',') # write to excel
         unit_list = units.split(',') # write to excel
-        comment_list = [ tmf_test[0] for i in range(len(header_list))] # write to excel
+        comment_list = [ experiment_type[0] for i in range(len(header_list))] # write to excel
         worksheet.write_row('A'+str(row_number), header_list, bold); row_number += 1 # write to excel
         worksheet.write_row('A'+str(row_number), unit_list, bold); row_number += 1 # write to excel
         worksheet.write_row('A'+str(row_number), comment_list, bold); row_number += 1 # write to excel
         
-        for name in tmf_test[1]:
+        for name in experiment_type[1]:
             regular = r'\d+\.?\d*'
             period = float(experiment_log.obtainItem(name,'period',regular)[0])
             expriment_life = int(experiment_log.obtainItem(name,'comments',regular)[0])
@@ -108,15 +109,15 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
             line += '%s,' % (name) # write to csv
             for d in data: # write to csv
                 line += '%s,' % (d) # write to csv
-            print >>resultfile, line[:-1] # write to csv, ignore the last comma
+#            print >>resultfile, line[:-1] # write to csv, ignore the last comma
             
-            line += '%s' % (tmf_test[0]) # write to csv all
+            line += '%s' % (experiment_type[0]) # write to csv all
             print >>allresultfile, line # write to csv all
             
             data_list = [expriment_life,equivalent_strain,0,name] + data # write to excel
             worksheet.write_row('A'+str(row_number), data_list); row_number += 1 # write to excel
             
-        resultfile.close() # write to csv
+#        resultfile.close() # write to csv
         
     allresultfile.close() # write to csv all
     workbook.close() # write to excel

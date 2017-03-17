@@ -356,12 +356,9 @@ class FatigueData:
         self.load_type = data[:,14]
         del data
 
-    def loadTypeFilter(self,load_type):
+    def loadTypeFilter(self,load_type,item):
         numbers = np.where(self.load_type == load_type)[0]
-        sub_experimental_life = []
-        sub_predicted_life = []
+        result = []
         for number in numbers:
-            sub_experimental_life.append(self.experimental_life[number])
-            sub_predicted_life.append(self.predicted_life[number])
-        return sub_experimental_life,sub_predicted_life
-        
+            result.append(eval('self.%s[number]' % item))
+        return result

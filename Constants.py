@@ -21,6 +21,8 @@ SimulationDirectiory = 'F:\\Temp\\IN718_Sim\\'
 
 ExperimentLogFile = ExperimentDirectiory + 'Inconel718_test_log.csv'
 
+FatigueDirectiory = 'F:\\Database\\Fatigue\\'
+
 InputTemplate = 'Tension3DTemplate.inp'
 
 xylabels = {'axial_count':'N, cycle',\
@@ -43,11 +45,13 @@ xylabels = {'axial_count':'N, cycle',\
 'axial_true_stress':'Axial True Stress $\sigma$, MPa',\
 }
 
-tmf_tests = []
-tmf_tests.append(['TC-IP',['7031','7047','7030','7018']])
-tmf_tests.append(['TC-OP',['7033','7048','7032','7017']])
-tmf_tests.append(['PRO-IP',['7040','7029','7039','7038']])
-tmf_tests.append(['NPR-IP',['7036','7034','7045','7046','7028','7037']])
+experiment_type_list = []
+experiment_type_list.append(['TC-IP',['7031','7047','7030','7018']])
+experiment_type_list.append(['TC-OP',['7033','7048','7032','7017']])
+experiment_type_list.append(['PRO-IP',['7040','7029','7039','7038']])
+experiment_type_list.append(['NPR-IP',['7036','7034','7045','7046','7028','7037']])
+experiment_type_list.append(['TC-90',['7025']])
+experiment_type_list.append(['TC-IF',['7110','7111','7112','7113','7114','7115','7116']])
 
 #xylabels = {'axial_count':'N [cycle]',\
 #'runing_time':'Running Time [s]',\

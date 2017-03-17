@@ -177,5 +177,5 @@ C <DAMAGE PARAMETERS>
     outfile.close()
     
 calculate_umat_parameters_in718()
-for name in ['7211']:
+for name in ['7028']:
     work(name)

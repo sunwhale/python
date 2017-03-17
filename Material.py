@@ -6,6 +6,7 @@ Created on Thu Jan 05 11:50:47 2017
 """
 
 import numpy as np
+import matplotlib.pyplot as plt
 from scipy.optimize import fsolve
 from scipy.optimize import leastsq
 
@@ -164,7 +165,14 @@ class Material:
             ]   
         result = fsolve(f, [1])
         return int(result[0])
-
+    
+    def plotMansonCoffinAxial(self):
+        life = np.arange(1E1, 1E5, 10)
+        epsilon_amplitude = self.sigma_f/self.youngs_modulus*(2*life)**self.b + self.epsilon_f*(2*life)**self.c
+#        plt.plot(life,epsilon)
+#        plt.show()
+        return life,epsilon_amplitude
+        
 #==============================================================================
 # material inconel718 at 650
 #==============================================================================
@@ -176,26 +184,26 @@ def material_in718():
     material.setCyclicAxial(sigma_f=1034.0,b=-0.04486,epsilon_f=0.11499,c=-0.52436)
     material.setCyclicTorsion(tau_f=1034.0/np.sqrt(3),b0=-0.04486,gamma_f=0.11499*np.sqrt(3),c0=-0.52436)
     return material
-
-#material = Material()
-#material.setName(name='SS304')
-#material.setTemperature(temperature=20.0)
-#material.setMonotonic(youngs_modulus=198000.0,poisson_ratio=0.3,yield_stress=220.0)
-#material.setCyclicAxial(sigma_f=671.22,b=-0.0842,epsilon_f=0.0931,c=-0.3792)
-#material.setCyclicTorsion(tau_f=315.12,b0=-0.0556,gamma_f=0.1043,c0=-0.2649)
-#
-#epsilon, sigma = np.genfromtxt(r'F:\Work\2017-01-07_Exercise\CyclicData.txt', unpack=True)
-#material.calculateCyclicStrengthCoefficient(epsilon,sigma)
-#
-#life_x2, epsilon_amp  = np.genfromtxt(r'F:\Work\2017-01-07_Exercise\epsilonN.txt', unpack=True)
-#material.calculateMansonCoffinAxial(epsilon_amp/100.0,life_x2)
-#
-#life_x2, gamma_amp  = np.genfromtxt(r'F:\Work\2017-01-07_Exercise\gammaN.txt', unpack=True)
-#material.calculateMansonCoffinTorsion(gamma_amp/100.0,life_x2)
-#
-#material = Material()
-#material.setName(name='IN718')
-#material.setTemperature(temperature=650.0)
-#material.setMonotonic(youngs_modulus=162600.0,poisson_ratio=0.3,yield_stress=220.0)
-#material.setCyclicAxial(sigma_f=1348.0,b=-0.10052,epsilon_f=0.12445,c=-0.55218)
-#material.setCyclicTorsion(tau_f=1348.0/np.sqrt(3),b0=-0.10052,gamma_f=0.12445*np.sqrt(3),c0=-0.55218)
+#==============================================================================
+# material ss304 at 20
+#==============================================================================
+def material_ss304():
+    material = Material()
+    material.setName(name='SS304')
+    material.setTemperature(temperature=20.0)
+    material.setMonotonic(youngs_modulus=198000.0,poisson_ratio=0.3,yield_stress=220.0)
+    material.setCyclicAxial(sigma_f=671.22,b=-0.0842,epsilon_f=0.0931,c=-0.3792)
+    material.setCyclicTorsion(tau_f=315.12,b0=-0.0556,gamma_f=0.1043,c0=-0.2649)
+    
+    epsilon, sigma = np.genfromtxt(r'F:\Work\2017-01-07_Exercise\CyclicData.txt', unpack=True)
+    material.calculateCyclicStrengthCoefficient(epsilon,sigma)
+    
+    life_x2, epsilon_amp  = np.genfromtxt(r'F:\Work\2017-01-07_Exercise\epsilonN.txt', unpack=True)
+    material.calculateMansonCoffinAxial(epsilon_amp/100.0,life_x2)
+    
+    life_x2, gamma_amp  = np.genfromtxt(r'F:\Work\2017-01-07_Exercise\gammaN.txt', unpack=True)
+    material.calculateMansonCoffinTorsion(gamma_amp/100.0,life_x2)
+    return material
+    
+#material = material_in718()
+#material.plotMansonCoffinAxial()

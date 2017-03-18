@@ -197,7 +197,7 @@ number_list = experiment_log.keyFilter("(self.calculate == '1') & (self.load_typ
 
 #print dir(experiment_log)
 #print experiment_log.load_type
-print number_list
+#print number_list
 #for name in number_list:
 #    work(name)
 work('7116',loading_cycles=1000)

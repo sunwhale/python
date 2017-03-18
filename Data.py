@@ -366,3 +366,18 @@ class FatigueData:
         for number in numbers:
             result.append(eval('self.%s[number]' % item))
         return result
+        
+#==============================================================================
+# PlotData
+#==============================================================================
+class PlotData:
+    """
+    Define a data structure for plot.
+    lines = [[x1,y1,label1],[x2,y2,label1],...,[xn,yn,labeln]]
+    """
+    def __init__(self):
+        self.lines = []
+        
+    def addLine(self,xlabel,ylabel,x,y,linelabel):
+        self.lines.append([xlabel,ylabel,x,y,linelabel])
+        

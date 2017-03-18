@@ -403,11 +403,11 @@ class Job:
             shutil.copytree(self.UMAT.UMATDirectory, self.AbaqusWorkUMATDirectory)
             
     def autoPostProc(self):
-        self.creatBatchFile()
-        shutil.copy(PythonDirectiory + self.PythonPostProc, self.AbaqusWorkDirectory)
-        os.chdir(self.AbaqusWorkDirectory)
-        cmd ='AutoPostProc'
-        os.system(cmd)
+#        self.creatBatchFile()
+#        shutil.copy(PythonDirectiory + self.PythonPostProc, self.AbaqusWorkDirectory)
+#        os.chdir(self.AbaqusWorkDirectory)
+#        cmd ='AutoPostProc'
+#        os.system(cmd)
         copy_suffix_files(self.AbaqusWorkDirectory,SimulationDirectiory,suffixs=['csv'])
         
     def show(self):

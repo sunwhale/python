@@ -13,11 +13,6 @@ import shutil
 from scipy.optimize import leastsq
 
 #==============================================================================
-# some constants
-#==============================================================================
-plastic_strain_list=[0.00005,0.0001,0.0002,0.0005,0.001,0.002,0.004,0.01,0.02]
-plastic_strain_list=[0.001,0.002,0.003,0.004,0.005,0.01,0.02]
-#==============================================================================
 # get_files
 #==============================================================================
 def get_files(path):
@@ -49,16 +44,19 @@ def is_csv_file(filename):
 # copy_suffix_files
 #==============================================================================
 def copy_suffix_files(input_directory,output_directory,suffixs=[]):
+    """
+    将input_directory文件夹中对应后缀的所有文件复制到output_directory文件夹。
+    例如copy_suffix_files('F:\\Temp\\IN7183\\','F:\\Temp\\IN718_Sim\\',suffixs=['csv'])
+    """
     if not os.path.isdir(output_directory):
         os.makedirs(output_directory)
         print 'Create new directory: ',output_directory
     filenames = get_files(input_directory)
     for filename in filenames:
         if is_suffix_file(filename[1],suffixs=suffixs):
-            fullname = filename[0] + '\\' + filename[1]
+            fullname = filename[0] + filename[1]
             shutil.copy(fullname, output_directory)
             print 'copy %-s  to  %-s' % (fullname,output_directory)
-#copy_suffix_files('F:\\Temp\\IN7183\\','F:\\Temp\\IN718_Sim\\',suffixs=['csv'])
 #==============================================================================
 # obtain_masing_curve
 #==============================================================================
@@ -126,6 +124,7 @@ def obtain_youngs_modulus(strain_stress_curve,elastic_limit=0.002):
 #==============================================================================
 # linear_interpolation
 #==============================================================================
+plastic_strain_list=[0.0005,0.001,0.002,0.005,0.01,0.02]
 def linear_interpolation(xy,position_x_list=plastic_strain_list):
     """
     线性差值。

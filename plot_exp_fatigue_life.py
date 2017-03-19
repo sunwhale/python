@@ -92,7 +92,7 @@ def plot_exp_fatigue_life(fatigue_data,figure_name=None,figure_path=None,save_ty
     plt.show()
     plt.close()
 
-ArticleFigureDirectiory = 'F:\\Articles\\Fatigue\\Figs\\'
-fatigue_file = '%s%s.csv' % (FatigueDirectiory,'BM')
+ArticleFigureDirectory = 'F:\\Articles\\Fatigue\\Figs\\'
+fatigue_file = '%s%s.csv' % (FatigueDirectory,'BM')
 fatigue_data = FatigueData(fatigue_file)
-plot_exp_fatigue_life(fatigue_data,figure_path=ArticleFigureDirectiory,figure_name='NF-TMF',save_types=['.pdf'])
+plot_exp_fatigue_life(fatigue_data,figure_path=ArticleFigureDirectory,figure_name='NF-TMF',save_types=['.pdf'])

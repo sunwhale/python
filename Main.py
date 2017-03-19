@@ -27,7 +27,7 @@ material.show()
 #==============================================================================
 name = '7037'
 
-experiment_log = ExperimentLog(ExperimentDirectiory + 'Inconel718_test_log.csv')
+experiment_log = ExperimentLog(ExperimentDirectory + 'Inconel718_test_log.csv')
 experiment_log.find(name)
 
 sim = SimulationData(r'F:\Temp\IN7182\7037\7037.csv')

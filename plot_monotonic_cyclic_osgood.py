@@ -23,7 +23,7 @@ def plot_exp_coffin_manson(fatigue_data,figure_name=None,figure_path=None,save_t
 # figure format
 # http://matplotlib.org/users/customizing.html?highlight=rcparams
 #==============================================================================
-    plot_format()   
+    plot_format()
 #==============================================================================
 # grid set up
 #==============================================================================
@@ -95,6 +95,6 @@ def plot_exp_coffin_manson(fatigue_data,figure_name=None,figure_path=None,save_t
     plt.show()
     plt.close()
 
-fatigue_file = '%s%s.csv' % (FatigueDirectiory,'BM')
+fatigue_file = '%s%s.csv' % (FatigueDirectory,'BM')
 fatigue_data = FatigueData(fatigue_file)
-plot_exp_coffin_manson(fatigue_data,figure_path=ArticleFigureDirectiory,figure_name='plot_exp_coffin_manson',save_types=['.pdf'])
+plot_exp_coffin_manson(fatigue_data,figure_path=ArticleFigureDirectory,figure_name='plot_exp_coffin_manson',save_types=['.pdf'])

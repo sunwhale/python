@@ -47,7 +47,7 @@ def work(name,loading_cycles=None):
 #==============================================================================
 # experiment
 #==============================================================================
-#    exp_full_name = ExperimentDirectiory + name + '.csv'
+#    exp_full_name = ExperimentDirectory + name + '.csv'
 #    if os.path.exists(exp_full_name):
 #        exp = ExperimentData(exp_full_name)
 #        experimental_life = exp.total_axial_count

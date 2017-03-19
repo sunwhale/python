@@ -33,11 +33,11 @@ def calculate_umat_parameters_in718():
     youngs_modulus, poisson_ratio, shear_modulus = calculate_elastic_by_temperature_in718(temperature)
     
     name = '7101'
-    exp_full_name = ExperimentDirectiory + name + '.csv'
+    exp_full_name = ExperimentDirectory + name + '.csv'
     exp_monotonic = ExperimentData(exp_full_name)
     
     name = '7211'
-    exp_full_name = ExperimentDirectiory + name + '.csv'
+    exp_full_name = ExperimentDirectory + name + '.csv'
     exp_cyclic = ExperimentData(exp_full_name)
     
     monotonic_curve = [exp_monotonic.axial_log_strain,exp_monotonic.axial_true_stress]
@@ -54,11 +54,11 @@ def calculate_umat_parameters_in718():
     youngs_modulus, poisson_ratio, shear_modulus = calculate_elastic_by_temperature_in718(temperature)
     
     name = '7103'
-    exp_full_name = ExperimentDirectiory + name + '.csv'
+    exp_full_name = ExperimentDirectory + name + '.csv'
     exp_monotonic = ExperimentData(exp_full_name)
     
     name = '7212'
-    exp_full_name = ExperimentDirectiory + name + '.csv'
+    exp_full_name = ExperimentDirectory + name + '.csv'
     exp_cyclic = ExperimentData(exp_full_name)
     
     monotonic_curve = [exp_monotonic.axial_log_strain,exp_monotonic.axial_true_stress]
@@ -75,11 +75,11 @@ def calculate_umat_parameters_in718():
     youngs_modulus, poisson_ratio, shear_modulus = calculate_elastic_by_temperature_in718(temperature)
     
     name = '7102'
-    exp_full_name = ExperimentDirectiory + name + '.csv'
+    exp_full_name = ExperimentDirectory + name + '.csv'
     exp_monotonic = ExperimentData(exp_full_name)
     
     name = '7213'
-    exp_full_name = ExperimentDirectiory + name + '.csv'
+    exp_full_name = ExperimentDirectory + name + '.csv'
     exp_cyclic = ExperimentData(exp_full_name)
     
     monotonic_curve = [exp_monotonic.axial_log_strain,exp_monotonic.axial_true_stress]

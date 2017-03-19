@@ -373,11 +373,142 @@ class FatigueData:
 class PlotData:
     """
     Define a data structure for plot.
-    lines = [[x1,y1,label1],[x2,y2,label1],...,[xn,yn,labeln]]
+    
+    lines = [{line1},{line2},...]
+    
+    Example:
+    
+    life_NASA = [33,35,200,515,830,1072,1785,1850,2868,4323,8903,13332,13762]
+    strain_amplitude_NASA = [1.75,1.75,0.85,0.85,0.575,0.5,0.507,0.575,0.398,0.402,0.329,0.323,0.328] # %
+    stess_amplitude_NASA = [873.5,873.5,726.6,726.6,636.8,601,605,636.8,538,541,480,474,479] # MPa
+    
+    life_BHU = [100000,48745,50900,35940,12980,6300,2220,678,515]
+    strain_amplitude_BHU = [0.4,0.42,0.43,0.45,0.47,0.5,0.6,0.8,1.0] # %
+    stess_amplitude_BHU = [621,638,607,606,653,646,749,756,779] # MPa
+    
+    plot_data = PlotData()
+    plot_data.addLine(life_NASA,strain_amplitude_NASA)
+    plot_data.addLine(life_BHU,strain_amplitude_BHU)
     """
     def __init__(self):
         self.lines = []
+        self.number_of_header_lines = 8
         
-    def addLine(self,xlabel,ylabel,x,y,linelabel):
-        self.lines.append([xlabel,ylabel,x,y,linelabel])
+    def addLine(self,
+                x,
+                y,
+                xlabel='xlabel',
+                ylabel='ylabel',
+                linelabel='',
+                linestyle='',
+                linewidth=2,
+                marker=None,
+                markersize=12,
+                color=''):
         
+        self.lines.append({'x':x,
+                           'y':y,
+                           'xlabel':xlabel,
+                           'ylabel':ylabel,
+                           'linelabel':linelabel,
+                           'linestyle':linestyle,
+                           'linewidth':linewidth,
+                           'marker':marker,
+                           'markersize':markersize,
+                           'color':color})
+        
+    def plot(self):
+        for line in self.lines:
+            plt.xlabel(line['xlabel'])
+            plt.ylabel(line['ylabel'])
+            plt.plot(line['x'],
+                     line['y'],
+                     label=line['linelabel'],
+                     linestyle=line['linestyle'],
+                     linewidth=line['linewidth'],
+                     marker=line['marker'],
+                     markersize=line['markersize'],
+                     color=line['color'])
+            
+    def writeToFile(self,directory,filename):
+        resultfile = open(directory + filename + '.csv', 'w') # write to csv
+        data_list = []
+        for line in self.lines:
+            xarray = []
+            xarray.append('x')
+            xarray.append(line['xlabel'])
+            xarray.append(line['linelabel'])
+            xarray.append(line['linestyle'])
+            xarray.append(line['linewidth'])
+            xarray.append(line['marker'])
+            xarray.append(line['markersize'])
+            xarray.append(line['color'])
+            for x in line['x']:
+                xarray.append(x)
+            data_list.append(xarray)
+            
+            yarray = []
+            yarray.append('y')
+            yarray.append(line['ylabel'])
+            yarray.append(line['linelabel'])
+            yarray.append(line['linestyle'])
+            yarray.append(line['linewidth'])
+            yarray.append(line['marker'])
+            yarray.append(line['markersize'])
+            yarray.append(line['color'])
+            for y in line['y']:
+                yarray.append(y)
+            data_list.append(yarray)
+        
+        data_length_list = []
+        for data in data_list:
+            data_length_list.append(len(data))
+        data_length_max = max(data_length_list)
+        data_height = len(data_list)
+
+        for i in range(data_length_max):
+            l = ''
+            for j in range(data_height):
+                if i < data_length_list[j]:
+                    l += '%s,' % str(data_list[j][i])
+                else:
+                    l += '%s,' % ''
+            print >>resultfile, l[:-1]
+            
+        resultfile.close()
+        print 'save as', directory + filename + '.csv'
+            
+    def readFromFile(self,directory,filename):
+        self.lines = []
+        data = np.genfromtxt(directory + filename + '.csv', delimiter=',', skip_header=0, dtype=str) # read from csv
+        data = data.transpose()
+        data_item_list = []
+        for d in data:
+            data_item_list.append(d[0])
+        data_item = np.array(data_item_list)
+        data_item_index = np.where(data_item == 'x')[0]
+        for i in data_item_index:
+            x_index = i
+            y_index = i + 1
+            x_data = data[x_index]
+            y_data = data[y_index]
+            x = [float(x) for x in x_data[self.number_of_header_lines:] if x <> '']
+            y = [float(y) for y in y_data[self.number_of_header_lines:] if y <> '']
+            xlabel = x_data[1]
+            ylabel = y_data[1]
+            linelabel = x_data[2]
+            linestyle = x_data[3]
+            linewidth = float(x_data[4])
+            marker = x_data[5]
+            markersize = int(x_data[6])
+            color = x_data[7]
+            self.lines.append({'x':x,
+                               'y':y,
+                               'xlabel':xlabel,
+                               'ylabel':ylabel,
+                               'linelabel':linelabel,
+                               'linestyle':linestyle,
+                               'linewidth':linewidth,
+                               'marker':marker,
+                               'markersize':markersize,
+                               'color':color})

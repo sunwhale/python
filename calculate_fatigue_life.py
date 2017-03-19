@@ -61,24 +61,24 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
     material.show()
     experiment_log = ExperimentLog(ExperimentLogFile)
     
-    FatigueDirectiory = 'F:\\Database\\Fatigue\\%s\\' % fatigue_model
-    FatigueDirectiory = 'F:\\Database\\Fatigue\\'
+    FatigueDirectory = 'F:\\Database\\Fatigue\\%s\\' % fatigue_model
+    FatigueDirectory = 'F:\\Database\\Fatigue\\'
 
-    if not os.path.isdir(FatigueDirectiory):
-        os.makedirs(FatigueDirectiory)
-        print 'Create new directory:',FatigueDirectiory
+    if not os.path.isdir(FatigueDirectory):
+        os.makedirs(FatigueDirectory)
+        print 'Create new directory:',FatigueDirectory
             
     headers = 'Number of Cycles to Failure N\-(f),Mises Equivalent Strain Amplitude \i(\g(De))\-(eq)/2,Stress Amplitude e \i(\g(Ds))/2,Specimen,Critical Plane,sigma_n_max,delta_sigma,delta_epsilon,tau_n_max,delta_tau,delta_gamma,Predicted Fatigue Lifetime N\-(p),Fatigue Coefficient,Temperature'
     units = 'cycles,mm/mm,MPa,-,deg,MPa,MPa,mm/mm,MPa,MPa,mm/mm,cycles,-,C'
     
-    workbook = xlsxwriter.Workbook(FatigueDirectiory + fatigue_model + '.xlsx') # write to excel
+    workbook = xlsxwriter.Workbook(FatigueDirectory + fatigue_model + '.xlsx') # write to excel
     
-    allresultfile = open(FatigueDirectiory + fatigue_model + '.csv', 'w') # write to csv all
+    allresultfile = open(FatigueDirectory + fatigue_model + '.csv', 'w') # write to csv all
     print >>allresultfile, headers + ',Load Type' # write to csv all
     print >>allresultfile, units + ',-' # write to csv all
         
     for experiment_type in experiment_type_list:
-#        resultfile = open(FatigueDirectiory + experiment_type[0] + '.csv', 'w') # write to csv
+#        resultfile = open(FatigueDirectory + experiment_type[0] + '.csv', 'w') # write to csv
 #        print >>resultfile, headers # write to csv
 #        print >>resultfile, units # write to csv
         
@@ -97,8 +97,8 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
             period = float(experiment_log.obtainItem(name,'period',regular)[0])
             expriment_life = int(experiment_log.obtainItem(name,'comments',regular)[0])
             equivalent_strain = float(experiment_log.obtainItem(name,'equivalent_strain',regular)[0])
-            sim = SimulationData(SimulationDirectiory+name+'.csv',period)
-#            exp = ExperimentData(ExperimentDirectiory+name+'.csv')
+            sim = SimulationData(SimulationDirectory+name+'.csv',period)
+#            exp = ExperimentData(ExperimentDirectory+name+'.csv')
             data = calculate_data_fatigue_life(sim,material,fatigue_model)
             
             line = '' # write to csv

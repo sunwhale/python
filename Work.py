@@ -225,9 +225,9 @@ class Job:
             print 'Create new directory:',self.AbaqusWorkDirectory
     
     def copyFiles(self):
-        shutil.copy(PythonDirectiory + self.PythonPostProc, self.AbaqusWorkDirectory)
-        shutil.copy(PythonDirectiory + self.PythonPreproc, self.AbaqusWorkDirectory)
-        shutil.copy(PythonDirectiory + self.PythonConstants, self.AbaqusWorkDirectory)
+        shutil.copy(PythonDirectory + self.PythonPostProc, self.AbaqusWorkDirectory)
+        shutil.copy(PythonDirectory + self.PythonPreproc, self.AbaqusWorkDirectory)
+        shutil.copy(PythonDirectory + self.PythonConstants, self.AbaqusWorkDirectory)
 
     def createAbaqusCAE(self):
         self.createDirectory()
@@ -246,8 +246,8 @@ class Job:
         print >>outfile, 'AbaqusWorkDirectory = %r' % (self.AbaqusWorkDirectory)
         outfile.close()
 
-        shutil.copy(PythonDirectiory + self.PythonPreproc, self.AbaqusWorkDirectory)
-        shutil.copy(PythonDirectiory + self.PythonConstants, self.AbaqusWorkDirectory)
+        shutil.copy(PythonDirectory + self.PythonPreproc, self.AbaqusWorkDirectory)
+        shutil.copy(PythonDirectory + self.PythonConstants, self.AbaqusWorkDirectory)
         
         os.chdir(self.AbaqusWorkDirectory)
         self.creatBatchFile()
@@ -403,16 +403,16 @@ class Job:
             shutil.copytree(self.UMAT.UMATDirectory, self.AbaqusWorkUMATDirectory)
             
     def autoPostProc(self):
-#        self.creatBatchFile()
-#        shutil.copy(PythonDirectiory + self.PythonPostProc, self.AbaqusWorkDirectory)
-#        os.chdir(self.AbaqusWorkDirectory)
-#        cmd ='AutoPostProc'
-#        os.system(cmd)
-        copy_suffix_files(self.AbaqusWorkDirectory,SimulationDirectiory,suffixs=['csv'])
+        self.creatBatchFile()
+        shutil.copy(PythonDirectory + self.PythonPostProc, self.AbaqusWorkDirectory)
+        os.chdir(self.AbaqusWorkDirectory)
+        cmd ='AutoPostProc'
+        os.system(cmd)
+        copy_suffix_files(self.AbaqusWorkDirectory,SimulationDirectory,suffixs=['csv'])
         
     def show(self):
-        print 'PythonDirectiory:',PythonDirectiory
-        print 'InputDirectiory:',InputDirectiory
+        print 'PythonDirectory:',PythonDirectory
+        print 'InputDirectory:',InputDirectory
         print 'AbaqusWorkDirectory:',self.AbaqusWorkDirectory
         print 'JobName:',self.JobName
         print 'CAEName:',self.CAEName

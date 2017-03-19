@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from scipy.optimize import fsolve
 from scipy.optimize import leastsq
 from Data import ExperimentData
-from Constants import ExperimentDirectiory
+from Constants import ExperimentDirectory
 
 class Material:
     def __init__(self):
@@ -230,7 +230,7 @@ def material_in718():
     material.setTemperature(temperature=650.0)
     material.setMonotonic(youngs_modulus=167100.0,poisson_ratio=0.2886,yield_stress=1064.0,K=1433.0,n=0.048958)
 #    name = '7102'
-#    exp_full_name = ExperimentDirectiory + name + '.csv'
+#    exp_full_name = ExperimentDirectory + name + '.csv'
 #    exp = ExperimentData(exp_full_name)
 #    epsilon = exp.axial_strain
 #    sigma = exp.axial_stress

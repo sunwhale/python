@@ -404,7 +404,7 @@ class PlotData:
                 linewidth=2,
                 marker=None,
                 markersize=12,
-                color=''):
+                color='auto'):
         
         self.lines.append({'x':x,
                            'y':y,
@@ -421,14 +421,23 @@ class PlotData:
         for line in self.lines:
             plt.xlabel(line['xlabel'])
             plt.ylabel(line['ylabel'])
-            plt.plot(line['x'],
-                     line['y'],
-                     label=line['linelabel'],
-                     linestyle=line['linestyle'],
-                     linewidth=line['linewidth'],
-                     marker=line['marker'],
-                     markersize=line['markersize'],
-                     color=line['color'])
+            if line['color'] == 'auto':
+                plt.plot(line['x'],
+                         line['y'],
+                         label=line['linelabel'],
+                         linestyle=line['linestyle'],
+                         linewidth=line['linewidth'],
+                         marker=line['marker'],
+                         markersize=line['markersize'])
+            else:
+                plt.plot(line['x'],
+                         line['y'],
+                         label=line['linelabel'],
+                         linestyle=line['linestyle'],
+                         linewidth=line['linewidth'],
+                         marker=line['marker'],
+                         markersize=line['markersize'],
+                         color=line['color'])
             
     def writeToFile(self,directory,filename):
         resultfile = open(directory + filename + '.csv', 'w') # write to csv

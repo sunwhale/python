@@ -9,7 +9,7 @@ import numpy as np
 import os
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator,ScalarFormatter,FormatStrFormatter 
-from Data import FatigueData
+from Data import FatigueData,PlotData
 from Constants import *
 from plot_format import plot_format
 from Material import material_in718,material_in718_NASA,material_in718_BHU
@@ -22,7 +22,96 @@ life_BHU = [100000,48745,50900,35940,12980,6300,2220,678,515]
 strain_amplitude_BHU = [0.4,0.42,0.43,0.45,0.47,0.5,0.6,0.8,1.0] # %
 stess_amplitude_BHU = [621,638,607,606,653,646,749,756,779] # MPa
 
-def plot_exp_coffin_manson(fatigue_data,figure_name=None,figure_path=None,save_types=[]):
+def create_plot_data_exp_coffin_manson(fatigue_data,figure_path=None,figure_name=None):
+    plot_data = PlotData()
+#==============================================================================
+# x,y label
+#==============================================================================
+    xlabel = xylabels['experimental_life']
+    ylabel = xylabels['axial_strain_amplitude']
+#==============================================================================
+# plot lines
+#==============================================================================
+    i = 0
+    marker_list = ['s','o','^','D','<']
+    for load_type in ['TC-IF']:
+        experimental_life = fatigue_data.loadTypeFilter(load_type,'experimental_life')
+        equivalent_strain_amplitude = fatigue_data.loadTypeFilter(load_type,'equivalent_strain_amplitude')
+        plot_data.addLine(experimental_life,
+                          equivalent_strain_amplitude,
+                          xlabel=xlabel,
+                          ylabel=ylabel,
+                          linelabel=load_type,
+                          linewidth=2,
+                          linestyle='',
+                          marker=marker_list[i],
+                          markersize=12)
+        i += 1
+        
+    plot_data.addLine(life_NASA,
+                      strain_amplitude_NASA,
+                      xlabel=xlabel,
+                      ylabel=ylabel,
+                      linelabel='NASA',
+                      linewidth=2,
+                      linestyle='',
+                      marker=marker_list[i],
+                      markersize=12)
+    
+    i += 1
+    plot_data.addLine(life_BHU,
+                      strain_amplitude_BHU,
+                      xlabel=xlabel,
+                      ylabel=ylabel,
+                      linelabel='G.S. Mahobia 2014',
+                      linewidth=2,
+                      linestyle='',
+                      marker=marker_list[i],
+                      markersize=12)
+
+                     
+    material = material_in718()
+    life,epsilon_amplitude = material.plotMansonCoffinAxial()
+    plot_data.addLine(life,
+                      epsilon_amplitude*100,
+                      xlabel=xlabel,
+                      ylabel=ylabel,
+                      linelabel='',
+                      linewidth=1.5,
+                      linestyle='-',
+                      marker=None,
+                      markersize=12,
+                      color='blue')
+    
+    material = material_in718_NASA()
+    life,epsilon_amplitude = material.plotMansonCoffinAxial()
+    plot_data.addLine(life,
+                      epsilon_amplitude*100,
+                      xlabel=xlabel,
+                      ylabel=ylabel,
+                      linelabel='',
+                      linewidth=1.5,
+                      linestyle='-',
+                      marker=None,
+                      markersize=12,
+                      color='green')
+    
+    material = material_in718_BHU()
+    life,epsilon_amplitude = material.plotMansonCoffinAxial()
+    plot_data.addLine(life,
+                      epsilon_amplitude*100,
+                      xlabel=xlabel,
+                      ylabel=ylabel,
+                      linelabel='',
+                      linewidth=1.5,
+                      linestyle='-',
+                      marker=None,
+                      markersize=12,
+                      color='red')
+    
+    plot_data.writeToFile(figure_path,figure_name)
+    
+def plot_exp_coffin_manson(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # title
 #==============================================================================
@@ -49,11 +138,6 @@ def plot_exp_coffin_manson(fatigue_data,figure_name=None,figure_path=None,save_t
     plt.xlim(1E1,2E6)
     plt.ylim(0.2,2.0)
 #==============================================================================
-# x,y label
-#==============================================================================
-    plt.xlabel(r'Experimental Fatigue Lifetime $N_{\rm{f}}$')
-    plt.ylabel(r'Equivalent Strain Amplitude $\Delta\varepsilon_{\rm{ep}}/2$, %')
-#==============================================================================
 # xy log scale
 #==============================================================================
     plt.xscale('log')
@@ -73,31 +157,9 @@ def plot_exp_coffin_manson(fatigue_data,figure_name=None,figure_path=None,save_t
 #==============================================================================
 # plot lines
 #==============================================================================
-    i = 0
-    marker_list = ['s','o','^','D','<']
-    for load_type in ['TC-IF']:
-        experimental_life = fatigue_data.loadTypeFilter(load_type,'experimental_life')
-        equivalent_strain_amplitude = fatigue_data.loadTypeFilter(load_type,'equivalent_strain_amplitude')
-        plt.plot(experimental_life, equivalent_strain_amplitude, label='Tsinghua', linewidth=2, linestyle='',
-                     marker=marker_list[i], markersize=12)
-        i += 1
-    plt.plot(life_NASA, strain_amplitude_NASA, label='NASA', linewidth=2, linestyle='',
-                     marker=marker_list[i], markersize=12)
-    i += 1
-    plt.plot(life_BHU, strain_amplitude_BHU, label='G.S. Mahobia 2014', linewidth=2, linestyle='',
-                     marker=marker_list[i], markersize=12)
-                     
-    material = material_in718()
-    life,epsilon_amplitude = material.plotMansonCoffinAxial()
-    plt.plot(life,epsilon_amplitude*100,linewidth=1.5,color='blue')
-    
-    material = material_in718_NASA()
-    life,epsilon_amplitude = material.plotMansonCoffinAxial()
-    plt.plot(life,epsilon_amplitude*100,linewidth=1.5,color='green')
-    
-    material = material_in718_BHU()
-    life,epsilon_amplitude = material.plotMansonCoffinAxial()
-    plt.plot(life,epsilon_amplitude*100,linewidth=1.5,color='red')
+    plot_data = PlotData()
+    plot_data.readFromFile(figure_path,figure_name)
+    plot_data.plot()
 #==============================================================================
 # show legend
 #==============================================================================
@@ -115,4 +177,7 @@ def plot_exp_coffin_manson(fatigue_data,figure_name=None,figure_path=None,save_t
 
 fatigue_file = '%s%s.csv' % (FatigueDirectory,'BM')
 fatigue_data = FatigueData(fatigue_file)
-plot_exp_coffin_manson(fatigue_data,figure_path=ArticleFigureDirectory,figure_name='plot_exp_coffin_manson',save_types=['.pdf'])
+figure_path = ArticleFigureDirectory
+figure_name = 'plot_exp_coffin_manson'
+create_plot_data_exp_coffin_manson(fatigue_data,figure_path,figure_name)
+plot_exp_coffin_manson(figure_path,figure_name,save_types=['.pdf'])

@@ -72,7 +72,8 @@ class ExperimentData:
         self.total_runing_time = self.runing_time[-1]
         # 总循环数
         self.total_axial_count = int(self.axial_count[-1])
-        self.half_life_cycle = self.total_axial_count/2
+        # 初始半疲劳寿命
+        self.half_life_cycle = 0
         # 初始温度
         self.initial_temperature = self.temperature[0]
         
@@ -86,6 +87,7 @@ class ExperimentData:
         """
         建立每个循环开始位置的索引表：axial_count_begin_index。
         建立每个循环结束位置的索引表：axial_count_end_index。
+        计算半疲劳寿命：half_life_cycle。
         """
         self.axial_count_begin_index = {}
         self.axial_count_end_index = {}

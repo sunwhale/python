@@ -5,59 +5,49 @@ Created on Thu Jan 05 11:50:47 2017
 @author: j.Sun
 """
 
-import shutil
 import matplotlib.pyplot as plt
+import shutil
+import matplotlib as mpl
 from matplotlib.ticker import MultipleLocator,ScalarFormatter,FormatStrFormatter 
-from Data import FatigueData,PlotData
+from Data import FatigueData,PlotData,ExperimentData
 from Constants import *
 from plot_format import plot_format
-from Material import material_in718
+from Material import material_in718,material_in718_NASA,material_in718_BHU
 
-def create_plot_data_exp_fatigue_life(fatigue_data,figure_path=None,figure_name=None):
+def create_plot_data_exp_half_life_cycle(figure_path=None,figure_name=None):
 #==============================================================================
 # x,y label
 #==============================================================================
-    xlabel = xylabels['experimental_life']
-    ylabel = xylabels['equivalent_strain_amplitude']
+    xlabel = xylabels['axial_strain']
+    ylabel = xylabels['axial_stress']
 #==============================================================================
 # plot lines
 #==============================================================================
     i = 0
     marker_list = ['s','o','^','D']
     plot_data = PlotData()
-    i = 0
-    marker_list = ['s','o','^','D','<']
-    for load_type in ['TC-IP','TC-OP','PRO-IP','NPR-IP','TC-90']:
-        experimental_life = fatigue_data.loadTypeFilter(load_type,'experimental_life')
-        equivalent_strain_amplitude = fatigue_data.loadTypeFilter(load_type,'equivalent_strain_amplitude')
-        plot_data.addLine(experimental_life,
-                          equivalent_strain_amplitude,
+    for name in experiment_type_dict['TC-IF']:
+#        print name
+        filename = ExperimentDirectory + name + '.csv'
+        experiment = ExperimentData(filename)
+#        print experiment.half_life_cycle
+        strain = experiment.obtainNthCycle('axial_strain',experiment.half_life_cycle)
+        stress = experiment.obtainNthCycle('axial_stress',experiment.half_life_cycle)
+        plot_data.addLine(strain*100,
+                          stress,
                           xlabel=xlabel,
                           ylabel=ylabel,
-                          linelabel=load_type,
+                          linelabel='',
                           linewidth=2,
-                          linestyle='',
-                          marker=marker_list[i],
+                          linestyle='-',
+                          marker=None,
                           markersize=12,
                           color='auto')
         i += 1
-
-    material = material_in718()
-    life,epsilon_amplitude = material.plotMansonCoffinAxial()
-    plot_data.addLine(life,
-                      epsilon_amplitude*100,
-                      xlabel=xlabel,
-                      ylabel=ylabel,
-                      linelabel='TC-IF',
-                      linewidth=1.5,
-                      linestyle='-',
-                      marker=None,
-                      markersize=12,
-                      color='black')
     
     plot_data.writeToFile(figure_path,figure_name)
     
-def plot_exp_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
+def plot_exp_half_life_cycle(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # title
 #==============================================================================
@@ -66,7 +56,8 @@ def plot_exp_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
 # figure format
 # http://matplotlib.org/users/customizing.html?highlight=rcparams
 #==============================================================================
-    plot_format()   
+    plot_format()
+    mpl.rcParams['figure.subplot.left'] = 0.15
 #==============================================================================
 # grid set up
 #==============================================================================
@@ -81,13 +72,13 @@ def plot_exp_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # x,y limite
 #==============================================================================
-    plt.xlim(1E1,1E4)
-    plt.ylim(0.4,1.1)
+    plt.xlim(-1,1)
+    plt.ylim(-1000,1000)
 #==============================================================================
 # xy log scale
 #==============================================================================
-    plt.xscale('log')
-    plt.yscale('log')
+#    plt.xscale('log')
+#    plt.yscale('log')
 #==============================================================================
 # xy axial equal
 #==============================================================================
@@ -95,22 +86,24 @@ def plot_exp_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
 #    ax.set_aspect('equal')
     ax.set_aspect('auto')
 #==============================================================================
-# http://stackoverflow.com/questions/21920233/matplotlib-log-scale-tick-label-number-formatting
-#==============================================================================
-    ax.yaxis.set_major_locator(MultipleLocator(0.1))
-    ax.yaxis.set_minor_locator(MultipleLocator(0.01))
-    ax.yaxis.set_major_formatter(ScalarFormatter())
-#==============================================================================
 # plot lines
 #==============================================================================
     plot_data = PlotData()
     plot_data.readFromFile(figure_path,figure_name)
     plot_data.plot()
 #==============================================================================
+# http://stackoverflow.com/questions/21920233/matplotlib-log-scale-tick-label-number-formatting
+#==============================================================================
+    ax.xaxis.set_major_locator(MultipleLocator(0.5))
+    ax.xaxis.set_minor_locator(MultipleLocator(0.1))
+    ax.xaxis.set_major_formatter(ScalarFormatter())
+    ax.yaxis.set_major_locator(MultipleLocator(500))
+    ax.yaxis.set_minor_locator(MultipleLocator(100))
+    ax.yaxis.set_major_formatter(ScalarFormatter())
+#==============================================================================
 # show legend
 #==============================================================================
     plt.legend(loc=0)
-#    plt.legend(loc=0,fontsize='small',frameon=True,numpoints=1,title='Temperature')
 #==============================================================================
 # save figures
 #==============================================================================
@@ -121,11 +114,9 @@ def plot_exp_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
     plt.show()
     plt.close()
 
-fatigue_file = '%s%s.csv' % (FatigueDirectory,'BM')
-fatigue_data = FatigueData(fatigue_file)
-figure_path = ArticleFigureDirectory
-figure_name = 'plot_exp_fatigue_life'
-create_plot_data_exp_fatigue_life(fatigue_data,figure_path,figure_name)
-plot_exp_fatigue_life(figure_path,figure_name,save_types=['.pdf'])
+figure_path=ArticleFigureDirectory
+figure_name='plot_exp_half_life_cycle'
+#create_plot_data_exp_half_life_cycle(figure_path,figure_name)
+plot_exp_half_life_cycle(figure_path,figure_name,save_types=['.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

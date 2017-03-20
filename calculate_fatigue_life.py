@@ -61,7 +61,7 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
     material.show()
     experiment_log = ExperimentLog(ExperimentLogFile)
     
-    FatigueDirectory = 'F:\\Database\\Fatigue\\%s\\' % fatigue_model
+#    FatigueDirectory = 'F:\\Database\\Fatigue\\%s\\' % fatigue_model
     FatigueDirectory = 'F:\\Database\\Fatigue\\'
 
     if not os.path.isdir(FatigueDirectory):

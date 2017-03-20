@@ -5,8 +5,7 @@ Created on Thu Jan 05 11:50:47 2017
 @author: j.Sun
 """
 
-import numpy as np
-import os
+import shutil
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator,ScalarFormatter,FormatStrFormatter 
 from Data import FatigueData,PlotData
@@ -151,8 +150,8 @@ def plot_exp_coffin_manson(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # http://stackoverflow.com/questions/21920233/matplotlib-log-scale-tick-label-number-formatting
 #==============================================================================
-    ax.yaxis.set_major_locator(MultipleLocator(0.5))
-    ax.yaxis.set_minor_locator(MultipleLocator(0.05))
+    ax.yaxis.set_major_locator(MultipleLocator(0.2))
+    ax.yaxis.set_minor_locator(MultipleLocator(0.1))
     ax.yaxis.set_major_formatter(ScalarFormatter())
 #==============================================================================
 # plot lines
@@ -181,3 +180,5 @@ figure_path = ArticleFigureDirectory
 figure_name = 'plot_exp_coffin_manson'
 create_plot_data_exp_coffin_manson(fatigue_data,figure_path,figure_name)
 plot_exp_coffin_manson(figure_path,figure_name,save_types=['.pdf'])
+
+shutil.copy(__file__,ArticleFigureDirectory)

@@ -392,9 +392,20 @@ class PlotData:
     plot_data.addLine(life_NASA,strain_amplitude_NASA)
     plot_data.addLine(life_BHU,strain_amplitude_BHU)
     """
-    def __init__(self):
+    def __init__(self,figure_path=None,figure_name=None,save_types=[]):
         self.lines = []
         self.number_of_header_lines = 8
+        self.figure_path = figure_path
+        self.figure_name = figure_name
+        self.save_types = save_types
+    
+    def setFigureFile(self,figure_path=None,figure_name=None,save_types=[]):
+        if figure_path <> None:
+            self.figure_path = figure_path
+        if figure_name <> None:
+            self.figure_name = figure_name
+        if save_types <> None:
+            self.save_types = save_types
         
     def addLine(self,
                 x,
@@ -418,30 +429,44 @@ class PlotData:
                            'marker':marker,
                            'markersize':markersize,
                            'color':color})
-        
-    def plot(self):
-        for line in self.lines:
-            plt.xlabel(line['xlabel'])
-            plt.ylabel(line['ylabel'])
-            if line['color'] == 'auto':
-                plt.plot(line['x'],
-                         line['y'],
-                         label=line['linelabel'],
-                         linestyle=line['linestyle'],
-                         linewidth=line['linewidth'],
-                         marker=line['marker'],
-                         markersize=line['markersize'])
-            else:
-                plt.plot(line['x'],
-                         line['y'],
-                         label=line['linelabel'],
-                         linestyle=line['linestyle'],
-                         linewidth=line['linewidth'],
-                         marker=line['marker'],
-                         markersize=line['markersize'],
-                         color=line['color'])
+    
+    def plot_line(self,line):
+        if line['color'] == 'auto':
+            plt.plot(line['x'],
+                     line['y'],
+                     label=line['linelabel'],
+                     linestyle=line['linestyle'],
+                     linewidth=line['linewidth'],
+                     marker=line['marker'],
+                     markersize=line['markersize'])
+        else:
+            plt.plot(line['x'],
+                     line['y'],
+                     label=line['linelabel'],
+                     linestyle=line['linestyle'],
+                     linewidth=line['linewidth'],
+                     marker=line['marker'],
+                     markersize=line['markersize'],
+                     color=line['color'])    
+                     
+    def plot(self,line_index=[]):
+        if line_index == []:
+            for line in self.lines:
+                plt.xlabel(line['xlabel'])
+                plt.ylabel(line['ylabel'])
+                self.plot_line(line)
+        else:
+            for i in line_index:
+                line = self.lines[i]
+                plt.xlabel(line['xlabel'])
+                plt.ylabel(line['ylabel'])
+                self.plot_line(line)
             
-    def writeToFile(self,directory,filename):
+            
+    def writeToFile(self,directory=None,filename=None):
+        if directory==None and filename==None:
+            directory = self.figure_path
+            filename = self.figure_name
         resultfile = open(directory + filename + '.csv', 'w') # write to csv
         data_list = []
         for line in self.lines:
@@ -489,7 +514,10 @@ class PlotData:
         resultfile.close()
         print 'save as', directory + filename + '.csv'
             
-    def readFromFile(self,directory,filename):
+    def readFromFile(self,directory=None,filename=None):
+        if directory==None and filename==None:
+            directory = self.figure_path
+            filename = self.figure_name
         self.lines = []
         data = np.genfromtxt(directory + filename + '.csv', delimiter=',', skip_header=0, dtype=str) # read from csv
         data = data.transpose()
@@ -523,3 +551,15 @@ class PlotData:
                                'marker':marker,
                                'markersize':markersize,
                                'color':color})
+                               
+    def saveFigure(self,figure_path=None,figure_name=None,save_type=[]):
+        if figure_path==None:
+            figure_path = self.figure_path
+        if figure_name==None:
+            figure_name = self.figure_name
+        if save_type==[]:
+            save_types = self.save_types
+        if figure_path <> None and figure_name<> None:
+            for save_type in save_types:
+                plt.savefig(figure_path + figure_name + save_type, dpi=150)
+                print 'save as', figure_path + figure_name + save_type

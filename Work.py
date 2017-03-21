@@ -56,10 +56,10 @@ class Load:
     """
     Load类，定义载荷。
     """
-    def __init__(self, runing_time=[], temprature=[], axial_strain=[], 
+    def __init__(self, runing_time=[], temperature=[], axial_strain=[], 
                  shear_strain=[], axial_stress=[], torque=[], first_cycle_shift=0):
         self.runing_time = runing_time
-        self.temprature = temprature
+        self.temperature = temperature
         self.axial_strain = axial_strain
         self.axial_stress = axial_stress
         self.shear_strain = shear_strain
@@ -71,7 +71,7 @@ class Load:
 
     def setLoadFromExperiment(self, ExperimentData):
         self.runing_time = ExperimentData.runing_time
-        self.temprature = ExperimentData.temprature
+        self.temperature = ExperimentData.temperature
         self.axial_strain = ExperimentData.axial_strain
         self.axial_stress = ExperimentData.axial_stress
         self.shear_strain = ExperimentData.shear_strain
@@ -80,14 +80,14 @@ class Load:
         self.length = len(self.runing_time)
         self.segment = 2
         
-    def setLoadUniaxial(self, cycles, runing_time, temprature, axial_strain):
+    def setLoadUniaxial(self, cycles, runing_time, temperature, axial_strain):
         for n in range(cycles):
             self.runing_time += [ n*(runing_time[-1]-runing_time[0]) + time for time in runing_time[:-1]]
-        self.temprature = temprature[:-1] * cycles
+        self.temperature = temperature[:-1] * cycles
         self.axial_strain = axial_strain[:-1] * cycles
         
         self.runing_time.append(cycles*(runing_time[-1]-runing_time[0]))
-        self.temprature.append(temprature[-1])
+        self.temperature.append(temperature[-1])
         self.axial_strain.append(axial_strain[-1])
         self.length = len(self.runing_time)
         self.axial_stress = np.zeros(self.length)
@@ -97,28 +97,28 @@ class Load:
         
     def listToArray(self):
         self.runing_time = np.array(self.runing_time)
-        self.temprature = np.array(self.temprature)
+        self.temperature = np.array(self.temperature)
         self.axial_strain = np.array(self.axial_strain)
         self.axial_stress = np.array(self.axial_stress)
         self.shear_strain = np.array(self.shear_strain)
         self.torque = np.array(self.torque)
         
-    def setLoadBiaxial(self, cycles, runing_time, temprature, axial_strain, shear_strain):
+    def setLoadBiaxial(self, cycles, runing_time, temperature, axial_strain, shear_strain):
         for n in range(cycles):
             self.runing_time += [ n*(runing_time[-1]-runing_time[0]) + time for time in runing_time[:-1]]
-        self.temprature += temprature[:-1] * cycles
+        self.temperature += temperature[:-1] * cycles
         self.axial_strain += axial_strain[:-1] * cycles
         self.shear_strain += shear_strain[:-1] * cycles
         
         self.runing_time.append(cycles*(runing_time[-1]-runing_time[0]))
-        self.temprature.append(temprature[-1])
+        self.temperature.append(temperature[-1])
         self.axial_strain.append(axial_strain[-1])
         self.shear_strain.append(shear_strain[-1])
         self.total_runing_time = self.runing_time[-1]
 
         if axial_strain[0]==0 and shear_strain[0]==0:
             self.runing_time.pop(1)
-            self.temprature.pop(1)
+            self.temperature.pop(1)
             self.axial_strain.pop(1)
             self.shear_strain.pop(1)
         if axial_strain[0]<>0:
@@ -143,11 +143,11 @@ class Load:
         ax1.set_xlabel(xylabels['runing_time'])
         ax1.set_ylabel(xylabels['axial_strain'] + ' and ' +  xylabels['shear_strain_eq'])
         ax2 = ax1.twinx() # this is the important function 
-        ax2.plot(self.runing_time[:show_number], self.temprature[:show_number], label='temprature', color='red')
-        ax2.set_ylabel(xylabels['temprature'])
+        ax2.plot(self.runing_time[:show_number], self.temperature[:show_number], label='temperature', color='red')
+        ax2.set_ylabel(xylabels['temperature'])
         ax2.legend(loc=4,fontsize='medium',frameon=True,numpoints=1,title='')
         for save_type in save_types:
-            save_name = '%s_%s_%s.%s' %('Loadpath','strain','temprature',save_type)
+            save_name = '%s_%s_%s.%s' %('Loadpath','strain','temperature',save_type)
             plt.savefig(save_name, dpi=150)
 #        plt.show()
         
@@ -163,8 +163,8 @@ class Load:
         
 #        plt.figure(figsize=(8,6))
 #        plt.xlabel(xylabels['runing_time'])
-#        plt.ylabel(xylabels['temprature'])
-#        plt.plot(self.runing_time[:show_number], self.temprature[:show_number])
+#        plt.ylabel(xylabels['temperature'])
+#        plt.plot(self.runing_time[:show_number], self.temperature[:show_number])
 #        for save_type in save_types:
 #            save_name = '%s_%s_%s.%s' %('Loadpath','time','temperature',save_type)
 #            plt.savefig(save_name, dpi=150)
@@ -180,7 +180,7 @@ class Load:
             plt.savefig(save_name, dpi=150)
 #        plt.show()
 
-#load = Load(runing_time=[0], temprature=[475], axial_strain=[0], shear_strain=[0], first_cycle_shift=1)
+#load = Load(runing_time=[0], temperature=[475], axial_strain=[0], shear_strain=[0], first_cycle_shift=1)
 #load.setLoadBiaxial(10,[0,45,90,135,180],[475,650,475,300,475],[0,1,0,-1,0],[-1,0,1,0,-1])
 #load.showLoadPath(AbaqusTempDirectory + '7034' + '\\')
 
@@ -279,7 +279,7 @@ class Job:
         outfile = open(output_filename, 'w')
         outfile.writelines('*Amplitude, name=TempTriangularWave\n')
         for i in range(0,self.Load.length,self.Load.segment):
-            line = '%-20.10f,%-20.10f\n' % (self.Load.runing_time[i],self.Load.temprature[i])
+            line = '%-20.10f,%-20.10f\n' % (self.Load.runing_time[i],self.Load.temperature[i])
             outfile.writelines(line)
         print 'Create ', output_filename
         outfile.close()

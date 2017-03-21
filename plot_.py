@@ -21,7 +21,7 @@ def create_plot_data_elastic_by_temperature_in718(plot_data):
 # x,y label
 #==============================================================================
     xlabel = xylabels['temperature']
-    ylabel = 'Young\'s and Shear Modulus [GPa]'
+    ylabel = 'Young\'s and Shear Modulus [MPa]'
 #==============================================================================
 # plot lines
 #==============================================================================
@@ -42,18 +42,18 @@ def create_plot_data_elastic_by_temperature_in718(plot_data):
                       youngs_modulus/1000.0,
                       xlabel=xlabel,
                       ylabel=ylabel,
-                      linelabel='Young\'s Modulus',
+                      linelabel='E',
                       linewidth=2,
                       linestyle='',
                       marker=marker_list[i],
                       markersize=12,
-                      color='green')
+                      color='black')
     i += 1
     plot_data.addLine(temperature,
                       shear_modulus/1000.0,
                       xlabel=xlabel,
                       ylabel=ylabel,
-                      linelabel='Shear Modulus',
+                      linelabel='G',
                       linewidth=2,
                       linestyle='',
                       marker=marker_list[i],
@@ -95,7 +95,7 @@ def create_plot_data_elastic_by_temperature_in718(plot_data):
                       linestyle='-',
                       marker=None,
                       markersize=12,
-                      color='green')
+                      color='black')
     
     plot_data.addLine(temperature,
                       shear_modulus/1000.0,
@@ -120,7 +120,7 @@ def create_plot_data_elastic_by_temperature_in718(plot_data):
                       color='red')
                       
     plot_data.writeToFile()
-
+    
 def plot_elastic_by_temperature_in718(plot_data):
 #==============================================================================
 # title
@@ -131,6 +131,7 @@ def plot_elastic_by_temperature_in718(plot_data):
 # http://matplotlib.org/users/customizing.html?highlight=rcparams
 #==============================================================================
     plot_format()
+    mpl.rcParams['figure.subplot.left'] = 0.15
     mpl.rcParams['figure.subplot.right'] = 0.9
 #==============================================================================
 # grid set up
@@ -163,29 +164,25 @@ def plot_elastic_by_temperature_in718(plot_data):
 #==============================================================================
     plot_data.readFromFile()
     plot_data.plot([0,1,3,4])
-    ax1.legend(loc=3)
+    plt.legend(loc=3)
     
     ax2 = ax1.twinx()  # this is the important function
     plot_data.plot([2,5])
     ax2.set_xlim(0,750)
-    ax2.set_ylim(0.1,0.4)
-    ax2.legend(loc=4)
+    ax2.set_ylim(0,0.5)
 #==============================================================================
 # http://stackoverflow.com/questions/21920233/matplotlib-log-scale-tick-label-number-formatting
 #==============================================================================
-    ax1.xaxis.set_major_locator(MultipleLocator(100))
-    ax1.xaxis.set_minor_locator(MultipleLocator(50))
-    ax1.xaxis.set_major_formatter(ScalarFormatter())
-    ax1.yaxis.set_major_locator(MultipleLocator(100))
-    ax1.yaxis.set_minor_locator(MultipleLocator(10))
-    ax1.yaxis.set_major_formatter(ScalarFormatter())
-    ax2.yaxis.set_major_locator(MultipleLocator(0.1))
-    ax2.yaxis.set_minor_locator(MultipleLocator(0.01))
-    ax2.yaxis.set_major_formatter(ScalarFormatter())
+#    ax.xaxis.set_major_locator(MultipleLocator(0.5))
+#    ax.xaxis.set_minor_locator(MultipleLocator(0.1))
+#    ax.xaxis.set_major_formatter(ScalarFormatter())
+#    ax.yaxis.set_major_locator(MultipleLocator(500))
+#    ax.yaxis.set_minor_locator(MultipleLocator(100))
+#    ax.yaxis.set_major_formatter(ScalarFormatter())
 #==============================================================================
 # show legend
 #==============================================================================
-    
+    plt.legend(loc=4)
 #==============================================================================
 # save figures
 #==============================================================================

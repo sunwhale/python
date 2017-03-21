@@ -49,7 +49,7 @@ def create_plot_data_exp_fatigue_life(fatigue_data,figure_path=None,figure_name=
                       xlabel=xlabel,
                       ylabel=ylabel,
                       linelabel='TC-IF',
-                      linewidth=1.5,
+                      linewidth=2,
                       linestyle='-',
                       marker=None,
                       markersize=12,

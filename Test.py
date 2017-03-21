@@ -11,6 +11,7 @@ from Data import *
 from Work import *
 from Plot import *
 from multicolored_lines import *
+from plot_format import plot_format
 
 name = '7037'
 
@@ -100,9 +101,9 @@ job = Job(JobName=name, UMAT=umat, Step=step, Load=load)
 #==============================================================================
 # plot
 #==============================================================================
-sim = SimulationData(job.CSVFullName)
-sim.obtainCountIndex(period)
-exp.obtainCountIndex(period)
+sim = SimulationData(job.CSVFullName,period)
+
+
 
 nth = 10
 xitem = 'axial_stress'
@@ -118,6 +119,8 @@ z1 = sim.obtainNthCycle(zitem,nth)
 x2 = exp.obtainNthCycle(xitem,nth)
 y2 = exp.obtainNthCycle(yitem,nth)
 z2 = exp.obtainNthCycle(zitem,nth)
+
+plot_format()
 
 multicolored_lines(x1,y1,z1)
 multicolored_lines(x2,y2,z2)

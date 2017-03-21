@@ -29,7 +29,7 @@ InputTemplate = 'Tension3DTemplate.inp'
 
 xylabels = {'axial_count':'N [cycle]',
             'runing_time':'Running Time [s]',
-            'temprature':'Temperature [$^{\circ}$C]',
+            'temperature':'Temperature [$^{\circ}$C]',
             'axial_disp':'Axial Displacement [mm]',
             'axial_force':'Axial Force [N]',
             'axial_strain':'Axial Strain $\\varepsilon$ [%]',

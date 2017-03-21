@@ -13,7 +13,7 @@ from Data import SimulationData,ExperimentData,ExperimentLog
 from Material import Material
 from Work import Step,UMAT,Load,Job
 
-def work(name,loading_cycles=None):
+def workbench(name,loading_cycles=None):
     """
     某试件对应的边界条件下的数值模拟。
     """
@@ -59,7 +59,7 @@ def work(name,loading_cycles=None):
     temperature_mean = (temperature_list[0] + temperature_list[1])/2.0
     temperature_min = min(temperature_list)
     temperature_max = max(temperature_list)
-    load = Load(runing_time=[0], temprature=[temperature_mean], axial_strain=[0], shear_strain=[0], first_cycle_shift=1)
+    load = Load(runing_time=[0], temperature=[temperature_mean], axial_strain=[0], shear_strain=[0], first_cycle_shift=1)
     axial_strain = axial_strain/100.0
     shear_strain = np.deg2rad(angel_strain)*d_out/2.0/gauge_length
     if loading_cycles == None:
@@ -115,9 +115,6 @@ def work(name,loading_cycles=None):
 #    step = Step(predefined_temperature = int(exp.initial_temperature), 
 #              time_period = int(load.total_runing_time), initial_inc = 0.005, 
 #              min_inc = 0.0001, max_inc = 5, nonlinear = 'ON')
-#    step = Step(predefined_temperature = temperature_mean, 
-#              time_period = int(load.total_runing_time), initial_inc = 0.005, 
-#              min_inc = 0.0001, max_inc = 5, nonlinear = 'ON')
     step = Step(predefined_temperature = temperature_mean, 
               time_period = int(load.total_runing_time), initial_inc = 0.005, 
               min_inc = 0.0001, max_inc = period/40.0, nonlinear = 'OFF')
@@ -133,59 +130,15 @@ def work(name,loading_cycles=None):
 # Job
 #==============================================================================
     job = Job(JobName=name, UMAT=umat, Step=step, Load=load)
-#    job.allProc()
+    job.allProc()
 #    job.createDirectory()
 #    job.copyFiles()
 #    job.creatBatchFile()
 #    job.createAbaqusCAE()
 #    job.createAbaqusInput()
 #    job.run()
-    job.autoPostProc()
-#==============================================================================
-# SimulationData
-#==============================================================================
-#    sim_full_name = job.CSVFullName
-#    if os.path.exists(sim_full_name):
-#        sim = SimulationData(sim_full_name,period)
-#    else:
-#        print ('%s is not existed' % sim_full_name)
-#    
-#    nth = 1
-#    begin_cycle = 0
-#    end_cycle = 1
-#
-##    print predicted_life
-#    xitem = 'axial_stress'
-#    yitem = 'shear_stress'
-#    zitem = 'temperature'
-#    xitem = 'axial_strain'
-#    yitem = 'axial_stress'
-##    xitem = 'axial_count'
-##    yitem = 'runing_time'
-#    
-#    x1 = sim.obtainNthCycle(xitem,begin_cycle,end_cycle)
-#    y1 = sim.obtainNthCycle(yitem,begin_cycle,end_cycle)
-#    z1 = sim.obtainNthCycle(zitem,begin_cycle,end_cycle)
-#
-#    x2 = exp.obtainNthCycle(xitem,begin_cycle,end_cycle)
-#    y2 = exp.obtainNthCycle(yitem,begin_cycle,end_cycle)
-#    z2 = exp.obtainNthCycle(zitem,begin_cycle,end_cycle)
-#    
-#    plt.plot(x1,y1)
-#    plt.plot(x2,y2)
-#    
-#    plt.gca().set_aspect('auto')
-#    plt.xlabel(xylabels[xitem])
-#    plt.ylabel(xylabels[yitem])
-#
-#    plt.show()
-##    if os.path.exists(exp_full_name):
-##        plt.plot(x2,y2,ls='',marker='s')
-##        save_types = ['png']
-##        for save_type in save_types:
-##            plt.savefig(name, dpi=150)
-##        plt.clf()
-
+#    job.autoPostProc()
+    
 #==============================================================================
 # experiment_log
 #==============================================================================
@@ -200,4 +153,4 @@ number_list = experiment_log.keyFilter("(self.calculate == '1') & (self.load_typ
 #print number_list
 #for name in number_list:
 #    work(name)
-work('7116',loading_cycles=1000)
+#workbench('7116',loading_cycles=1000)

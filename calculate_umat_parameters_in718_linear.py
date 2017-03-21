@@ -18,8 +18,8 @@ def calculate_umat_parameters_in718(name='_output.txt'):
     parameters = []
     yield_stress = 300.0
     show = False
-    plastic_strain_list=[0.001,0.002,0.005,0.01,0.02]
-#    plastic_strain_list=[0.0005,0.001,0.002,0.005,0.01,0.02,0.03]
+#    plastic_strain_list=[0.001,0.005,0.01,0.02]
+    plastic_strain_list=[0.00005,0.0001,0.0002,0.0005,0.001,0.002,0.004,0.01,0.02]
     umat = UMAT(UMATDirectory = 'F:\\UMAT\\CurrentVersion\\', 
                 UMATMainFile = 'MAIN_IN718.for',
                 ParameterFortranFile = 'PARAMETERS_IN718_TMF.for',
@@ -118,21 +118,21 @@ C <KINEMATIC HARDENING PARAMETERS>
 # output r0
 #==============================================================================
     for i in range(seg):
-        x=np.array([parameters[0][0],parameters[1][0],parameters[2][0]])
-        y=np.array([parameters[0][3][i],parameters[1][3][i],parameters[2][3][i]])
-        z=np.polyfit(x,y,2)
+        x=np.array([parameters[0][0],parameters[2][0]])
+        y=np.array([parameters[0][3][i],parameters[2][3][i]])
+        z=np.polyfit(x,y,1)
         p = np.poly1d(z)
-        lines='      R0KI(%u)=(%g)*TEMP**2+(%g)*TEMP+(%g)' %(i+1,z[0],z[1],z[2])
+        lines='      R0KI(%u)=(%g)*TEMP+(%g)' %(i+1,z[0],z[1])
         print >>outfile, lines
 #==============================================================================
 # output r_delta
 #==============================================================================
     for i in range(seg):
-        x=np.array([parameters[0][0],parameters[1][0],parameters[2][0]])
-        y=np.array([parameters[0][4][i],parameters[1][4][i],parameters[2][4][i]])
-        z=np.polyfit(x,y,2)
+        x=np.array([parameters[0][0],parameters[2][0]])
+        y=np.array([parameters[0][4][i],parameters[2][4][i]])
+        z=np.polyfit(x,y,1)
         p = np.poly1d(z)
-        lines='      RDSSKI(%u)=(%g)*TEMP**2+(%g)*TEMP+(%g)' %(i+1,z[0],z[1],z[2])
+        lines='      RDSSKI(%u)=(%g)*TEMP+(%g)' %(i+1,z[0],z[1])
         print >>outfile, lines
 #==============================================================================
 # others

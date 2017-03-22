@@ -179,6 +179,7 @@ class Load:
             save_name = '%s_%s_%s.%s' %('Loadpath','axial_strain','shear_strain_eq',save_type)
             plt.savefig(save_name, dpi=150)
 #        plt.show()
+        plt.close()
 
 #load = Load(runing_time=[0], temperature=[475], axial_strain=[0], shear_strain=[0], first_cycle_shift=1)
 #load.setLoadBiaxial(10,[0,45,90,135,180],[475,650,475,300,475],[0,1,0,-1,0],[-1,0,1,0,-1])

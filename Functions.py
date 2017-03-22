@@ -245,14 +245,30 @@ def obtain_kinematic_hardening_parameters(monotonic_curve,cyclic_curve,
 # calculate_elastic_by_temperature_in718
 #==============================================================================
 def calculate_elastic_by_temperature_in718(temperature):
+    """
+    计算屈服应力与温度的函数。
+    temperature_list = [20,300,550,650]
+    yield_stress =     [1150,1121.9,1081.6,1056.7]
+    plt.plot(temperature_list,yield_stress)
+    x = np.array(temperature_list)
+    y = np.array(yield_stress)
+    z = np.polyfit(x,y,3)
+    p = np.poly1d(z)
+    print p
+    print z
+    plt.plot(x,p(x))
+    plt.show()
+    """
     TEMP = temperature
     EMOD = 206308.7426+(-51.20306)*TEMP+0.01109*TEMP**2+(-3.84391E-05)*TEMP**3
     ENU = 2.901300E-01+(1.457750E-05)*TEMP+(-2.067420E-07)*TEMP**2+(2.780300E-10)*TEMP**3
     EG = 0.5*EMOD/(1.0+ENU)
+    SY = 1.15203105E+03+(-1.02927853E-01)*TEMP+7.30935695E-05*TEMP**2+(-2.15967142E-07)*TEMP**3
     youngs_modulus = EMOD
     poisson_ratio = ENU
     shear_modulus = EG
-    return youngs_modulus,poisson_ratio,shear_modulus
+    yield_stress = SY
+    return youngs_modulus,poisson_ratio,shear_modulus,yield_stress
 #==============================================================================
 # write_umat_output_file
 #==============================================================================

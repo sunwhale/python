@@ -11,6 +11,7 @@ from scipy.optimize import fsolve
 from scipy.optimize import leastsq
 from Data import ExperimentData
 from Constants import ExperimentDirectory
+from Functions import calculate_elastic_by_temperature_in718
 
 class Material:
     def __init__(self):
@@ -51,18 +52,26 @@ class Material:
             print line_format_stress % ('Strength coefficient:',self.K)
         if self.n <> None:
             print line_format_coefficient % ('Strain hardening exponent:',self.n)
-        print line_format_stress % ('Fatigue strength coefficient:',self.sigma_f)
-        print line_format_coefficient % ('Fatigue strength exponent:',self.b)
-        print line_format_stress % ('Fatigue ductility coefficient:',self.epsilon_f)
-        print line_format_coefficient % ('Fatigue ductility exponent:',self.c)
+        if self.sigma_f <> None:
+            print line_format_stress % ('Fatigue strength coefficient:',self.sigma_f)
+        if self.b <> None:
+            print line_format_coefficient % ('Fatigue strength exponent:',self.b)
+        if self.epsilon_f <> None:
+            print line_format_stress % ('Fatigue ductility coefficient:',self.epsilon_f)
+        if self.c <> None:
+            print line_format_coefficient % ('Fatigue ductility exponent:',self.c)
         if self.K_cyclic <> None:
             print line_format_stress % ('Cyclic strength coefficient:',self.K_cyclic)
         if self.n_cyclic <> None:
             print line_format_coefficient % ('Cyclic strain hardening exponent:',self.n_cyclic)
-        print line_format_stress % ('Shear fatigue strength coefficient:',self.tau_f)
-        print line_format_coefficient % ('Shear fatigue strength exponent:',self.b0)
-        print line_format_stress % ('Shear fatigue ductility coefficient:',self.gamma_f)
-        print line_format_coefficient % ('Shear fatigue ductility exponent:',self.c0)
+        if self.tau_f <> None:
+            print line_format_stress % ('Shear fatigue strength coefficient:',self.tau_f)
+        if self.b0 <> None:
+            print line_format_coefficient % ('Shear fatigue strength exponent:',self.b0)
+        if self.gamma_f <> None:
+            print line_format_stress % ('Shear fatigue ductility coefficient:',self.gamma_f)
+        if self.c0 <> None:
+            print line_format_coefficient % ('Shear fatigue ductility exponent:',self.c0)
     def setName(self,name=None):
         self.name = name
         
@@ -130,7 +139,7 @@ class Material:
         epsilon_p_list = []
         sigma_list = []
         for i in range(len(epsilon_p)):
-            if epsilon_p[i]>0.0005:
+            if epsilon_p[i]>0.0005 and epsilon_p[i]<0.015:
                 epsilon_p_list.append(epsilon_p[i])
                 sigma_list.append(sigma[i])
         epsilon_p = np.array(epsilon_p_list)
@@ -139,19 +148,19 @@ class Material:
         self.n = self.calculateRambergOsgood(epsilon_p,sigma)[1]
 
     def plotStrengthCoefficient(self):
-        epsilon_p = np.arange(0,0.1,0.00001)
+        epsilon_p = np.arange(0,0.2,0.00001)
         sigma = self.K*epsilon_p**self.n
         epsilon = sigma/self.youngs_modulus + epsilon_p
-#        plt.plot(epsilon_p,sigma)
-#        plt.show()
+        plt.plot(epsilon,sigma)
+        plt.show()
         return epsilon,sigma
     
     def plotCyclicStrengthCoefficient(self):
         epsilon_p = np.arange(0,0.1,0.00001)
         sigma = self.K_cyclic*epsilon_p**self.n_cyclic
         epsilon = sigma/self.youngs_modulus + epsilon_p
-#        plt.plot(epsilon_p,sigma)
-#        plt.show()
+        plt.plot(epsilon,sigma)
+        plt.show()
         return epsilon,sigma
         
     def calculateMansonCoffinAxial(self,epsilon,life):
@@ -229,12 +238,6 @@ def material_in718():
     material.setName(name='IN718')
     material.setTemperature(temperature=650.0)
     material.setMonotonic(youngs_modulus=167100.0,poisson_ratio=0.2886,yield_stress=1064.0,K=1433.0,n=0.048958)
-#    name = '7102'
-#    exp_full_name = ExperimentDirectory + name + '.csv'
-#    exp = ExperimentData(exp_full_name)
-#    epsilon = exp.axial_strain
-#    sigma = exp.axial_stress
-#    material.calculateStrengthCoefficient(epsilon,sigma)
     material.setCyclicAxial(sigma_f=1034.0,b=-0.04486,epsilon_f=0.11499,c=-0.52436,K_cyclic=1406.0,n_cyclic=0.10527)
     material.setCyclicTorsion()
     return material
@@ -257,6 +260,41 @@ def material_in718_BHU():
     material.setCyclicTorsion()
     return material
 #==============================================================================
+# calculate material inconel718
+#==============================================================================\
+def calc_material_in718():
+    material = Material()
+    material.setName(name='IN718')
+    
+    name = '7101' #300C
+    temperature = 300.0
+    material.setTemperature(temperature=temperature)
+    youngs_modulus,poisson_ratio,shear_modulus = calculate_elastic_by_temperature_in718(temperature)
+    material.setMonotonic(youngs_modulus=youngs_modulus,poisson_ratio=poisson_ratio,yield_stress=1121.9,K=1449.4,n=0.041214)
+    
+    name = '7103' #550C
+    temperature = 550.0
+    material.setTemperature(temperature=temperature)
+    youngs_modulus,poisson_ratio,shear_modulus = calculate_elastic_by_temperature_in718(temperature)
+    material.setMonotonic(youngs_modulus=youngs_modulus,poisson_ratio=poisson_ratio,yield_stress=1081.6,K=1398.7,n=0.041366)
+    
+    name = '7102' #650C
+    temperature = 650.0
+    material.setTemperature(temperature=temperature)
+    youngs_modulus,poisson_ratio,shear_modulus = calculate_elastic_by_temperature_in718(temperature)
+    material.setMonotonic(youngs_modulus=youngs_modulus,poisson_ratio=poisson_ratio,yield_stress=1056.7,K=1433.8,n=0.049103)
+     
+    exp_full_name = ExperimentDirectory + name + '.csv'
+    exp = ExperimentData(exp_full_name)
+    epsilon = exp.axial_strain
+    sigma = exp.axial_stress
+    plt.plot(epsilon,sigma)
+    material.calculateStrengthCoefficient(epsilon,sigma)
+    material.show()
+    material.plotStrengthCoefficient()
+    print material.K*0.002**material.n
+    return material
+#==============================================================================
 # material ss304 at 20
 #==============================================================================
 def material_ss304():
@@ -276,6 +314,3 @@ def material_ss304():
     life_x2, gamma_amp  = np.genfromtxt(r'F:\Work\2017-01-07_Exercise\gammaN.txt', unpack=True)
     material.calculateMansonCoffinTorsion(gamma_amp/100.0,life_x2)
     return material
-    
-#material = material_in718()
-#material.show()

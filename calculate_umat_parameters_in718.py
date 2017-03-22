@@ -13,13 +13,13 @@ from Data import ExperimentData,ExperimentLog
 from Functions import obtain_kinematic_hardening_parameters,calculate_elastic_by_temperature_in718
 from Constants import *
 from workbench import workbench
+from compare_exp_sim import compare_exp_sim
 
 def calculate_umat_parameters_in718(name='_output.txt'):
     parameters = []
     yield_stress = 300.0
     show = False
     plastic_strain_list=[0.001,0.002,0.005,0.01,0.02]
-#    plastic_strain_list=[0.0005,0.001,0.002,0.005,0.01,0.02,0.03]
     umat = UMAT(UMATDirectory = 'F:\\UMAT\\CurrentVersion\\', 
                 UMATMainFile = 'MAIN_IN718.for',
                 ParameterFortranFile = 'PARAMETERS_IN718_TMF.for',
@@ -30,7 +30,8 @@ def calculate_umat_parameters_in718(name='_output.txt'):
 # 300C
 #==============================================================================
     temperature = 300.0
-    youngs_modulus, poisson_ratio, shear_modulus = calculate_elastic_by_temperature_in718(temperature)
+#    youngs_modulus, poisson_ratio, shear_modulus = calculate_elastic_by_temperature_in718(temperature)
+    youngs_modulus, poisson_ratio, shear_modulus, y = calculate_elastic_by_temperature_in718(temperature)
     
     name = '7101'
     exp_full_name = ExperimentDirectory + name + '.csv'
@@ -51,7 +52,8 @@ def calculate_umat_parameters_in718(name='_output.txt'):
 # 550C
 #==============================================================================
     temperature = 550.0
-    youngs_modulus, poisson_ratio, shear_modulus = calculate_elastic_by_temperature_in718(temperature)
+#    youngs_modulus, poisson_ratio, shear_modulus = calculate_elastic_by_temperature_in718(temperature)
+    youngs_modulus, poisson_ratio, shear_modulus, y = calculate_elastic_by_temperature_in718(temperature)
     
     name = '7103'
     exp_full_name = ExperimentDirectory + name + '.csv'
@@ -72,7 +74,8 @@ def calculate_umat_parameters_in718(name='_output.txt'):
 # 650C
 #==============================================================================
     temperature = 650.0
-    youngs_modulus, poisson_ratio, shear_modulus = calculate_elastic_by_temperature_in718(temperature)
+#    youngs_modulus, poisson_ratio, shear_modulus = calculate_elastic_by_temperature_in718(temperature)
+    youngs_modulus, poisson_ratio, shear_modulus, y = calculate_elastic_by_temperature_in718(temperature)
     
     name = '7102'
     exp_full_name = ExperimentDirectory + name + '.csv'
@@ -89,6 +92,7 @@ def calculate_umat_parameters_in718(name='_output.txt'):
                                                            yield_stress=yield_stress,
                                                            youngs_modulus=youngs_modulus,show=show)
     parameters.append([temperature,seg,zeta,r0,ri])    
+    print parameters
 #==============================================================================
 # output elastic
 #==============================================================================
@@ -108,6 +112,23 @@ C <YIELD STRESS>
 C <KINEMATIC HARDENING PARAMETERS>
       MU=0.2D0
       TQ=3.0D1""" % yield_stress
+#    print >>outfile, """C <ELASTKIC CONSTANTS>
+#C <Young's modulus 3rd order fitting>
+#      EMOD=206308.7426+(-51.20306)*TEMP+0.01109*TEMP**2
+#     1     +(-3.84391E-05)*TEMP**3
+#C <Poisson's Ratio 3rd order fitting>
+#      ENU=2.901300E-01+(1.457750E-05)*TEMP
+#     1     +(-2.067420E-07)*TEMP**2+(2.780300E-10)*TEMP**3
+#      EG=0.5D0*EMOD/(1.0D0+ENU)
+#      EBULK=EMOD/(3.0D0*(1.0D0-2.0D0*ENU))
+#      ELAM=EBULK-EG*2.0D0/3.0D0
+#      ELAMK0=0.0D0-EG*2.0D0/3.0D0
+#C <YIELD STRESS>
+#      SY=1.15203105E+03+(-1.02927853E-01)*TEMP
+#     1     +7.30935695E-05*TEMP**2+(-2.15967142E-07)*TEMP**3
+#C <KINEMATIC HARDENING PARAMETERS>
+#      MU=0.2D0
+#      TQ=3.0D1"""
 #==============================================================================
 # output zeta
 #==============================================================================
@@ -176,5 +197,7 @@ C <DAMAGE PARAMETERS>
     outfile.close()
     
 calculate_umat_parameters_in718()
-for name in ['7036']:
+for name in experiment_type_dict['NPR-IP']:
     workbench(name)
+#    compare_exp_sim(name,10,'axial_stress','shear_stress')
+#    compare_exp_sim(name,10,'axial_strain','axial_stress')

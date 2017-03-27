@@ -10,8 +10,6 @@ import os
 import matplotlib.pyplot as plt
 from Constants import *
 from Data import SimulationData,ExperimentData,ExperimentLog
-from Material import Material
-from Work import Step,UMAT,Load,Job
 
 def compare_exp_sim(name,loading_cycles=1,xitem='axial_strain',ytiem='axial_stress'):
     experiment_log = ExperimentLog(ExperimentLogFile)
@@ -47,3 +45,4 @@ def compare_exp_sim(name,loading_cycles=1,xitem='axial_strain',ytiem='axial_stre
     plt.plot(sim_xitem,sim_ytiem)
     
     plt.show()
+    plt.close()

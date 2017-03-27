@@ -7,7 +7,7 @@ Created on Thu Jan 05 11:50:47 2017
 
 WorkbenchDirectory = 'F:\\UMAT\\'
 
-UMATDirectory = 'F:\\UMAT\\CurrentVersion\\'
+UMATDirectory = 'F:\\GitHub\\umat\\umat\\'
 
 AbaqusTempDirectory = 'F:\\Temp\\IN7183\\'
 

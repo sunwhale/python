@@ -36,7 +36,7 @@ class UMAT:
     """
     UMAT类，定义UMAT文件的路径，名称。
     """
-    def __init__(self, UMATDirectory = 'F:\\UMAT\\CurrentVersion\\', 
+    def __init__(self, UMATDirectory = 'F:\\GitHub\\umat\\umat\\', 
                  UMATMainFile = 'MAIN_IN718.for', 
                  ParameterFortranFile = 'PARAMETERS_IN718_TMF.for',
                  OutputFortranFile = 'OUTPUT.for',
@@ -49,6 +49,7 @@ class UMAT:
         self.UMATMainFileFullName = UMATDirectory + UMATMainFile
         self.ParameterFortranFileFullName = UMATDirectory + ParameterFortranFile
         self.OutputFortranFileFullName = UMATDirectory + OutputFortranFile
+        
 #==============================================================================
 # class Load
 #==============================================================================
@@ -135,8 +136,8 @@ class Load:
         show_number = 12
         save_types = ['png','pdf']
         self.listToArray()
-        fig = plt.figure(figsize=(8,6))
-        ax1 = fig.add_subplot(111)
+        plt.figure(figsize=(8,6))
+        ax1 = plt.gca()
         ax1.plot(self.runing_time[:show_number], self.axial_strain[:show_number], label='axial_strain')
         ax1.plot(self.runing_time[:show_number], self.shear_strain[:show_number]/np.sqrt(3), label='shear_strain_eq')
         ax1.legend(loc=1,fontsize='medium',frameon=True,numpoints=1,title='')
@@ -149,26 +150,26 @@ class Load:
         for save_type in save_types:
             save_name = '%s_%s_%s.%s' %('Loadpath','strain','temperature',save_type)
             plt.savefig(save_name, dpi=150)
-#        plt.show()
+        plt.close()
         
-#        plt.figure(figsize=(8,6))
-#        plt.xlabel(xylabels['runing_time'])
-#        plt.ylabel(xylabels['axial_strain'] + ' and ' +  xylabels['shear_strain_eq'])
-#        plt.plot(self.runing_time[:show_number], self.axial_strain[:show_number])
-#        plt.plot(self.runing_time[:show_number], np.array(self.shear_strain[:show_number])*-6.0/np.sqrt(3))
-#        for save_type in save_types:
-#            save_name = '%s_%s_%s.%s' %('Loadpath','time','strain',save_type)
-#            plt.savefig(save_name, dpi=150)
-#        plt.show()
+        plt.figure(figsize=(8,6))
+        plt.xlabel(xylabels['runing_time'])
+        plt.ylabel(xylabels['axial_strain'] + ' and ' +  xylabels['shear_strain_eq'])
+        plt.plot(self.runing_time[:show_number], self.axial_strain[:show_number])
+        plt.plot(self.runing_time[:show_number], np.array(self.shear_strain[:show_number])*-6.0/np.sqrt(3))
+        for save_type in save_types:
+            save_name = '%s_%s_%s.%s' %('Loadpath','time','strain',save_type)
+            plt.savefig(save_name, dpi=150)
+        plt.close()
         
-#        plt.figure(figsize=(8,6))
-#        plt.xlabel(xylabels['runing_time'])
-#        plt.ylabel(xylabels['temperature'])
-#        plt.plot(self.runing_time[:show_number], self.temperature[:show_number])
-#        for save_type in save_types:
-#            save_name = '%s_%s_%s.%s' %('Loadpath','time','temperature',save_type)
-#            plt.savefig(save_name, dpi=150)
-#        plt.show()
+        plt.figure(figsize=(8,6))
+        plt.xlabel(xylabels['runing_time'])
+        plt.ylabel(xylabels['temperature'])
+        plt.plot(self.runing_time[:show_number], self.temperature[:show_number])
+        for save_type in save_types:
+            save_name = '%s_%s_%s.%s' %('Loadpath','time','temperature',save_type)
+            plt.savefig(save_name, dpi=150)
+        plt.close()
         
         plt.figure(figsize=(8,6))
         plt.xlabel(xylabels['axial_strain'])
@@ -178,12 +179,7 @@ class Load:
         for save_type in save_types:
             save_name = '%s_%s_%s.%s' %('Loadpath','axial_strain','shear_strain_eq',save_type)
             plt.savefig(save_name, dpi=150)
-#        plt.show()
         plt.close()
-
-#load = Load(runing_time=[0], temperature=[475], axial_strain=[0], shear_strain=[0], first_cycle_shift=1)
-#load.setLoadBiaxial(10,[0,45,90,135,180],[475,650,475,300,475],[0,1,0,-1,0],[-1,0,1,0,-1])
-#load.showLoadPath(AbaqusTempDirectory + '7034' + '\\')
 
 #==============================================================================
 # class Job
@@ -192,11 +188,12 @@ class Job:
     """
     Job类，定义ABAQUS前处理，求解，后处理。
     """
-    def __init__(self, JobName, UMAT, Step, Load):
+    def __init__(self, JobName, UMAT, Step, Load, copy=True):
         self.JobName = JobName
         self.UMAT = UMAT
         self.Step = Step
         self.Load = Load
+        self.copy = copy
         self.CAEName = JobName + '.cae'
         self.InputName = JobName + '.inp'
         self.AbaqusWorkDirectory = AbaqusTempDirectory + JobName + '\\'
@@ -409,7 +406,8 @@ class Job:
         os.chdir(self.AbaqusWorkDirectory)
         cmd ='AutoPostProc'
         os.system(cmd)
-        copy_suffix_files(self.AbaqusWorkDirectory,SimulationDirectory,suffixs=['csv'])
+        if self.copy:
+            copy_suffix_files(self.AbaqusWorkDirectory,SimulationDirectory,suffixs=['csv'])
         
     def show(self):
         print 'PythonDirectory:',PythonDirectory

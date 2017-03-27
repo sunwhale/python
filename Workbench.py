@@ -13,7 +13,7 @@ from Data import SimulationData,ExperimentData,ExperimentLog
 from Material import Material
 from Work import Step,UMAT,Load,Job
 
-def workbench(name,loading_cycles=None):
+def workbench(name,loading_cycles=None,copy=True):
     """
     某试件对应的边界条件下的数值模拟。
     """
@@ -117,19 +117,24 @@ def workbench(name,loading_cycles=None):
 #              min_inc = 0.0001, max_inc = 5, nonlinear = 'ON')
     step = Step(predefined_temperature = temperature_mean, 
               time_period = int(load.total_runing_time), initial_inc = 0.005, 
-              min_inc = 0.0001, max_inc = period/40.0, nonlinear = 'OFF')
+              min_inc = 0.0001, max_inc = period/30.0, nonlinear = 'OFF')
 #==============================================================================
 # UMAT
 #==============================================================================
-    umat = UMAT(UMATDirectory = 'F:\\UMAT\\CurrentVersion\\', 
+#    umat = UMAT(UMATDirectory = 'F:\\UMAT\\CurrentVersion\\', 
+#                UMATMainFile = 'MAIN_IN718.for', 
+#                ParameterFortranFile = 'PARAMETERS_IN718_TMF.for',
+#                OutputFortranFile = 'OUTPUT.for',
+#                OutputTextFile = name + '_output.txt')
+    umat = UMAT(UMATDirectory = 'F:\\GitHub\\umat\\umat\\', 
                 UMATMainFile = 'MAIN_IN718.for', 
                 ParameterFortranFile = 'PARAMETERS_IN718_TMF.for',
                 OutputFortranFile = 'OUTPUT.for',
-                OutputTextFile = name + '_output.txt')
+                OutputTextFile = name + '_output.txt')      
 #==============================================================================
 # Job
 #==============================================================================
-    job = Job(JobName=name, UMAT=umat, Step=step, Load=load)
+    job = Job(JobName=name, UMAT=umat, Step=step, Load=load, copy=copy)
     job.allProc()
 #    job.createDirectory()
 #    job.copyFiles()
@@ -142,15 +147,13 @@ def workbench(name,loading_cycles=None):
 #==============================================================================
 # experiment_log
 #==============================================================================
-experiment_log = ExperimentLog(ExperimentLogFile)
-number_list = experiment_log.keyFilter("(self.temperature_mode == '300-650') & (self.calculate == '1') & (self.load_type == 'cyclic diamond path')")
-number_list = experiment_log.keyFilter("(self.calculate == '1') & (self.load_type == 'cyclic diamond path')")
+#experiment_log = ExperimentLog(ExperimentLogFile)
+#number_list = experiment_log.keyFilter("(self.temperature_mode == '300-650') & (self.calculate == '1') & (self.load_type == 'cyclic diamond path')")
+#number_list = experiment_log.keyFilter("(self.calculate == '1') & (self.load_type == 'cyclic diamond path')")
 #number_list += experiment_log.keyFilter("(self.calculate == '1') & (self.load_type == 'cyclic proportional path')")
 #number_list += experiment_log.keyFilter("(self.calculate == '1') & (self.load_type == 'cyclic tension compression')")
-
-#print dir(experiment_log)
-#print experiment_log.load_type
 #print number_list
+
 #for name in number_list:
 #    work(name)
 #workbench('7116',loading_cycles=1000)

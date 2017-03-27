@@ -20,7 +20,8 @@ def calculate_umat_parameters_in718(name='_output.txt'):
     yield_stress = 300.0
     show = False
     plastic_strain_list=[0.001,0.002,0.005,0.01,0.02]
-    umat = UMAT(UMATDirectory = 'F:\\UMAT\\CurrentVersion\\', 
+#    plastic_strain_list=[0.002,0.005,0.01,0.02,0.05]
+    umat = UMAT(UMATDirectory = UMATDirectory, 
                 UMATMainFile = 'MAIN_IN718.for',
                 ParameterFortranFile = 'PARAMETERS_IN718_TMF.for',
                 OutputFortranFile = 'OUTPUT.for',
@@ -184,7 +185,7 @@ C <650C 200CYCLES>
       CB2=9.108D0
       CB3=0.0D0
 C <ISOTROPIC PARAMETERS>
-      YDNONPSS=000.0D0
+      YDNONPSS=100.0D0
       GAMAP=5.0D1
       GAMAQ=5.0D0
       YDPTS=0.0D0
@@ -196,8 +197,10 @@ C <DAMAGE PARAMETERS>
       PD=1000.0D0"""
     outfile.close()
     
-calculate_umat_parameters_in718()
-for name in experiment_type_dict['NPR-IP']:
-    workbench(name)
-#    compare_exp_sim(name,10,'axial_stress','shear_stress')
-#    compare_exp_sim(name,10,'axial_strain','axial_stress')
+#for name in experiment_type_dict['NPR-IP']:
+#for name in ['7211']:
+for name in ['7028']:    
+    calculate_umat_parameters_in718()
+    workbench(name,copy=False)
+#    compare_exp_sim(name,2,'axial_stress','shear_stress')
+    compare_exp_sim(name,2,'axial_strain','axial_stress')

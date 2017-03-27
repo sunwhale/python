@@ -132,9 +132,9 @@ def transform_to_database(inpath,outpath,name):
                     if 'Axial Force' in Header[i]:
                         for j in range(len(list3)):
                             lines[j][4] = list3[j][i]
-                    if 'Axial Total Strain' in Header[i]:
-                        for j in range(len(list3)):
-                            lines[j][5] = list3[j][i]
+#                    if 'Axial Total Strain' in Header[i]:
+#                        for j in range(len(list3)):
+#                            lines[j][5] = list3[j][i]
                     if 'Axial Mech. Strain' in Header[i] or 'Axial Strain' in Header[i]:
                         for j in range(len(list3)):
                             lines[j][5] = list3[j][i]

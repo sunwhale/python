@@ -126,7 +126,7 @@ def workbench(name,loading_cycles=None,copy=True):
 #                ParameterFortranFile = 'PARAMETERS_IN718_TMF.for',
 #                OutputFortranFile = 'OUTPUT.for',
 #                OutputTextFile = name + '_output.txt')
-    umat = UMAT(UMATDirectory = 'F:\\GitHub\\umat\\umat\\', 
+    umat = UMAT(UMATDirectory = 'F:\\GitHub\\umat\\', 
                 UMATMainFile = 'MAIN_IN718.for', 
                 ParameterFortranFile = 'PARAMETERS_IN718_TMF.for',
                 OutputFortranFile = 'OUTPUT.for',

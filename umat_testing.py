@@ -8,9 +8,6 @@ Created on Mon Feb 13 13:46:18 2017
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from Work import UMAT
-from Data import ExperimentData,ExperimentLog
-from Functions import obtain_kinematic_hardening_parameters,calculate_elastic_by_temperature_in718
 from Constants import *
 from workbench import workbench
 from compare_exp_sim import compare_exp_sim

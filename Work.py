@@ -36,7 +36,7 @@ class UMAT:
     """
     UMAT类，定义UMAT文件的路径，名称。
     """
-    def __init__(self, UMATDirectory = 'F:\\GitHub\\umat\\umat\\', 
+    def __init__(self, UMATDirectory = 'F:\\GitHub\\umat\\', 
                  UMATMainFile = 'MAIN_IN718.for', 
                  ParameterFortranFile = 'PARAMETERS_IN718_TMF.for',
                  OutputFortranFile = 'OUTPUT.for',

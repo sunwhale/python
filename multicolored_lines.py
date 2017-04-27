@@ -25,6 +25,7 @@ def multicolored_lines(x=None, y=None, z=None):
     plt.xlim(x.min(), x.max())
     plt.ylim(y.min(), y.max())
     mymap = matplotlib.colors.LinearSegmentedColormap.from_list('mycolors',['blue','green','yellow','orange','red'])
+    mymap = matplotlib.colors.LinearSegmentedColormap.from_list('mycolors',['blue','red'])
     lc = colorline(x, y, z, norm=plt.Normalize(300, 650), cmap=mymap)
     cbar = plt.colorbar(lc)
     cbar.set_label('Temperature [$^{\circ}$C]')

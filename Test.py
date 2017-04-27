@@ -43,7 +43,7 @@ exp = ExperimentData('F:\\Database\\IN718\\Timed\\' + name + '.csv')
 temperature_mean = (temperature_list[0] + temperature_list[1])/2.0
 temperature_min = min(temperature_list)
 temperature_max = max(temperature_list)
-load = Load(runing_time=[0], temprature=[temperature_mean], axial_strain=[0], shear_strain=[0], first_cycle_shift=1)
+load = Load(runing_time=[0], temperature=[temperature_mean], axial_strain=[0], shear_strain=[0], first_cycle_shift=1)
 axial_strain = axial_strain/100.0
 shear_strain = np.deg2rad(angel_strain)*d_out/2.0/gauge_length
 #==============================================================================

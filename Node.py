@@ -499,8 +499,8 @@ class Node:
         transformation_critical_plane = []
 
         if self.dimension == 3:
-            theta_deg_list = range(0,180,5)
-            phi_deg_list = range(0,180,5)
+            theta_deg_list = range(0,180,1)
+            phi_deg_list = range(0,180,1)
         if self.dimension == 2:
             theta_deg_list = [90]
             phi_deg_list = range(0,180,1)
@@ -593,18 +593,42 @@ class Node:
         phi_deg=0.0
         theta=np.radians(theta_deg)
         phi=np.radians(phi_deg)
-        stress=np.array([[2.0,1.0,0.0],[1.0,0.0,0.0],[0.0,0.0,0.0]])
-        strain=np.array([[2.0,1.0,0.0],[1.0,0.0,0.0],[0.0,0.0,0.0]])
-        print stress
-        print strain
-        transformation=np.array([
+        stress_list=[[2.0,1.0,0.0],[1.0,0.0,0.0],[0.0,0.0,0.0]]
+        strain_list=[[2.0,1.0,0.0],[1.0,-1.0,0.0],[0.0,0.0,-1.0]]
+        transformation_list=[
         [np.sin(theta)*np.cos(phi) ,np.sin(theta)*np.sin(phi) ,np.cos(theta)],
         [-np.sin(phi)              ,np.cos(phi)               ,0            ],
         [-np.cos(theta)*np.cos(phi),-np.cos(theta)*np.sin(phi),np.sin(theta)]
-        ])
+        ]
+        
+        dimension = 3
+        stress_list = [s[:dimension] for s in stress_list[:dimension]]
+        strain_list = [s[:dimension] for s in strain_list[:dimension]]
+        transformation_list = [t[:dimension] for t in transformation_list[:dimension]]
+        stress=np.array(stress_list)
+        strain=np.array(strain_list)
+        transformation=np.array(transformation_list)
+        print stress
+        print strain
+        print 'theta = %s deg' % theta_deg
+        print 'phi = %s deg' % phi_deg
         print transformation
         print np.dot(np.dot(transformation,stress),transformation.T)
         print np.dot(np.dot(transformation,strain),transformation.T)
+        
+        dimension = 2
+        stress_list = [s[:dimension] for s in stress_list[:dimension]]
+        strain_list = [s[:dimension] for s in strain_list[:dimension]]
+        transformation_list = [t[:dimension] for t in transformation_list[:dimension]]
+        stress=np.array(strain_list)
+        strain=np.array(stress_list)
+        transformation=np.array(transformation_list)
+        print stress
+        print strain
+        print transformation
+        print np.dot(np.dot(transformation,stress),transformation.T)
+        print np.dot(np.dot(transformation,strain),transformation.T)
+        
         s11 = stress[0][0]
         s22 = stress[1][1]
         s12 = stress[0][1]
@@ -613,12 +637,13 @@ class Node:
         e12 = strain[0][1]*2
         sigma_phi      =s11/2+s11/2*np.cos(2*phi)+s12*np.sin(2*phi)
         tau_phi        =s11/2*np.sin(2*phi)-s12*np.cos(2*phi)
-#        sigma_phi      =(s11+s22)/2+(s11-s22)/2*np.cos(2*phi)+s12*np.sin(2*phi)
-#        tau_phi        =(s11-s22)/2*np.sin(2*phi)-s12*np.cos(2*phi)
+        sigma_phi      =(s11+s22)/2+(s11-s22)/2*np.cos(2*phi)+s12*np.sin(2*phi)
+        tau_phi        =(s11-s22)/2*np.sin(2*phi)-s12*np.cos(2*phi)
         epsilon_phi    =(e11+e22)/2+(e11-e22)/2*np.cos(2*phi)+e12/2*np.sin(2*phi)
         gamma_phi_half =(e11-e22)/2*np.sin(2*phi)-e12/2*np.cos(2*phi)
         print sigma_phi, tau_phi
         print epsilon_phi, gamma_phi_half
+
         
     def lifeTest(self):
         youngs_modulus = 210000.0
@@ -668,5 +693,6 @@ class Node:
         self.fatigueLifeLiu2Model(material)
         self.fatigueLifeChuModel(material)
         
-#n = Node()
-#n.lifeTest()
+n = Node(dimension=3)
+n.lifeTest()
+#n.mathematicsTest()

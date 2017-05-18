@@ -117,6 +117,6 @@ for fatigue_model in fatigue_model_list:
 for fatigue_model in fatigue_model_list:
     figure_path = ArticleFigureDirectory
     figure_name = 'NF-NP-'+fatigue_model
-    plot_fatigue_life(figure_path,figure_name,save_types=['.pdf'])
+    plot_fatigue_life(figure_path,figure_name,save_types=['.pdf','.png'])
     
 shutil.copy(__file__,ArticleFigureDirectory)

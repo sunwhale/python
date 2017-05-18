@@ -126,6 +126,6 @@ fatigue_data = FatigueData(fatigue_file)
 figure_path = ArticleFigureDirectory
 figure_name = 'plot_exp_fatigue_life'
 create_plot_data_exp_fatigue_life(fatigue_data,figure_path,figure_name)
-plot_exp_fatigue_life(figure_path,figure_name,save_types=['.pdf'])
+plot_exp_fatigue_life(figure_path,figure_name,save_types=['.pdf','.png'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

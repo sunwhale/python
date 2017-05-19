@@ -223,7 +223,7 @@ class SimulationData:
         cycle = []
         peak = []
         valley = []
-        for n in range(1,self.total_axial_count+1):
+        for n in range(1,self.total_axial_count):
             data_nth_cycle = self.obtainNthCycle(item,n)
             if data_nth_cycle <> []:
                 maxitem = max(data_nth_cycle)

@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from Constants import *
 from Data import SimulationData,ExperimentData,ExperimentLog
 
-def compare_exp_sim(name,loading_cycles=1,xitem='axial_strain',yitem='axial_stress'):
+def plot_sim_all(name,begin_cycle,end_cycle,xitem='axial_strain',yitem='axial_stress'):
     experiment_log = ExperimentLog(ExperimentLogFile)
     experiment_log.output(name)
     regular = r'.*'
@@ -30,18 +30,12 @@ def compare_exp_sim(name,loading_cycles=1,xitem='axial_strain',yitem='axial_stre
     period = float(experiment_log.obtainItem(name,'period',regular)[0])
     axial_temperature_phase = float(experiment_log.obtainItem(name,'axial_temperature_phase',regular)[0])
 
-    exp_filename = ExperimentDirectory + name + '.csv'
-    experiment = ExperimentData(exp_filename)
     sim_filename = SimulationDirectory + name + '.csv'
     simulation = SimulationData(sim_filename,period)
-    
-    exp_xitem = experiment.obtainNthCycle(xitem,loading_cycles)
-    exp_yitem = experiment.obtainNthCycle(yitem,loading_cycles)
-    
-    sim_xitem = simulation.obtainNthCycle(xitem,loading_cycles)
-    sim_yitem = simulation.obtainNthCycle(yitem,loading_cycles)
-    
-    plt.plot(exp_xitem,exp_yitem)
+
+    sim_xitem = simulation.obtainNthCycle(xitem,begin_cycle,end_cycle)
+    sim_yitem = simulation.obtainNthCycle(yitem,begin_cycle,end_cycle)
+
     plt.plot(sim_xitem,sim_yitem)
     
     plt.show()

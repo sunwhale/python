@@ -49,7 +49,24 @@ def create_plot_data_monotonic_cyclic_osgood(figure_path=None,figure_name=None):
                       markersize=12,
                       color='red')
     i += 1
-    
+
+    name = '7102' # 650C monotonic tension
+    filename = ExperimentDirectory + name + '.csv'
+    experiment = ExperimentData(filename)
+    monotonic_stress = list(experiment.axial_stress)[::20]
+    monotonic_strain = list(experiment.axial_strain*100.0)[::20]
+    plot_data.addLine(monotonic_strain,
+                      monotonic_stress,
+                      xlabel=xlabel,
+                      ylabel=ylabel,
+                      linelabel='Experiment',
+                      linewidth=2,
+                      linestyle='',
+                      marker=marker_list[i],
+                      markersize=12,
+                      color='blue')
+    i += 1
+        
     material = material_in718()
     epsilon,sigma = material.plotStrengthCoefficient()
     plot_data.addLine(epsilon*100,
@@ -145,7 +162,7 @@ def plot_monotonic_cyclic_osgood(figure_path=None,figure_name=None,save_types=[]
 
 figure_path=ArticleFigureDirectory
 figure_name='plot_monotonic_cyclic_osgood'
-#create_plot_data_monotonic_cyclic_osgood(figure_path,figure_name)
+create_plot_data_monotonic_cyclic_osgood(figure_path,figure_name)
 plot_monotonic_cyclic_osgood(figure_path,figure_name,save_types=['.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

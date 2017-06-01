@@ -117,21 +117,21 @@ def workbench(name,loading_cycles=None,copy=True):
 #              min_inc = 0.0001, max_inc = 5, nonlinear = 'ON')
     step = Step(predefined_temperature = temperature_mean, 
               time_period = int(load.total_runing_time), initial_inc = 0.005, 
-              min_inc = 0.0001, max_inc = period/60.0, nonlinear = 'OFF')
+              min_inc = 0.0001, max_inc = period/20.0, nonlinear = 'OFF')
 #==============================================================================
 # UMAT
 #==============================================================================
-#    umat = UMAT(UMATDirectory = 'F:\\UMAT\\CurrentVersion\\', 
-#                UMATMainFile = 'MAIN_IN718.for', 
-#                ParameterFortranFile = 'PARAMETERS_IN718_TMF.for',
-#                OutputFortranFile = 'OUTPUT.for',
-#                OutputTextFile = name + '_output.txt')
     umat = UMAT(UMATDirectory = 'F:\\GitHub\\umat\\', 
                 UMATMainFile = 'MAIN_IN718.for', 
                 ParameterFortranFile = 'PARAMETERS_IN718_TMF.for',
                 OutputFortranFile = 'OUTPUT.for',
                 OutputTextFile = name + '_output.txt')
-
+                
+    umat = UMAT(UMATDirectory = 'F:\\GitHub\\umat\\', 
+                UMATMainFile = 'MAIN_IN718.for', 
+                ParameterFortranFile = 'PARAMETERS_SS304.for',
+                OutputFortranFile = 'OUTPUT.for',
+                OutputTextFile = name + '_output.txt')
 #==============================================================================
 # Job
 #==============================================================================

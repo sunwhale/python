@@ -467,6 +467,9 @@ class PlotData:
         if directory==None and filename==None:
             directory = self.figure_path
             filename = self.figure_name
+        if not os.path.isdir(directory):
+            os.makedirs(directory)
+            print 'Create new directory:',directory
         resultfile = open(directory + filename + '.csv', 'w') # write to csv
         data_list = []
         for line in self.lines:

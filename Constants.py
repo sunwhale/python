@@ -15,29 +15,41 @@ InputTemplate = 'Tension3DTemplate.inp'
 #==============================================================================
 # Inconel 718
 #==============================================================================
-AbaqusTempDirectory = 'F:\\Temp\\IN7183\\'
-ExperimentDirectory = 'F:\\Database\\IN718\\Timed\\'
-SimulationDirectory = 'F:\\Temp\\IN718_Sim\\'
-SimulationDirectory = 'F:\\Temp\\IN718_Sim_2\\'
-ExperimentLogFile = PythonDirectory + 'Inconel718_test_log.csv'
+#AbaqusTempDirectory = 'F:\\Temp\\IN7183\\'
+#ExperimentDirectory = 'F:\\Database\\IN718\\Timed\\'
+#SimulationDirectory = 'F:\\Temp\\IN718_Sim\\'
+#SimulationDirectory = 'F:\\Temp\\IN718_Sim_2\\'
+#ExperimentLogFile = PythonDirectory + 'Inconel718_test_log.csv'
+#FatigueDirectory = 'F:\\Database\\Fatigue\\'
+#ArticleFigureDirectory = 'F:\\Cloud\\Article\\Fatigue\\Figs\\'
+#
+#experiment_type_list = []
+#experiment_type_list.append(['TC-IP',['7031','7047','7030','7018']])
+#experiment_type_list.append(['TC-OP',['7033','7048','7032','7017']])
+#experiment_type_list.append(['PRO-IP',['7040','7029','7039','7038']])
+#experiment_type_list.append(['NPR-IP',['7036','7034','7045','7046','7028','7037']])
+#experiment_type_list.append(['TC-90',['7025']])
+#experiment_type_list.append(['TC-IF',['7110','7111','7112','7113','7114','7115','7116']])
+#
+#experiment_type_dict = {}
+#experiment_type_dict['TC-IP']=['7031','7047','7030','7018']
+#experiment_type_dict['TC-OP']=['7033','7048','7032','7017']
+#experiment_type_dict['PRO-IP']=['7040','7029','7039','7038']
+#experiment_type_dict['NPR-IP']=['7036','7034','7045','7046','7028','7037']
+#experiment_type_dict['TC-90']=['7025']
+#experiment_type_dict['TC-IF']=['7110','7111','7112','7113','7114','7115','7116']
+
+#==============================================================================
+# SS304
+#==============================================================================
+AbaqusTempDirectory = 'F:\\Temp\\SS304\\'
+ExperimentDirectory = 'F:\\Database\\SS304\\Timed\\'
+SimulationDirectory = 'F:\\Temp\\SS304_Sim\\'
+ExperimentLogFile = PythonDirectory + 'SS304_test_log.csv'
 FatigueDirectory = 'F:\\Database\\Fatigue\\'
 ArticleFigureDirectory = 'F:\\Cloud\\Article\\Fatigue\\Figs\\'
-
-experiment_type_list = []
-experiment_type_list.append(['TC-IP',['7031','7047','7030','7018']])
-experiment_type_list.append(['TC-OP',['7033','7048','7032','7017']])
-experiment_type_list.append(['PRO-IP',['7040','7029','7039','7038']])
-experiment_type_list.append(['NPR-IP',['7036','7034','7045','7046','7028','7037']])
-experiment_type_list.append(['TC-90',['7025']])
-experiment_type_list.append(['TC-IF',['7110','7111','7112','7113','7114','7115','7116']])
-
 experiment_type_dict = {}
-experiment_type_dict['TC-IP']=['7031','7047','7030','7018']
-experiment_type_dict['TC-OP']=['7033','7048','7032','7017']
-experiment_type_dict['PRO-IP']=['7040','7029','7039','7038']
-experiment_type_dict['NPR-IP']=['7036','7034','7045','7046','7028','7037']
-experiment_type_dict['TC-90']=['7025']
-experiment_type_dict['TC-IF']=['7110','7111','7112','7113','7114','7115','7116']
+experiment_type_dict['TC']=['3001']
 
 #==============================================================================
 # CMSX4

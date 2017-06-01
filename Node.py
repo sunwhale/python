@@ -608,13 +608,16 @@ class Node:
         stress=np.array(stress_list)
         strain=np.array(strain_list)
         transformation=np.array(transformation_list)
+        print 'stress'
         print stress
+        print 'strain'
         print strain
         print 'theta = %s deg' % theta_deg
         print 'phi = %s deg' % phi_deg
+        print 'transformation'
         print transformation
-        print np.dot(np.dot(transformation,stress),transformation.T)
-        print np.dot(np.dot(transformation,strain),transformation.T)
+#        print np.dot(np.dot(transformation,stress),transformation.T)
+#        print np.dot(np.dot(transformation,strain),transformation.T)
         
         dimension = 2
         stress_list = [s[:dimension] for s in stress_list[:dimension]]
@@ -623,10 +626,15 @@ class Node:
         stress=np.array(strain_list)
         strain=np.array(stress_list)
         transformation=np.array(transformation_list)
+        print 'stress'
         print stress
+        print 'strain'
         print strain
+        print 'transformation'
         print transformation
+        print 'stress_transformation'
         print np.dot(np.dot(transformation,stress),transformation.T)
+        print 'strain_transformation'
         print np.dot(np.dot(transformation,strain),transformation.T)
         
         s11 = stress[0][0]
@@ -694,5 +702,5 @@ class Node:
         self.fatigueLifeChuModel(material)
         
 n = Node(dimension=3)
-n.lifeTest()
-#n.mathematicsTest()
+#n.lifeTest()
+n.mathematicsTest()

@@ -1,21 +1,21 @@
 number,din mm,dout mm,gauge length mm,load type,axial control mode,rotational control mode,temperature mode,axial displacement,axial strain %,axial force,rotation,angel strain deg,torque,equivalent strain %,axial rotational phase deg,axial temperature phase deg,Period,load rate or frequence,test date,comments,calculate
+3000,0.00 ,6.00 ,10.00 ,monotonic tension,strain,rotation,20,-,fracture,-,0,-,-,-,0 ,0 ,-,0.0004mm/mm/s,2014-10-30,,1
 3001,0.00 ,6.00 ,10.00 ,cyclic tension compression,strain,rotation,20,-,ramp:+-0.15,-,0,-,-,+-0.15,0 ,0 ,T:1s,1Hz,2014-11-13,failure at 8239,1
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
+3002,0.00 ,6.00 ,10.00 ,cyclic tension compression,strain,rotation,20,-,ramp:+-0.20,-,0,-,-,+-0.20,0 ,0 ,T:1s,1Hz,2014-11-13,failure at 10874,1
+3003,0.00 ,6.00 ,10.00 ,cyclic tension compression,strain,rotation,20,-,ramp:+-0.25,-,0,-,-,+-0.25,0 ,0 ,T:1s,1Hz,2014-11-13,failure at 8442,1
+3004,0.00 ,6.00 ,10.00 ,cyclic tension compression,strain,rotation,20,-,ramp:+-0.30,-,0,-,-,+-0.30,0 ,0 ,T:2s,0.5Hz,2014-11-13,failure at 23860,1
+3005,0.00 ,6.00 ,10.00 ,cyclic tension compression,strain,rotation,20,-,ramp:+-0.35,-,0,-,-,+-0.35,0 ,0 ,T:1s,1Hz,2014-11-13,failure at 11903,1
+3006,0.00 ,6.00 ,10.00 ,cyclic tension compression,strain,rotation,20,-,ramp:+-0.40,-,0,-,-,+-0.40,0 ,0 ,T:2s,0.5Hz,2014-11-13,failure at 5026,1
+3007,0.00 ,6.00 ,10.00 ,cyclic tension compression,strain,rotation,20,-,ramp:+-0.45,-,0,-,-,+-0.45,0 ,0 ,T:2s,0.5Hz,2014-11-13,failure at 5047,1
+3008,0.00 ,6.00 ,10.00 ,cyclic tension compression,strain,rotation,20,-,ramp:+-0.50,-,0,-,-,+-0.50,0 ,0 ,T:2s,0.5Hz,2014-11-13,failure at 2301,1
+3009,0.00 ,6.00 ,10.00 ,cyclic tension compression,strain,rotation,20,-,ramp:+-0.55,-,0,-,-,+-0.55,0 ,0 ,T:2s,0.5Hz,2014-11-13,failure at 2261,1
+3010,0.00 ,6.00 ,10.00 ,cyclic tension compression,strain,rotation,20,-,ramp:+-0.60,-,0,-,-,+-0.60,0 ,0 ,T:2s,0.5Hz,2014-11-13,failure at 1422,1
+3011,0.00 ,6.00 ,10.00 ,cyclic tension compression,strain,rotation,20,-,ramp:+-0.70,-,0,-,-,+-0.70,0 ,0 ,T:10s,0.1Hz,2014-11-13,failure at 1185,1
+3012,0.00 ,6.00 ,10.00 ,cyclic tension compression,strain,rotation,20,-,ramp:+-0.80,-,0,-,-,+-0.80,0 ,0 ,T:2s,0.5Hz,2014-11-13,failure at 500,1
+3013,0.00 ,6.00 ,10.00 ,cyclic tension compression,strain,rotation,20,-,ramp:+-1.00,-,0,-,-,+-0.10,0 ,0 ,T:10s,0.1Hz,2014-11-13,failure at 531,1
+3014,0.00 ,6.00 ,10.00 ,cyclic tension compression,strain,rotation,20,-,ramp:+-1.00,-,0,-,-,+-0.10,0 ,0 ,T:10s,0.1Hz,2014-11-13,failure at 838,1
+3015,0.00 ,6.00 ,10.00 ,cyclic tension compression,strain,rotation,20,-,ramp:+-1.00,-,0,-,-,+-0.10,0 ,0 ,T:10s,0.1Hz,2014-11-13,failure at 494,1
+3016,0.00 ,6.00 ,10.00 ,cyclic tension compression,strain,rotation,20,-,ramp:+-1.00,-,0,-,-,+-0.10,0 ,0 ,T:10s,0.1Hz,2014-11-13,failure at 459,1
 ,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,

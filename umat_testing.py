@@ -14,14 +14,17 @@ from compare_exp_sim import compare_exp_sim
 from plot_sim_all import plot_sim_all
 from plot_sim_pv import plot_sim_pv
 
-for name in ['7047']: #TC-IP
-#for name in ['7046']: #NPR-IP
-#    workbench(name,loading_cycles=10,copy=True)
-#    compare_exp_sim(name,2,'axial_stress','shear_stress')
-#    compare_exp_sim(name,5,'axial_strain','axial_stress')
+#for name in ['7047']: #TC-IP
+for name in ['7046']: #NPR-IP
+    workbench(name,loading_cycles=10,copy=True)
+
+    compare_exp_sim(name,5,'axial_strain','axial_stress')
     plot_sim_all(name,begin_cycle=1,end_cycle=9,xitem='axial_strain',yitem='axial_stress')
-#    plot_sim_all(name,begin_cycle=1,end_cycle=9,xitem='axial_stress',yitem='shear_stress')
-#    plot_sim_pv(name,item='axial_stress')
+
+    compare_exp_sim(name,5,'axial_stress','shear_stress')
+    plot_sim_all(name,begin_cycle=1,end_cycle=9,xitem='axial_stress',yitem='shear_stress')
+    
+    plot_sim_pv(name,item='axial_stress')
 
 #==============================================================================
 # OUTPUT

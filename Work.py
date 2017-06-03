@@ -70,14 +70,17 @@ class Load:
         self.first_cycle_shift = first_cycle_shift
         self.segment = 1
 
-    def setLoadFromExperiment(self, ExperimentData):
+    def setLoadFromExperiment(self, ExperimentData, runing_time=None):
         self.runing_time = ExperimentData.runing_time
         self.temperature = ExperimentData.temperature
         self.axial_strain = ExperimentData.axial_strain
         self.axial_stress = ExperimentData.axial_stress
         self.shear_strain = ExperimentData.shear_strain
         self.torque = ExperimentData.torque
-        self.total_runing_time = self.runing_time[-1]
+        if runing_time == None:
+            self.total_runing_time = self.runing_time[-1]
+        else:
+            self.total_runing_time = runing_time
         self.length = len(self.runing_time)
         self.segment = 2
         

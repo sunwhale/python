@@ -47,12 +47,12 @@ def workbench(name,loading_cycles=None,copy=True):
 #==============================================================================
 # experiment
 #==============================================================================
-#    exp_full_name = ExperimentDirectory + name + '.csv'
-#    if os.path.exists(exp_full_name):
-#        exp = ExperimentData(exp_full_name)
-#        experimental_life = exp.total_axial_count
-#    else:
-#        print ('%s is not existed' % exp_full_name)
+    exp_full_name = ExperimentDirectory + name + '.csv'
+    if os.path.exists(exp_full_name):
+        exp = ExperimentData(exp_full_name)
+        experimental_life = exp.total_axial_count
+    else:
+        print ('%s is not existed' % exp_full_name)
 #==============================================================================
 # load
 #==============================================================================
@@ -64,6 +64,13 @@ def workbench(name,loading_cycles=None,copy=True):
     shear_strain = np.deg2rad(angel_strain)*d_out/2.0/gauge_length
     if loading_cycles == None:
         loading_cycles = int(predicted_life/4.0)
+#==============================================================================
+# load from experiment data
+#==============================================================================
+    if loading_cycles == None:
+        load.setLoadFromExperiment(exp,runing_time=None)
+    else:
+        load.setLoadFromExperiment(exp,runing_time=period*loading_cycles)
 #==============================================================================
 # Diamond path TMF IP
 #==============================================================================
@@ -117,15 +124,15 @@ def workbench(name,loading_cycles=None,copy=True):
 #              min_inc = 0.0001, max_inc = 5, nonlinear = 'ON')
     step = Step(predefined_temperature = temperature_mean, 
               time_period = int(load.total_runing_time), initial_inc = 0.005, 
-              min_inc = 0.0001, max_inc = period/180.0, nonlinear = 'OFF')
+              min_inc = 0.0001, max_inc = period/40.0, nonlinear = 'OFF')
 #==============================================================================
 # UMAT
 #==============================================================================
-    umat = UMAT(UMATDirectory = 'F:\\GitHub\\umat\\', 
-                UMATMainFile = 'MAIN_IN718.for', 
-                ParameterFortranFile = 'PARAMETERS_IN718_TMF.for',
-                OutputFortranFile = 'OUTPUT.for',
-                OutputTextFile = name + '_output.txt')
+#    umat = UMAT(UMATDirectory = 'F:\\GitHub\\umat\\', 
+#                UMATMainFile = 'MAIN_IN718.for', 
+#                ParameterFortranFile = 'PARAMETERS_IN718_TMF.for',
+#                OutputFortranFile = 'OUTPUT.for',
+#                OutputTextFile = name + '_output.txt')
                 
 #    umat = UMAT(UMATDirectory = 'F:\\GitHub\\umat\\', 
 #                UMATMainFile = 'MAIN_IN718.for', 
@@ -139,11 +146,11 @@ def workbench(name,loading_cycles=None,copy=True):
 #                OutputFortranFile = 'OUTPUT.for',
 #                OutputTextFile = name + '_output.txt')
                 
-#    umat = UMAT(UMATDirectory = 'F:\\UMAT\\SS304\\', 
-#                UMATMainFile = 'MAIN_SS304.for', 
-#                ParameterFortranFile = 'PARAMETERS_SS304.for',
-#                OutputFortranFile = 'OUTPUT.for',
-#                OutputTextFile = name + '_output.txt')
+    umat = UMAT(UMATDirectory = 'F:\\UMAT\\SS304\\', 
+                UMATMainFile = 'MAIN_SS304.for', 
+                ParameterFortranFile = 'PARAMETERS_SS304.for',
+                OutputFortranFile = 'OUTPUT.for',
+                OutputTextFile = name + '_output.txt')
 #==============================================================================
 # Job
 #==============================================================================

@@ -16,20 +16,18 @@ number,din mm,dout mm,gauge length mm,load type,axial control mode,rotational co
 3014,0.00 ,6.00 ,10.00 ,cyclic tension compression,strain,rotation,20,-,ramp:+-1.00,-,0,-,-,+-0.10,0 ,0 ,T:10s,0.1Hz,2014-11-13,failure at 838,1
 3015,0.00 ,6.00 ,10.00 ,cyclic tension compression,strain,rotation,20,-,ramp:+-1.00,-,0,-,-,+-0.10,0 ,0 ,T:10s,0.1Hz,2014-11-13,failure at 494,1
 3016,0.00 ,6.00 ,10.00 ,cyclic tension compression,strain,rotation,20,-,ramp:+-1.00,-,0,-,-,+-0.10,0 ,0 ,T:10s,0.1Hz,2014-11-13,failure at 459,1
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,
+3101,10.00 ,12.50 ,25.00 ,cyclic cross path,strain,strain,20,-,ramp:+-0.10,-,-,ramp:+-0.4315,-,+-0.1477,0 ,0 ,T:24s,0.04167Hz,2012-10-15,stop at 300,1
+3102,10.00 ,12.50 ,25.00 ,cyclic cross path,strain,strain,20,-,ramp:+-0.20,-,-,ramp:+-0.8629,-,+-0.2954,0 ,0 ,T:24s,0.04167Hz,2012-10-16,stop at 300,1
+3103,10.00 ,12.50 ,25.00 ,cyclic left triangle path,strain,strain,20,-,ramp:+-0.15,-,-,ramp:+-0.6472,-,+-0.2215,0 ,0 ,T:18s,0.05556Hz,2012-10-16,stop at 300,1
+3104,10.00 ,12.50 ,25.00 ,cyclic left triangle path,strain,strain,20,-,ramp:+-0.30,-,-,ramp:+-1.2944,-,+-0.4431,0 ,0 ,T:18s,0.05556Hz,2012-10-16,stop at 300,1
+3105,10.00 ,12.50 ,25.00 ,cyclic circle path,strain,strain,20,-,sin:+-0.10,,,sin:+-0.4313,-,+-0.1087 ,90 ,0 ,T:20s,0.05Hz,2012-10-18,stop at 300,1
+3106,10.00 ,12.50 ,25.00 ,cyclic circle path,strain,strain,20,-,sin:+-0.15,,,sin:+-0.6469,-,+-0.1630 ,90 ,0 ,T:20s,0.05Hz,2012-10-18,stop at 300,1
+3107,10.00 ,12.50 ,25.00 ,cyclic circle path,strain,strain,20,-,sin:+-0.30,,,sin:+-1.2939,-,+-0.3260 ,90 ,0 ,T:20s,0.05Hz,2012-10-18,stop at 300,1
+3108,10.00 ,12.50 ,25.00 ,cyclic proportional path,strain,strain,20,-,ramp:+-0.80,-,-,ramp:+-3.4503,-,+-1.1813 ,0 ,0 ,T:20s,0.05Hz,2012-10-19,stop at 300,1
+3109,10.00 ,12.50 ,25.00 ,cyclic proportional path,strain,strain,20,-,ramp:+-0.40,-,-,ramp:+-1.7251,-,+-0.5906 ,0 ,0 ,T:20s,0.05Hz,2012-10-19,stop at 300,1
+3110,10.00 ,12.50 ,25.00 ,cyclic circle path,strain,strain,20,-,sin:+-0.80,,,sin:+-1.7251,-,+-0.80,90 ,0 ,T:20s,0.05Hz,2012-10-25,stop at 300,1
+3111,10.00 ,12.50 ,25.00 ,cyclic circle path,strain,strain,20,-,sin:+-0.40,,,sin:+-3.4503,-,+-0.8692,90 ,0 ,T:20s,0.05Hz,2012-10-25,stop at 300,1
+3112,10.00 ,12.50 ,25.00 ,cyclic circle path,strain,strain,20,-,sin:+-0.60,,,sin:+-2.5866,-,+-0.8858,45 ,0 ,T:20s,0.05Hz,2012-10-25,stop at 300,1
 ,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,

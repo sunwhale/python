@@ -67,7 +67,9 @@ def transform_to_database(inpath,outpath,name):
         outname = fullname.replace('\\','_')
         outname = outname.replace(':','')
         outname = outname[:-4] + '.csv'
-        if ('Strain Test 3 - Data Acquisition 1 - (Delta Level)' in outname) or ('Strain Test 3 - Data Acquisition 1 - (Timed)' in outname):
+        if ('Strain Test 3 - Data Acquisition 1 - (Delta Level)' in outname) \
+        or ('Strain Test 3 - Data Acquisition 1 - (Timed)' in outname) \
+        or ('Data Acquisition 1 - (Timed)' in outname):
             outname = name + '.csv'
         if isTextFile(filename[1]):
             print '------------------------------'
@@ -138,7 +140,7 @@ def transform_to_database(inpath,outpath,name):
                     if 'Axial Mech. Strain' in Header[i] or 'Axial Strain' in Header[i]:
                         for j in range(len(list3)):
                             lines[j][5] = list3[j][i]
-                    if 'Torsional Rotation' in Header[i]:
+                    if 'Torsional Rotation' in Header[i] or 'Torsional Angle' in Header[i]:
                         for j in range(len(list3)):
                             lines[j][7] = list3[j][i]
                     if 'Torsional Strain (ang)' in Header[i]:
@@ -163,7 +165,7 @@ def transform_to_database(inpath,outpath,name):
 #                    扭矩单位为N.m
                     torque = float(lines[i][8])
 #                    剪应变单位为1
-                    gama = r_out * theta / gauge_length
+                    gama = r_out * np.deg2rad(theta) / gauge_length
 #                    薄壁管剪应力
                     shear_stress = 16.0*torque/(np.pi*(d_out**2-d_in**2)*(d_out+d_in))/1.0e6
 #                    alpha表示
@@ -178,14 +180,19 @@ def transform_to_database(inpath,outpath,name):
                 print 'writing: ' + outpath + outname
                 print
                 outfile.writelines('Axial Segment Count,Running Time,Temperature,Axial Displacement,Axial Force,Axial Strain,Axial Stress,Rotation,Torque,Angle Strain,Shear Stress,Equivalent Plastic Strain,Thermal Strain,Axial Total Strain\n')
-                outfile.writelines('cycles,sec,C,mm,N,mm/mm,Mpa,deg,N*m,-,Mpa,-,mm/mm,mm/mm\n')
+                outfile.writelines('cycles,sec,C,mm,N,mm/mm,MPa,deg,N*m,-,MPa,-,mm/mm,mm/mm\n')
                 for l in lines:
                     line = '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' % (l[0],l[1],l[2],l[3],l[4],l[5],l[6],l[7],l[8],l[9],l[10],l[11],l[12],l[13])
                     outfile.writelines(line)
                 del list3
                 del lines
 
-name = '7116'
-inpath = 'F:\\Database\\IN718\\Sun Jingyu\\%s\\' % name
-outpath = 'F:\\Database\\IN718\\Sun Jingyu\\'
-transform_to_database(inpath,outpath,name)
+#name = '7116'
+#inpath = 'F:\\Database\\IN718\\Sun Jingyu\\%s\\' % name
+#outpath = 'F:\\Database\\IN718\\Sun Jingyu\\'
+#transform_to_database(inpath,outpath,name)
+
+for name in experiment_type_dict['BIAXIAL']:
+    inpath = 'F:\\Database\\SS304\\MTS\\%s\\' % name
+    outpath = 'F:\\Database\\SS304\\MTS_OUT\\'
+    transform_to_database(inpath,outpath,name)

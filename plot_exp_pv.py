@@ -33,7 +33,7 @@ def plot_exp_pv(names,item='axial_stress'):
     
         exp_filename = ExperimentDirectory + name + '.csv'
         experiment = ExperimentData(exp_filename)
-        cycle,peak,valley = experiment.obtainPeakValley('axial_stress')
+        cycle,peak,valley = experiment.obtainPeakValley(item)
         plt.plot(cycle,peak)
         plt.plot(cycle,valley)
         

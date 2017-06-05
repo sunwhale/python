@@ -65,13 +65,6 @@ def workbench(name,loading_cycles=None,copy=True):
     if loading_cycles == None:
         loading_cycles = int(predicted_life/4.0)
 #==============================================================================
-# load from experiment data
-#==============================================================================
-    if loading_cycles == None:
-        load.setLoadFromExperiment(exp,runing_time=None)
-    else:
-        load.setLoadFromExperiment(exp,runing_time=period*loading_cycles)
-#==============================================================================
 # Diamond path TMF IP
 #==============================================================================
     if load_type == 'cyclic diamond path' and axial_temperature_phase == 0.0:
@@ -116,6 +109,13 @@ def workbench(name,loading_cycles=None,copy=True):
                             [temperature_min,temperature_mean,temperature_max,temperature_mean,temperature_min],
                             [0,axial_strain,0,-1*axial_strain,0],
                             [0,shear_strain,0,-1*shear_strain,0])
+#==============================================================================
+# load from experiment data
+#==============================================================================
+    if loading_cycles == None:
+        load.setLoadFromExperiment(exp,runing_time=None)
+    else:
+        load.setLoadFromExperiment(exp,runing_time=period*loading_cycles)
 #==============================================================================
 # Step
 #==============================================================================

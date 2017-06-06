@@ -45,7 +45,7 @@ def compare_exp_sim(name,loading_cycles=1,xitem='axial_strain',yitem='axial_stre
     plt.plot(sim_xitem,sim_yitem,label='sim')
     
     figure_path = ArticleFigureDirectory
-    figure_name = name
+    figure_name = name + '_' + xitem + '_' + yitem
     save_types=['.png','.pdf']
     if not os.path.isdir(ArticleFigureDirectory):
         os.makedirs(ArticleFigureDirectory)

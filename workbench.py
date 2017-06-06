@@ -64,10 +64,12 @@ def workbench(name,loading_cycles=None,copy=True):
     shear_strain = np.deg2rad(angel_strain)*d_out/2.0/gauge_length
     if loading_cycles == None:
         loading_cycles = int(predicted_life/4.0)
+    use_exp_data = True
 #==============================================================================
 # Diamond path TMF IP
 #==============================================================================
     if load_type == 'cyclic diamond path' and axial_temperature_phase == 0.0:
+        use_exp_data = False
         load.setLoadBiaxial(int(loading_cycles),
                             [0,period/4.0,period/2.0,period/4.0*3.0,period],
                             [temperature_mean,temperature_max,temperature_mean,temperature_min,temperature_mean],
@@ -77,6 +79,7 @@ def workbench(name,loading_cycles=None,copy=True):
 # Proportional path TMF IP
 #==============================================================================
     if load_type == 'cyclic proportional path' and axial_temperature_phase == 0.0:
+        use_exp_data = False
         load.setLoadBiaxial(int(loading_cycles),
                             [0,period/4.0,period/2.0,period/4.0*3.0,period],
                             [temperature_mean,temperature_max,temperature_mean,temperature_min,temperature_mean],
@@ -86,6 +89,7 @@ def workbench(name,loading_cycles=None,copy=True):
 # Uniaxial TMF IP
 #==============================================================================
     if load_type == 'cyclic tension compression' and axial_temperature_phase == 0.0:
+        use_exp_data = False
         load.setLoadBiaxial(int(loading_cycles),
                             [0,period/4.0,period/2.0,period/4.0*3.0,period],
                             [temperature_mean,temperature_max,temperature_mean,temperature_min,temperature_mean],
@@ -95,6 +99,7 @@ def workbench(name,loading_cycles=None,copy=True):
 # Uniaxial TMF OP
 #==============================================================================
     if load_type == 'cyclic tension compression' and axial_temperature_phase == 180.0:
+        use_exp_data = False
         load.setLoadBiaxial(int(loading_cycles),
                             [0,period/4.0,period/2.0,period/4.0*3.0,period],
                             [temperature_mean,temperature_min,temperature_mean,temperature_max,temperature_mean],
@@ -104,6 +109,7 @@ def workbench(name,loading_cycles=None,copy=True):
 # Uniaxial TMF 90
 #==============================================================================
     if load_type == 'cyclic tension compression' and axial_temperature_phase == 90.0:
+        use_exp_data = False
         load.setLoadBiaxial(int(loading_cycles),
                             [0,period/4.0,period/2.0,period/4.0*3.0,period],
                             [temperature_min,temperature_mean,temperature_max,temperature_mean,temperature_min],
@@ -112,10 +118,11 @@ def workbench(name,loading_cycles=None,copy=True):
 #==============================================================================
 # load from experiment data
 #==============================================================================
-    if loading_cycles == None:
-        load.setLoadFromExperiment(exp,runing_time=None)
-    else:
-        load.setLoadFromExperiment(exp,runing_time=period*loading_cycles)
+    if use_exp_data:
+        if loading_cycles == None:
+            load.setLoadFromExperiment(exp,runing_time=None)
+        else:
+            load.setLoadFromExperiment(exp,runing_time=period*loading_cycles)
 #==============================================================================
 # Step
 #==============================================================================
@@ -140,17 +147,17 @@ def workbench(name,loading_cycles=None,copy=True):
 #                OutputFortranFile = 'OUTPUT.for',
 #                OutputTextFile = name + '_output.txt')
                 
-#    umat = UMAT(UMATDirectory = 'F:\\UMAT\\Fangjie\\', 
-#                UMATMainFile = 'AO304Tanakav6VariDamageMyisokin2.for', 
-#                ParameterFortranFile = 'PARAMETERS_SS304.for',
-#                OutputFortranFile = 'OUTPUT.for',
-#                OutputTextFile = name + '_output.txt')
-                
-    umat = UMAT(UMATDirectory = 'F:\\UMAT\\SS304\\', 
-                UMATMainFile = 'MAIN_SS304.for', 
+    umat = UMAT(UMATDirectory = 'F:\\UMAT\\Fangjie\\', 
+                UMATMainFile = 'AO304Tanakav6VariDamageMyisokin2.for', 
                 ParameterFortranFile = 'PARAMETERS_SS304.for',
                 OutputFortranFile = 'OUTPUT.for',
                 OutputTextFile = name + '_output.txt')
+                
+#    umat = UMAT(UMATDirectory = 'F:\\UMAT\\SS304\\', 
+#                UMATMainFile = 'MAIN_SS304.for', 
+#                ParameterFortranFile = 'PARAMETERS_SS304.for',
+#                OutputFortranFile = 'OUTPUT.for',
+#                OutputTextFile = name + '_output.txt')
 #==============================================================================
 # Job
 #==============================================================================

@@ -133,4 +133,6 @@ if __name__ == '__main__':
                 sys.exit()
 
 #zip_dir('F:\\Temp\\SS304_Sim\\3001.csv', 'F:\\Temp\\SS304_Sim\\3001.zip')
+
+#zip_dir('F:\\Temp\\SS304_Sim\\3001.csv', 'F:\\Temp\\SS304_Sim\\3001.zip')
 #unzip_dir('F:\\Temp\\SS304_Sim\\3001.zip', 'F:\\Temp\\SS304_Sim\\')

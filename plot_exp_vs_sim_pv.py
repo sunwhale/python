@@ -32,18 +32,29 @@ def plot_exp_vs_sim_pv(name,item='axial_stress'):
 
     sim_filename = SimulationDirectory + name + '.csv'
     simulation = SimulationData(sim_filename,period)
-    cycle,peak,valley = simulation.obtainPeakValley('axial_stress')
-    plt.plot(cycle,peak)
+    cycle,peak,valley = simulation.obtainPeakValley(item)
+    plt.plot(cycle,peak,label='exp')
     plt.plot(cycle,valley)
         
     exp_filename = ExperimentDirectory + name + '.csv'
     experiment = ExperimentData(exp_filename)
-    cycle,peak,valley = experiment.obtainPeakValley('axial_stress')
-    plt.plot(cycle,peak)
+    cycle,peak,valley = experiment.obtainPeakValley(item)
+    plt.plot(cycle,peak,label='sim')
     plt.plot(cycle,valley)
     
     plt.xscale('log')
 #    plt.yscale('log')
     
-    plt.show()
+    figure_path = ArticleFigureDirectory
+    figure_name = name + '_' + item + '_pv'
+    save_types=['.png','.pdf']
+    if not os.path.isdir(ArticleFigureDirectory):
+        os.makedirs(ArticleFigureDirectory)
+        print 'Create new directory:',ArticleFigureDirectory
+    if figure_path <> None and figure_name<> None:
+        for save_type in save_types:
+            plt.savefig(figure_path + figure_name + save_type, dpi=150)
+            print 'save as', figure_path + figure_name + save_type
+            
+#    plt.show()
     plt.close()

@@ -28,10 +28,12 @@ for name in experiment_type_dict['BIAXIAL']:
 #    compare_exp_sim(name,5,'axial_strain','axial_stress')
 #    plot_sim_all(name,begin_cycle=1,end_cycle=100,xitem='axial_strain',yitem='axial_stress')
     
-    compare_exp_sim(name,200,'axial_stress','shear_stress')
+    compare_exp_sim(name,100,'axial_stress','shear_stress')
+    compare_exp_sim(name,100,'axial_strain','shear_strain')
 #    plot_sim_all(name,begin_cycle=1,end_cycle=100,xitem='axial_stress',yitem='shear_stress')
     
-#    plot_exp_vs_sim_pv(name,item='axial_stress')
+    plot_exp_vs_sim_pv(name,item='axial_stress')
+    plot_exp_vs_sim_pv(name,item='shear_stress')
 
 #for name in experiment_type_dict['BIAXIAL']:
 #    exp_filename = ExperimentDirectory + name + '.csv'

@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from Constants import *
 from Data import SimulationData,ExperimentData,ExperimentLog
 
-def compare_exp_sim(name,loading_cycles=1,xitem='axial_strain',yitem='axial_stress'):
+def compare_exp_sim(name,loading_cycles=1,xitem='axial_strain',yitem='axial_stress',save_types=['.png','.pdf']):
     experiment_log = ExperimentLog(ExperimentLogFile)
     experiment_log.output(name)
     regular = r'.*'
@@ -44,9 +44,10 @@ def compare_exp_sim(name,loading_cycles=1,xitem='axial_strain',yitem='axial_stre
     plt.plot(exp_xitem,exp_yitem,label='exp')
     plt.plot(sim_xitem,sim_yitem,label='sim')
     
+    plt.legend(loc=0)
+    
     figure_path = ArticleFigureDirectory
     figure_name = name + '_' + xitem + '_' + yitem
-    save_types=['.png','.pdf']
     if not os.path.isdir(ArticleFigureDirectory):
         os.makedirs(ArticleFigureDirectory)
         print 'Create new directory:',ArticleFigureDirectory
@@ -55,5 +56,5 @@ def compare_exp_sim(name,loading_cycles=1,xitem='axial_strain',yitem='axial_stre
             plt.savefig(figure_path + figure_name + save_type, dpi=150)
             print 'save as', figure_path + figure_name + save_type
             
-#    plt.show()
+    plt.show()
     plt.close()

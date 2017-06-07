@@ -94,5 +94,6 @@ ENV/
 .ropeproject
 
 # myself
+output/
 *.cal
 *.bat

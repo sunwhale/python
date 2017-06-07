@@ -141,17 +141,17 @@ def workbench(name,loading_cycles=None,copy=True):
 #                OutputFortranFile = 'OUTPUT.for',
 #                OutputTextFile = name + '_output.txt')
                 
-#    umat = UMAT(UMATDirectory = 'F:\\GitHub\\umat\\', 
-#                UMATMainFile = 'MAIN_IN718.for', 
-#                ParameterFortranFile = 'PARAMETERS_SS304.for',
-#                OutputFortranFile = 'OUTPUT.for',
-#                OutputTextFile = name + '_output.txt')
-                
-    umat = UMAT(UMATDirectory = 'F:\\UMAT\\Fangjie\\', 
-                UMATMainFile = 'AO304Tanakav6VariDamageMyisokin2.for', 
+    umat = UMAT(UMATDirectory = 'F:\\GitHub\\umat\\', 
+                UMATMainFile = 'MAIN_IN718.for', 
                 ParameterFortranFile = 'PARAMETERS_SS304.for',
                 OutputFortranFile = 'OUTPUT.for',
                 OutputTextFile = name + '_output.txt')
+                
+#    umat = UMAT(UMATDirectory = 'F:\\UMAT\\Fangjie\\', 
+#                UMATMainFile = 'AO304Tanakav6VariDamageMyisokin3.for', 
+#                ParameterFortranFile = 'PARAMETERS_SS304.for',
+#                OutputFortranFile = 'OUTPUT.for',
+#                OutputTextFile = name + '_output.txt')
                 
 #    umat = UMAT(UMATDirectory = 'F:\\UMAT\\SS304\\', 
 #                UMATMainFile = 'MAIN_SS304.for', 

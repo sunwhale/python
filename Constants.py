@@ -44,10 +44,11 @@ InputTemplate = 'Tension3DTemplate.inp'
 #==============================================================================
 AbaqusTempDirectory = 'F:\\Temp\\SS304\\'
 ExperimentDirectory = 'F:\\Database\\SS304\\Timed\\'
-SimulationDirectory = 'F:\\Temp\\SS304_Sim\\'
+#SimulationDirectory = 'F:\\Temp\\SS304_Sim\\'
+SimulationDirectory = 'F:\\Temp\\SS304_Sim_fang_20170607\\'
 ExperimentLogFile = PythonDirectory + 'SS304_test_log.csv'
 FatigueDirectory = 'F:\\Database\\Fatigue\\'
-ArticleFigureDirectory = 'F:\\Database\\SS304\\Fatigue\\Figs\\'
+ArticleFigureDirectory = 'F:\\GitHub\\python\\output\\'
 experiment_type_dict = {}
 experiment_type_dict['Tensile']=['3000']
 experiment_type_dict['TC']=[

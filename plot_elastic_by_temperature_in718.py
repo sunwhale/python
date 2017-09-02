@@ -76,7 +76,7 @@ def create_plot_data_elastic_by_temperature_in718(plot_data):
     shear_modulus = []
     poisson_ratio = []
     for t in temperature:
-        y,p,s = calculate_elastic_by_temperature_in718(t)
+        y,p,s,ys = calculate_elastic_by_temperature_in718(t)
         youngs_modulus.append(y)
         shear_modulus.append(s)
         poisson_ratio.append(p)

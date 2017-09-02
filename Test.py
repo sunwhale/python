@@ -6,6 +6,7 @@ Created on Mon Feb 13 13:46:18 2017
 """
 
 import numpy as np
+import matplotlib as mpl
 from Constants import *
 from Data import *
 from Work import *
@@ -110,23 +111,47 @@ xitem = 'axial_stress'
 yitem = 'shear_stress'
 zitem = 'temperature'
 xitem = 'axial_strain'
-yitem = 'axial_stress'
+yitem = 'shear_strain'
+#yitem = 'axial_stress'
 #fig, ax = plt.subplots()
-x1 = sim.obtainNthCycle(xitem,nth)
-y1 = sim.obtainNthCycle(yitem,nth)
+x1 = sim.obtainNthCycle(xitem,nth)*100
+y1 = sim.obtainNthCycle(yitem,nth)*100
 z1 = sim.obtainNthCycle(zitem,nth)
 
-x2 = exp.obtainNthCycle(xitem,nth)
-y2 = exp.obtainNthCycle(yitem,nth)
+x2 = exp.obtainNthCycle(xitem,nth)*100
+y2 = exp.obtainNthCycle(yitem,nth)*100
 z2 = exp.obtainNthCycle(zitem,nth)
 
 plot_format()
-
+mpl.rcParams['figure.subplot.left'] = 0.13
+mpl.rcParams['figure.subplot.right'] = 0.95
+    
 multicolored_lines(x1,y1,z1)
-multicolored_lines(x2,y2,z2)
+plt.xlabel(xylabels[xitem])
+plt.ylabel(xylabels[yitem])
 
+figure_path='F:\\Cloud\\2017-07-26_Darmstadt\\'
+figure_name='multicolored_lines_exp'
+save_types = ['.png']
+if figure_path <> None and figure_name<> None:
+    for save_type in save_types:
+        plt.savefig(figure_path + figure_name + save_type, dpi=150)
+        print 'save as', figure_path + figure_name + save_type
+
+plt.show()
+
+multicolored_lines(x2,y2,z2)
 
 #plt.gca().set_aspect('auto')
 plt.xlabel(xylabels[xitem])
 plt.ylabel(xylabels[yitem])
+
+figure_path='F:\\Cloud\\2017-07-26_Darmstadt\\'
+figure_name='multicolored_lines_sim'
+save_types = ['.png']
+if figure_path <> None and figure_name<> None:
+    for save_type in save_types:
+        plt.savefig(figure_path + figure_name + save_type, dpi=150)
+        print 'save as', figure_path + figure_name + save_type
+
 plt.show()

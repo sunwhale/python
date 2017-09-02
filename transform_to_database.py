@@ -187,12 +187,13 @@ def transform_to_database(inpath,outpath,name):
                 del list3
                 del lines
 
-#name = '7116'
-#inpath = 'F:\\Database\\IN718\\Sun Jingyu\\%s\\' % name
-#outpath = 'F:\\Database\\IN718\\Sun Jingyu\\'
-#transform_to_database(inpath,outpath,name)
+name = '7116'
+inpath = 'F:\\Database\\IN718\\Sun Jingyu\\%s\\' % name
+outpath = 'F:\\Database\\IN718\\Sun Jingyu\\'
+transform_to_database(inpath,outpath,name)
+print 'end'
 
-for name in experiment_type_dict['BIAXIAL']:
-    inpath = 'F:\\Database\\SS304\\MTS\\%s\\' % name
-    outpath = 'F:\\Database\\SS304\\MTS_OUT\\'
-    transform_to_database(inpath,outpath,name)
+#for name in experiment_type_dict['BIAXIAL']:
+#    inpath = 'F:\\Database\\SS304\\MTS\\%s\\' % name
+#    outpath = 'F:\\Database\\SS304\\MTS_OUT\\'
+#    transform_to_database(inpath,outpath,name)

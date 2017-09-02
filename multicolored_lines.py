@@ -24,13 +24,18 @@ def multicolored_lines(x=None, y=None, z=None):
     fig, ax = plt.subplots()
     plt.xlim(x.min(), x.max())
     plt.ylim(y.min(), y.max())
+    plt.xlim(-1500, 1500)
+    plt.ylim(-800, 800)
+    plt.xlim(-1.0, 1)
+    plt.ylim(-1.8, 1.8)
     mymap = matplotlib.colors.LinearSegmentedColormap.from_list('mycolors',['blue','green','yellow','orange','red'])
     mymap = matplotlib.colors.LinearSegmentedColormap.from_list('mycolors',['blue','red'])
     lc = colorline(x, y, z, norm=plt.Normalize(300, 650), cmap=mymap)
     cbar = plt.colorbar(lc)
     cbar.set_label('Temperature [$^{\circ}$C]')
     cbar.set_ticks(np.linspace(300,650,8))
-    cbar.set_ticklabels( ('300', '350', '400', '450', '500', '550', '600', '650') ) 
+    cbar.set_ticklabels( ('300', '350', '400', '450', '500', '550', '600', '650') )
+    
 
 def colorline(
         x, y, z=None, cmap='copper', norm=plt.Normalize(0.0, 1.0),

@@ -18,34 +18,32 @@ from plot_exp_vs_sim_pv import plot_exp_vs_sim_pv
 from plot_exp_pv import plot_exp_pv
 
 
-#for name in experiment_type_dict['TC']:
-for name in ['3112']:
-    exp_filename = ExperimentDirectory + name + '.csv'
-    experiment = ExperimentData(exp_filename)
+for name in experiment_type_dict['BIAXIAL']:
+#for name in ['3101']:
+#    exp_filename = ExperimentDirectory + name + '.csv'
+#    experiment = ExperimentData(exp_filename)
 #    workbench(name,loading_cycles=experiment.total_axial_count,copy=True)
-#    workbench(name,loading_cycles=5,copy=True)
-#    
+#    workbench(name,loading_cycles=10,copy=True)
+    
 #    compare_exp_sim(name,5,'axial_strain','axial_stress')
 #    plot_sim_all(name,begin_cycle=1,end_cycle=100,xitem='axial_strain',yitem='axial_stress')
     
-    compare_exp_sim(name,4,'axial_stress','shear_stress')
-#    plot_sim_all(name,begin_cycle=1,end_cycle=9,xitem='axial_stress',yitem='shear_stress')
+    compare_exp_sim(name,100,'axial_stress','shear_stress')
+    compare_exp_sim(name,100,'axial_strain','shear_strain')
+#    plot_sim_all(name,begin_cycle=1,end_cycle=100,xitem='axial_stress',yitem='shear_stress')
     
-#    plot_exp_vs_sim_pv(name,item='axial_stress')
+    plot_exp_vs_sim_pv(name,item='axial_stress')
+    plot_exp_vs_sim_pv(name,item='shear_stress')
 
-#for name in experiment_type_dict['TC']:
+#for name in experiment_type_dict['BIAXIAL']:
 #    exp_filename = ExperimentDirectory + name + '.csv'
 #    experiment = ExperimentData(exp_filename)
 #    print name,experiment.axial_count[-1],experiment.runing_time[-1],experiment.runing_time[-1]/experiment.axial_count[-1]
 #    print name,experiment.total_axial_count
 
-#plot_exp_pv(experiment_type_dict['TC'],item='axial_stress')
+#plot_exp_pv(experiment_type_dict['BIAXIAL'],item='axial_stress')
+#plot_exp_pv(experiment_type_dict['BIAXIAL'],item='shear_strain')
 
 #==============================================================================
 # OUTPUT
 #==============================================================================
-#=========================   119.5/   120.0========== 99.58%
-# PACC  4.099855867681935E-003
-# TEMP  0.000000000000000E+000
-# TRIAXIALITY  0.000000000000000E+000
-# YD  0.391979424862558  

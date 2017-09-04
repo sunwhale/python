@@ -21,9 +21,9 @@ def create_plot_data_fatigue_life(fatigue_data,figure_path=None,figure_name=None
 # plot lines
 #==============================================================================
     i = 0
-    marker_list = ['s','o','^','D']
+    marker_list = ['s','o','^','<','D']
     plot_data = PlotData()
-    for load_type in ['TC-IP','TC-OP','PRO-IP','NPR-IP']:
+    for load_type in ['TC-IP','TC-OP','TC-90','PRO-IP','NPR-IP']:
         experimental_life = fatigue_data.loadTypeFilter(load_type,'experimental_life')
         predicted_life = fatigue_data.loadTypeFilter(load_type,'predicted_life')
         plot_data.addLine(experimental_life,
@@ -82,6 +82,11 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
     plot_data.readFromFile(figure_path,figure_name)
     plot_data.plot()
 #==============================================================================
+# plot 1x lines
+#==============================================================================
+    linewidth = 1.0
+    plt.plot([10,1e4],[10,1e4],color='black',linewidth=linewidth)
+#==============================================================================
 # plot 2x lines
 #==============================================================================
     linewidth = 0.5
@@ -96,6 +101,7 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
 # show legend
 #==============================================================================
     plt.legend(loc=2)
+#    plt.show()
 #==============================================================================
 # save figures
 #==============================================================================
@@ -106,6 +112,7 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
     plt.close()
 
 fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
+#fatigue_model_list = ['BM']
 
 for fatigue_model in fatigue_model_list:
     fatigue_file = '%s%s.csv' % (FatigueDirectory,fatigue_model)

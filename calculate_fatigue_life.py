@@ -42,6 +42,11 @@ def calculate_data_fatigue_life(data,material,fatigue_model):
                 displacement=[], stress=stress, strain=strain, temperature=temperature)
     if fatigue_model == 'FS':
         fatigue_data = node.fatigueLifeFSModel(material,k=1.0)
+#    if fatigue_model == 'FS':
+#        life = nth*2.0
+#        k = ((material.tau_f/material.shear_modulus*(2.0*life)**material.b0 + material.gamma_f*(2.0*life)**material.c0)/((1.0+material.poisson_ratio)*material.sigma_f/material.youngs_modulus*(2.0*life)**material.b+(1.0+0.5)*material.epsilon_f*(2.0*life)**material.c)-1.0)*material.yield_stress/(material.sigma_f*(2.0*life)**material.b)
+#        print k
+#        fatigue_data = node.fatigueLifeFSModel(material,k=k)
     if fatigue_model == 'SWT':
         fatigue_data = node.fatigueLifeSWTModel(material)
     if fatigue_model == 'BM':
@@ -93,6 +98,7 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
         worksheet.write_row('A'+str(row_number), comment_list, bold); row_number += 1 # write to excel
         
         for name in experiment_type[1]:
+            print name
             regular = r'\d+\.?\d*'
             period = float(experiment_log.obtainItem(name,'period',regular)[0])
             expriment_life = int(experiment_log.obtainItem(name,'comments',regular)[0])
@@ -121,6 +127,7 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
     allresultfile.close() # write to csv all
     workbook.close() # write to excel
 
-fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
+#fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
+fatigue_model_list = ['FS']
 for fatigue_model in fatigue_model_list:
     calculate_fatigue_life(fatigue_model)

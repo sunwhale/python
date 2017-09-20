@@ -40,13 +40,13 @@ def calculate_data_fatigue_life(data,material,fatigue_model):
         strain.append([[e11[i],e12[i],e13[i]],[e12[i],e22[i],e23[i]],[e13[i],e23[i],e33[i]]])
     node = Node(nodelabel=nodelabel, dimension=2, time=time, coordinate=[], 
                 displacement=[], stress=stress, strain=strain, temperature=temperature)
-    if fatigue_model == 'FS':
-        fatigue_data = node.fatigueLifeFSModel(material,k=1.0)
 #    if fatigue_model == 'FS':
-#        life = nth*2.0
-#        k = ((material.tau_f/material.shear_modulus*(2.0*life)**material.b0 + material.gamma_f*(2.0*life)**material.c0)/((1.0+material.poisson_ratio)*material.sigma_f/material.youngs_modulus*(2.0*life)**material.b+(1.0+0.5)*material.epsilon_f*(2.0*life)**material.c)-1.0)*material.yield_stress/(material.sigma_f*(2.0*life)**material.b)
-#        print k
-#        fatigue_data = node.fatigueLifeFSModel(material,k=k)
+#        fatigue_data = node.fatigueLifeFSModel(material,k=1.0)
+    if fatigue_model == 'FS':
+        life = nth*2.0
+        k = ((material.tau_f/material.shear_modulus*(2.0*life)**material.b0 + material.gamma_f*(2.0*life)**material.c0)/((1.0+material.poisson_ratio)*material.sigma_f/material.youngs_modulus*(2.0*life)**material.b+(1.0+0.5)*material.epsilon_f*(2.0*life)**material.c)-1.0)*material.yield_stress/(material.sigma_f*(2.0*life)**material.b)
+        print k
+        fatigue_data = node.fatigueLifeFSModel(material,k=k)
     if fatigue_model == 'SWT':
         fatigue_data = node.fatigueLifeSWTModel(material)
     if fatigue_model == 'BM':

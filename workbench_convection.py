@@ -13,7 +13,7 @@ from Data import SimulationData,ExperimentData,ExperimentLog
 from Material import Material
 from Work_convection import Step,UMAT,Load,Job
 
-def workbench(name,loading_cycles=None,copy=True):
+def workbench(name,loading_cycles=None,copy=True,film_coefficient=0.0,sink_temperature=0.0,temperature_list=[]):
     """
     某试件对应的边界条件下的数值模拟。
     """
@@ -23,10 +23,10 @@ def workbench(name,loading_cycles=None,copy=True):
     load_type = experiment_log.obtainItem(name,'load_type',regular)[0]
     regular = r'\d+\.?\d*'
     temperature_mode = experiment_log.obtainItem(name,'temperature_mode',regular)
-    if len(temperature_mode) == 1:
-        temperature_list = [float(temperature_mode[0]), float(temperature_mode[0])]
-    if len(temperature_mode) == 2:
-        temperature_list = [float(temperature_mode[0]), float(temperature_mode[1])]
+#    if len(temperature_mode) == 1:
+#        temperature_list = [float(temperature_mode[0]), float(temperature_mode[0])]
+#    if len(temperature_mode) == 2:
+#        temperature_list = [float(temperature_mode[0]), float(temperature_mode[1])]
     d_out = float(experiment_log.obtainItem(name,'d_out',regular)[0])
     gauge_length = float(experiment_log.obtainItem(name,'gauge_length',regular)[0])
     axial_strain = float(experiment_log.obtainItem(name,'axial_strain',regular)[0])
@@ -123,6 +123,10 @@ def workbench(name,loading_cycles=None,copy=True):
             load.setLoadFromExperiment(exp,runing_time=None)
         else:
             load.setLoadFromExperiment(exp,runing_time=period*loading_cycles)
+#==============================================================================
+# load of convection
+#==============================================================================
+    load.setConvection(film_coefficient,sink_temperature)
 #==============================================================================
 # Step
 #==============================================================================

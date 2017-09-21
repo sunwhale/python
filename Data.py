@@ -158,6 +158,8 @@ class SimulationData:
         self.shear_strain = []
         self.shear_stress = []
         self.mises_stress = []
+        self.heat_flux_1 = []
+        self.heat_flux_2 = []
         self.axial_count_index = {}
         self.axial_count_index_list = []
         self.total_axial_count = []
@@ -182,6 +184,10 @@ class SimulationData:
                 self.shear_stress = data[:,self.header.index(h)]
             if h in ['Mises']:
                 self.mises_stress = data[:,self.header.index(h)]
+            if h in ['HFL1']:
+                self.heat_flux_1 = data[:,self.header.index(h)]
+            if h in ['HFL2']:
+                self.heat_flux_2 = data[:,self.header.index(h)]
         del data
         
         self.length = len(self.runing_time)

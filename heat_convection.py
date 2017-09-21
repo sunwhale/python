@@ -19,7 +19,15 @@ from plot_exp_pv import plot_exp_pv
 
 
 for name in ['0000']:
-    exp_filename = ExperimentDirectory + name + '.csv'
-    experiment = ExperimentData(exp_filename)
-#    workbench(name,loading_cycles=experiment.total_axial_count,copy=True)
-    workbench(name,loading_cycles=1,copy=True)
+    film_coefficient = 0.3
+    sink_temperature = 20.0
+    temperature_list = [650.0,650.0]
+    workbench(name,loading_cycles=1,copy=True,
+              film_coefficient=film_coefficient,
+              sink_temperature=sink_temperature,
+              temperature_list=temperature_list)
+              
+    sim_filename = SimulationDirectory + name + '.csv'
+    simulation = SimulationData(sim_filename,period=1)
+    print simulation.temperature
+    print simulation.heat_flux_1

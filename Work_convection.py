@@ -69,6 +69,8 @@ class Load:
         self.length = len(self.runing_time)
         self.first_cycle_shift = first_cycle_shift
         self.segment = 1
+        self.film_coefficient = 0.0
+        self.sink_temperature = 0.0
 
     def setLoadFromExperiment(self, ExperimentData, runing_time=None):
         self.runing_time = ExperimentData.runing_time
@@ -133,6 +135,10 @@ class Load:
         self.axial_stress = np.zeros(self.length)
         self.torque = np.zeros(self.length)
         self.segment = 1
+        
+    def setConvection(self, film_coefficient, sink_temperature):
+        self.film_coefficient = film_coefficient
+        self.sink_temperature = sink_temperature
         
     def showLoadPath(self, directory):
         os.chdir(directory)
@@ -245,6 +251,8 @@ class Job:
         print >>outfile, 'JobName = %r' % (self.JobName)
         print >>outfile, 'CAEName = %r' % (self.CAEName)
         print >>outfile, 'AbaqusWorkDirectory = %r' % (self.AbaqusWorkDirectory)
+        print >>outfile, 'film_coefficient = %r' % (self.Load.film_coefficient)
+        print >>outfile, 'sink_temperature = %r' % (self.Load.sink_temperature)
         outfile.close()
 
         shutil.copy(PythonDirectory + self.PythonPreproc, self.AbaqusWorkDirectory)

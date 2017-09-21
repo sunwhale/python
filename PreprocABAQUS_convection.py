@@ -27,7 +27,7 @@ s.sketchOptions.setValues(viewStyle=AXISYM)
 s.setPrimaryObject(option=STANDALONE)
 s.ConstructionLine(point1=(0.0, -100.0), point2=(0.0, 100.0))
 s.FixedConstraint(entity=g[2])
-s.rectangle(point1=(5.00, 0.0), point2=(6.00, 1.0))
+s.rectangle(point1=(3.25, 0.0), point2=(4.25, 1.0))
 p = mdb.models['Model-1'].Part(name='Part-1', dimensionality=AXISYMMETRIC, type=DEFORMABLE_BODY, twist=ON)
 p = mdb.models['Model-1'].parts['Part-1']
 p.BaseShell(sketch=s)
@@ -265,7 +265,7 @@ side1Edges1 = s1.getSequenceFromMask(mask=('[#8 ]', ), )
 region=regionToolset.Region(side1Edges=side1Edges1)
 mdb.models['Model-1'].FilmCondition(name='inner_convection', 
     createStepName='Step-1', surface=region, definition=EMBEDDED_COEFF, 
-    filmCoeff=0.3, filmCoeffAmplitude='', sinkTemperature=20.0, 
+    filmCoeff=film_coefficient, filmCoeffAmplitude='', sinkTemperature=sink_temperature, 
     sinkAmplitude='', sinkDistributionType=UNIFORM, sinkFieldName='')
     
 

@@ -63,7 +63,7 @@ for filename in filenames:
             header += 'Mises,'
             header += (H_field_name+'1,')
 #            header += (H_field_name+'2,')
-            print >>resultfile, header
+            print >>resultfile, header[:-1]
             
             for frame in frames:
                 x=odb.rootAssembly.instances['PART-1-1'].nodes[i].coordinates[0]
@@ -100,8 +100,7 @@ for filename in filenames:
 #                line += '%s,' % (S_field_comp.getScalarField(componentLabel=S_field_name+'13').values[0].data)
                 line += '%s,' % (S_field_comp.getScalarField(componentLabel=S_field_name+'23').values[0].data)
                 line += '%s,' % (S_field_comp.getScalarField(invariant=MISES).values[0].data)
-                line += '%s' % (H_field_comp.getScalarField(componentLabel=H_field_name+'1').values[0].data)
-#                line += '%s' % (H_field_comp.getScalarField(componentLabel=H_field_name+'2').values[0].data)
-                print >>resultfile, line
+                line += '%s,' % (H_field_comp.getScalarField(componentLabel=H_field_name+'1').values[0].data)
+#                line += '%s,' % (H_field_comp.getScalarField(componentLabel=H_field_name+'2').values[0].data)
+                print >>resultfile, line[:-1]
             resultfile.close()
-                

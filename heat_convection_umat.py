@@ -26,7 +26,7 @@ d = rin*2
 #outfile = open('heat_convection.csv', 'w')
 
 for name in ['7201']:
-    for volume_flow in [10]:
+    for volume_flow in [40]:
         for out_face_temperature in [650]:
             velocity = volume_flow/60.0/1000.0/(np.pi*rin**2)
             density = pressure/287.058/air_temperature
@@ -44,7 +44,7 @@ for name in ['7201']:
         
             film_coefficient = thermal_conductivity/d*Nu/1000.0
             sink_temperature = air_temperature - 273.15
-            temperature_list = [out_face_temperature,out_face_temperature]
+            temperature_list = [650,300]
             workbench(name,loading_cycles=10,copy=True,
                       film_coefficient=film_coefficient,
                       sink_temperature=sink_temperature,

@@ -14,7 +14,7 @@ from Constants import *
 from plot_format import plot_format
 from Material import material_in718,material_in718_NASA,material_in718_BHU
 
-def create_plot_data_exp_pv_TCTMF(figure_path=None,figure_name=None):
+def create_plot_data_exp_pv_TCTGMF(figure_path=None,figure_name=None):
 #==============================================================================
 # x,y label
 #==============================================================================
@@ -28,8 +28,8 @@ def create_plot_data_exp_pv_TCTMF(figure_path=None,figure_name=None):
     color_list = ['blue','red','black','green','yellow','orange','magenta','cyan']
     plot_data = PlotData()
     experiment_log = ExperimentLog(ExperimentLogFile)
-    for name in experiment_type_dict['TC-IP']+experiment_type_dict['TC-OP']+experiment_type_dict['TC-90']:
-#    for name in ['7018','7017','7025']:
+#    for name in experiment_type_dict['TC-IP-TGMF']+experiment_type_dict['TC-OP-TGMF']:
+    for name in experiment_type_dict['TC-OP-TGMF']:        
         print name
 
         experiment_log.output(name)
@@ -53,16 +53,16 @@ def create_plot_data_exp_pv_TCTMF(figure_path=None,figure_name=None):
         experiment = ExperimentData(filename)
         cycle,peak,valley = experiment.obtainPeakValley('axial_stress')
         mean = (np.array(peak) + np.array(valley))/2
-#        plot_data.addLine(cycle,
-#                          peak,
-#                          xlabel=xlabel,
-#                          ylabel=ylabel,
-#                          linelabel=str(load_type),
-#                          linewidth=2,
-#                          linestyle='-',
-#                          marker=None,
-#                          markersize=12,
-#                          color=color_list[i])
+        plot_data.addLine(cycle,
+                          peak,
+                          xlabel=xlabel,
+                          ylabel=ylabel,
+                          linelabel=str(load_type),
+                          linewidth=2,
+                          linestyle='-',
+                          marker=None,
+                          markersize=12,
+                          color=color_list[i])
         plot_data.addLine(cycle,
                           mean,
                           xlabel=xlabel,
@@ -73,21 +73,21 @@ def create_plot_data_exp_pv_TCTMF(figure_path=None,figure_name=None):
                           marker=None,
                           markersize=12,
                           color='auto')
-#        plot_data.addLine(cycle,
-#                          valley,
-#                          xlabel=xlabel,
-#                          ylabel=ylabel,
-#                          linelabel='',
-#                          linewidth=2,
-#                          linestyle='-',
-#                          marker=None,
-#                          markersize=12,
-#                          color=color_list[i])
+        plot_data.addLine(cycle,
+                          valley,
+                          xlabel=xlabel,
+                          ylabel=ylabel,
+                          linelabel='',
+                          linewidth=2,
+                          linestyle='-',
+                          marker=None,
+                          markersize=12,
+                          color=color_list[i])
         i += 1
     
     plot_data.writeToFile(figure_path,figure_name)
     
-def plot_exp_pv_TCTMF(figure_path=None,figure_name=None,save_types=[]):
+def plot_exp_pv_TCTGMF(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # title
 #==============================================================================
@@ -113,7 +113,7 @@ def plot_exp_pv_TCTMF(figure_path=None,figure_name=None,save_types=[]):
 # x,y limite
 #==============================================================================
 #    plt.xlim(1,10000)
-    plt.ylim(-200,200)
+#    plt.ylim(-200,200)
 #==============================================================================
 # xy log scale
 #==============================================================================
@@ -157,8 +157,8 @@ def plot_exp_pv_TCTMF(figure_path=None,figure_name=None,save_types=[]):
     plt.close()
 
 figure_path=ArticleFigureDirectory
-figure_name='plot_exp_pv_TCTMF'
-create_plot_data_exp_pv_TCTMF(figure_path,figure_name)
-plot_exp_pv_TCTMF(figure_path,figure_name,save_types=['.pdf'])
+figure_name='plot_exp_pv_TCTGMF'
+create_plot_data_exp_pv_TCTGMF(figure_path,figure_name)
+plot_exp_pv_TCTGMF(figure_path,figure_name,save_types=['.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

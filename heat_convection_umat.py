@@ -26,7 +26,7 @@ d = rin*2
 #outfile = open('heat_convection.csv', 'w')
 
 for name in ['7201']:
-    for volume_flow in [40]:
+    for volume_flow in [10,20,30,40]:
         for out_face_temperature in [650]:
             velocity = volume_flow/60.0/1000.0/(np.pi*rin**2)
             density = pressure/287.058/air_temperature
@@ -45,14 +45,26 @@ for name in ['7201']:
             film_coefficient = thermal_conductivity/d*Nu/1000.0
             sink_temperature = air_temperature - 273.15
             temperature_list = [650,300]
-            workbench(name,loading_cycles=10,copy=True,
-                      film_coefficient=film_coefficient,
-                      sink_temperature=sink_temperature,
-                      temperature_list=temperature_list)
-                      
-            sim_filename = SimulationDirectory + name + '.csv'
-            simulation = SimulationData(sim_filename,period=240)
-            power = simulation.heat_flux_1[-1]*np.pi*6.5*80.0/1000.0
+#            workbench(name,loading_cycles=10,copy=True,
+#                      film_coefficient=film_coefficient,
+#                      sink_temperature=sink_temperature,
+#                      temperature_list=temperature_list)
+#                      
+#            sim_filename = SimulationDirectory + name + '.csv'
+#            simulation = SimulationData(sim_filename,period=240)
+#            power = simulation.heat_flux_1[-1]*np.pi*6.5*80.0/1000.0
+            print volume_flow
+            print density
+            print dynamic_viscosity
+            print velocity*1000
+            print Re
+            print Pr
+            print f
+            print Nu
+            print film_coefficient*1000
+            print specific_heat
+            print thermal_conductivity
+            
 #            print >>outfile, '%s,%s,%s,%s,%s,%s,%s' % (out_face_temperature,volume_flow,Nu,film_coefficient,simulation.temperature[-1],simulation.heat_flux_1[-1],power)
             
 #outfile.close()

@@ -187,7 +187,7 @@ def transform_to_database(inpath,outpath,name):
                 del list3
                 del lines
 
-name = '7208'
+name = '7205'
 inpath = 'F:\\Database\\IN718\\Sun Jingyu\\%s\\' % name
 outpath = 'F:\\Database\\IN718\\Sun Jingyu\\'
 transform_to_database(inpath,outpath,name)

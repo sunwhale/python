@@ -28,8 +28,9 @@ def create_plot_data_exp_pv_TCTGMF(figure_path=None,figure_name=None):
     color_list = ['blue','red','black','green','yellow','orange','magenta','cyan']
     plot_data = PlotData()
     experiment_log = ExperimentLog(ExperimentLogFile)
-    for name in experiment_type_dict['TC-IP-TGMF']+experiment_type_dict['TC-OP-TGMF']+['7301']:
-#    for name in experiment_type_dict['TC-OP-TGMF']:        
+#    for name in experiment_type_dict['TC-IP-TGMF']+experiment_type_dict['TC-OP-TGMF']+['7301']:
+#    for name in experiment_type_dict['TC-IP-TGMF']:
+    for name in ['7208']:
 #        print name
 
 #        experiment_log.output(name)
@@ -53,9 +54,18 @@ def create_plot_data_exp_pv_TCTGMF(figure_path=None,figure_name=None):
         
         filename = ExperimentDirectory + name + '.csv'
         experiment = ExperimentData(filename)
-        cycle,peak,valley = experiment.obtainPeakValley('axial_stress')
-        print name,axial_displacement,peak[int(life/2.0)],valley[int(life/2.0)],life
+#        cycle,peak,valley = experiment.obtainPeakValley('axial_stress')
+        cycle,peak,valley = experiment.obtainPeakValley('total_strain')
         mean = (np.array(peak) + np.array(valley))/2
+        
+        strain_amp = (np.array(peak) - np.array(valley))
+        
+        plt.plot(strain_amp[:10])
+        plt.show()
+        material = material_in718()
+#        print name,axial_displacement,material.calcStrainAmplitude(peak[int(life/2.0)])*2.0,peak[int(life/2.0)],valley[int(life/2.0)],life
+#        print name,axial_displacement,material.calcStrain(-1.0*valley[0]),(peak[0]-valley[0])/2.0,life
+        
 #        plot_data.addLine(cycle,
 #                          peak,
 #                          xlabel=xlabel,

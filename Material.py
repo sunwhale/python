@@ -155,6 +155,12 @@ class Material:
         plt.show()
         return epsilon,sigma
     
+    def calcStrain(self,stress):
+        return stress/self.youngs_modulus + (stress/self.K)**(1.0/self.n)
+
+    def calcStrainAmplitude(self,stress_amplitude):
+        return stress_amplitude/self.youngs_modulus + (stress_amplitude/self.K_cyclic)**(1.0/self.n_cyclic)
+        
     def plotCyclicStrengthCoefficient(self):
         epsilon_p = np.arange(0,0.1,0.00001)
         sigma = self.K_cyclic*epsilon_p**self.n_cyclic
@@ -217,7 +223,7 @@ class Material:
             ]   
         result = fsolve(f, [1])
         return int(result[0])
-    
+        
     def plotMansonCoffinAxial(self):
         life_list = []
         seg = 10

@@ -137,7 +137,7 @@ def workbench(name,loading_cycles=None,copy=True,film_coefficient=0.0,sink_tempe
 #              min_inc = 0.0001, max_inc = 5, nonlinear = 'ON')
     step = Step(predefined_temperature = temperature_mean, 
               time_period = int(load.total_runing_time), initial_inc = 0.005, 
-              min_inc = 0.0001, max_inc = period/40.0, nonlinear = 'OFF')
+              min_inc = 0.0001, max_inc = period/20.0, nonlinear = 'OFF')
 #==============================================================================
 # UMAT
 #==============================================================================

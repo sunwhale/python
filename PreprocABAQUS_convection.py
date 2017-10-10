@@ -263,6 +263,17 @@ e1 = a.instances['Part-1-1'].edges
 edges1 = e1.getSequenceFromMask(mask=('[#2 ]', ), )
 region = regionToolset.Region(edges=edges1)
 mdb.models['Model-1'].TemperatureBC(name='BC-5', createStepName='Step-1', region=region, fixed=OFF, distributionType=UNIFORM, fieldName='', magnitude=1.0, amplitude='TempTriangularWave')
+mdb.models['Model-1'].ExpressionField(name='AnalyticalField-1', localCsys=None, 
+    description='', expression='1-0.03*Y')
+mdb.models['Model-1'].boundaryConditions['BC-5'].setValues(
+    distributionType=FIELD, fieldName='AnalyticalField-1')
+# top y direction heat flux
+a = mdb.models['Model-1'].rootAssembly
+s1 = a.instances['Part-1-1'].edges
+side1Edges1 = s1.getSequenceFromMask(mask=('[#4 ]', ), )
+region = regionToolset.Region(side1Edges=side1Edges1)
+mdb.models['Model-1'].SurfaceHeatFlux(name='Load-1', createStepName='Step-1', 
+    region=region, magnitude=-400.0)
 # convection
 a = mdb.models['Model-1'].rootAssembly
 s1 = a.instances['Part-1-1'].edges
@@ -272,7 +283,6 @@ mdb.models['Model-1'].FilmCondition(name='inner_convection',
     createStepName='Step-1', surface=region, definition=EMBEDDED_COEFF, 
     filmCoeff=film_coefficient, filmCoeffAmplitude='', sinkTemperature=sink_temperature, 
     sinkAmplitude='', sinkDistributionType=UNIFORM, sinkFieldName='')
-    
 
 
 

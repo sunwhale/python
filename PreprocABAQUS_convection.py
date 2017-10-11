@@ -273,7 +273,7 @@ s1 = a.instances['Part-1-1'].edges
 side1Edges1 = s1.getSequenceFromMask(mask=('[#4 ]', ), )
 region = regionToolset.Region(side1Edges=side1Edges1)
 mdb.models['Model-1'].SurfaceHeatFlux(name='Load-1', createStepName='Step-1', 
-    region=region, magnitude=-400.0)
+    region=region, magnitude=-300.0)
 # convection
 a = mdb.models['Model-1'].rootAssembly
 s1 = a.instances['Part-1-1'].edges

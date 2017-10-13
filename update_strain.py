@@ -6,12 +6,11 @@ Created on Mon Feb 13 13:46:18 2017
 """
 
 import numpy as np
-import os
-import matplotlib.pyplot as plt
 from Constants import *
-from Data import SimulationData,ExperimentData,ExperimentLog
+from Data import *
 
-def plot_sim_pv(name,item='axial_stress'):
+#for name in experiment_type_dict['TC-IP-TGMF']+experiment_type_dict['TC-OP-TGMF']:
+for name in ['7302']:
     experiment_log = ExperimentLog(ExperimentLogFile)
     experiment_log.output(name)
     regular = r'.*'
@@ -29,17 +28,8 @@ def plot_sim_pv(name,item='axial_stress'):
     equivalent_strain = float(experiment_log.obtainItem(name,'equivalent_strain',regular)[0])
     period = float(experiment_log.obtainItem(name,'period',regular)[0])
     axial_temperature_phase = float(experiment_log.obtainItem(name,'axial_temperature_phase',regular)[0])
-
-    sim_filename = SimulationDirectory + name + '.csv'
-    simulation = SimulationData(sim_filename,period)
-    cycle,peak,valley = simulation.obtainPeakValley('axial_stress')
-
-    plt.plot(cycle,peak)
-    plt.plot(cycle,valley)
+    life = float(experiment_log.obtainItem(name,'comments',regular)[0])
     
-#    print cycle
-#    print peak
-#    print valley
-    
-    plt.show()
-    plt.close()
+    exp_filename = ExperimentDirectory + name + '.csv'
+    experiment = ExperimentData(exp_filename)
+    experiment.updateStrain(period,[0.01*axial_strain*1.1,-0.01*axial_strain*1.1])

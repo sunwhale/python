@@ -29,8 +29,8 @@ def create_plot_data_exp_pv_TCTGMF(figure_path=None,figure_name=None):
     plot_data = PlotData()
     experiment_log = ExperimentLog(ExperimentLogFile)
 #    for name in experiment_type_dict['TC-IP-TGMF']+experiment_type_dict['TC-OP-TGMF']+['7301']:
-#    for name in experiment_type_dict['TC-IP-TGMF']:
-    for name in ['7208']:
+    for name in experiment_type_dict['TC-IP-TGMF-TBC']:
+#    for name in ['7208']:
 #        print name
 
 #        experiment_log.output(name)
@@ -54,49 +54,49 @@ def create_plot_data_exp_pv_TCTGMF(figure_path=None,figure_name=None):
         
         filename = ExperimentDirectory + name + '.csv'
         experiment = ExperimentData(filename)
-#        cycle,peak,valley = experiment.obtainPeakValley('axial_stress')
-        cycle,peak,valley = experiment.obtainPeakValley('total_strain')
+        cycle,peak,valley = experiment.obtainPeakValley('axial_stress')
+#        cycle,peak,valley = experiment.obtainPeakValley('total_strain')
         mean = (np.array(peak) + np.array(valley))/2
         
-        strain_amp = (np.array(peak) - np.array(valley))
-        
-        plt.plot(strain_amp[:10])
-        plt.show()
-        material = material_in718()
+#        strain_amp = (np.array(peak) - np.array(valley))
+#        
+#        plt.plot(strain_amp[:10])
+#        plt.show()
+#        material = material_in718()
 #        print name,axial_displacement,material.calcStrainAmplitude(peak[int(life/2.0)])*2.0,peak[int(life/2.0)],valley[int(life/2.0)],life
 #        print name,axial_displacement,material.calcStrain(-1.0*valley[0]),(peak[0]-valley[0])/2.0,life
         
-#        plot_data.addLine(cycle,
-#                          peak,
-#                          xlabel=xlabel,
-#                          ylabel=ylabel,
-#                          linelabel=str(load_type),
-#                          linewidth=2,
-#                          linestyle='-',
-#                          marker=None,
-#                          markersize=12,
-#                          color=color_list[i])
-#        plot_data.addLine(cycle,
-#                          mean,
-#                          xlabel=xlabel,
-#                          ylabel=ylabel,
-#                          linelabel='',
-#                          linewidth=2,
-#                          linestyle='-',
-#                          marker=None,
-#                          markersize=12,
-#                          color='auto')
-#        plot_data.addLine(cycle,
-#                          valley,
-#                          xlabel=xlabel,
-#                          ylabel=ylabel,
-#                          linelabel='',
-#                          linewidth=2,
-#                          linestyle='-',
-#                          marker=None,
-#                          markersize=12,
-#                          color=color_list[i])
-#        i += 1
+        plot_data.addLine(cycle,
+                          peak,
+                          xlabel=xlabel,
+                          ylabel=ylabel,
+                          linelabel=str(axial_strain) + '%',
+                          linewidth=2,
+                          linestyle='-',
+                          marker=None,
+                          markersize=12,
+                          color=color_list[i])
+        plot_data.addLine(cycle,
+                          mean,
+                          xlabel=xlabel,
+                          ylabel=ylabel,
+                          linelabel='',
+                          linewidth=2,
+                          linestyle='-',
+                          marker=None,
+                          markersize=12,
+                          color='auto')
+        plot_data.addLine(cycle,
+                          valley,
+                          xlabel=xlabel,
+                          ylabel=ylabel,
+                          linelabel='',
+                          linewidth=2,
+                          linestyle='-',
+                          marker=None,
+                          markersize=12,
+                          color=color_list[i])
+        i += 1
     
     plot_data.writeToFile(figure_path,figure_name)
     
@@ -156,9 +156,9 @@ def plot_exp_pv_TCTGMF(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # show legend
 #==============================================================================
-#    lg = plt.legend(title='$\Delta\\varepsilon/2$',loc=1)
-#    title = lg.get_title()
-#    title.set_fontsize(16)
+    lg = plt.legend(title='$\Delta\\varepsilon/2$',loc=1)
+    title = lg.get_title()
+    title.set_fontsize(16)
 #==============================================================================
 # save figures
 #==============================================================================
@@ -172,6 +172,6 @@ def plot_exp_pv_TCTGMF(figure_path=None,figure_name=None,save_types=[]):
 figure_path=ArticleFigureDirectory
 figure_name='plot_exp_pv_TCTGMF'
 create_plot_data_exp_pv_TCTGMF(figure_path,figure_name)
-plot_exp_pv_TCTGMF(figure_path,figure_name,save_types=['.pdf'])
+plot_exp_pv_TCTGMF(figure_path,figure_name,save_types=['.png','.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

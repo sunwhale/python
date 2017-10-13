@@ -27,7 +27,7 @@ def create_plot_data_exp_half_life_cycle_TCTGMF(figure_path=None,figure_name=Non
     marker_list = ['s','o','^','D']
     plot_data = PlotData()
     experiment_log = ExperimentLog(ExperimentLogFile)
-    for name in experiment_type_dict['TC-OP-TGMF']:
+    for name in experiment_type_dict['TC-IP-TGMF-TBC']:
 #        print name
         experiment_log.output(name)
         regular = r'.*'
@@ -137,6 +137,6 @@ def plot_exp_half_life_cycle_TCTGMF(figure_path=None,figure_name=None,save_types
 figure_path=ArticleFigureDirectory
 figure_name='plot_exp_half_life_cycle_TCTGMF'
 create_plot_data_exp_half_life_cycle_TCTGMF(figure_path,figure_name)
-plot_exp_half_life_cycle_TCTGMF(figure_path,figure_name,save_types=['.pdf'])
+plot_exp_half_life_cycle_TCTGMF(figure_path,figure_name,save_types=['.png','.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

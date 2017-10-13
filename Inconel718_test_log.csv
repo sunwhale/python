@@ -59,5 +59,5 @@ number,din mm,dout mm,gauge length mm,load type,axial control mode,rotational co
 7208,6.50 ,8.50 ,12.00 ,cyclic tension compression,strain,rotation,300-650,ramp:+-0.70,ramp:+-0.75,-,0,-,-,+-0.75,0 ,180 ,T:240s,T:240s,2017-09-01,fracture at 128,1
 7209,6.50 ,8.50 ,12.00 ,cyclic tension compression,strain,rotation,300-650,ramp:+-0.45,ramp:+-0.45,-,0,-,-,+-0.45,0 ,180 ,T:180s,T:180s,2017-09-01,fracture at 864,1
 7301,6.50 ,8.50 ,12.00 ,cyclic tension compression,strain,rotation,300-650,ramp:+-0.55,ramp:+-0.55,-,0,-,-,+-0.55,0 ,0 ,T:240s,T:240s,2017-09-01,fracture at 624,1
-7301,6.50 ,8.50 ,12.00 ,cyclic tension compression,strain,rotation,300-650,ramp:+-0.70,ramp:+-0.75,-,0,-,-,+-0.75,0 ,0 ,T:240s,T:240s,2017-09-01,fracture at 147,1
+7302,6.50 ,8.50 ,12.00 ,cyclic tension compression,strain,rotation,300-650,ramp:+-0.70,ramp:+-0.75,-,0,-,-,+-0.75,0 ,0 ,T:240s,T:240s,2017-09-01,fracture at 147,1
 0000,0.00 ,6.50 ,8.50 ,cyclic tension compression,strain,rotation,650,-,ramp:+-0.0,-,0,-,-,0,0 ,0 ,T:1s,0.001mm/mm,2016-11-16,fracture at 864,1

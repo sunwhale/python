@@ -57,5 +57,5 @@ def plot_exp_vs_sim_pv(name,item='axial_stress',save_types=['.png','.pdf']):
             plt.savefig(figure_path + figure_name + save_type, dpi=150)
             print 'save as', figure_path + figure_name + save_type
             
-#    plt.show()
+    plt.show()
     plt.close()

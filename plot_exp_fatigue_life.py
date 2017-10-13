@@ -27,7 +27,8 @@ def create_plot_data_exp_fatigue_life(fatigue_data,figure_path=None,figure_name=
     plot_data = PlotData()
     i = 0
     marker_list = ['s','o','^','D','<','^','>']
-    for load_type in ['TC-IP','TC-OP','PRO-IP','NPR-IP','TC-90','TC-IP-TGMF','TC-OP-TGMF']:
+#    for load_type in ['TC-IP','TC-OP','PRO-IP','NPR-IP','TC-90','TC-IP-TGMF','TC-OP-TGMF']:
+    for load_type in ['TC-IP','TC-OP','TC-IP-TGMF','TC-OP-TGMF','TC-IP-TGMF-TBC']:
         experimental_life = fatigue_data.loadTypeFilter(load_type,'experimental_life')
         equivalent_strain_amplitude = fatigue_data.loadTypeFilter(load_type,'equivalent_strain_amplitude')
         plot_data.addLine(experimental_life,

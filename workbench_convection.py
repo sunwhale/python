@@ -13,7 +13,7 @@ from Data import SimulationData,ExperimentData,ExperimentLog
 from Material import Material
 from Work_convection import Step,UMAT,Load,Job
 
-def workbench(name,loading_cycles=None,copy=True,film_coefficient=0.0,sink_temperature=0.0,temperature_list=[]):
+def workbench(name,loading_cycles=None,copy=True,film_coefficient=0.0,sink_temperature=0.0,temperature_list=[],thermal_strain_list=[0.0,-0.0]):
     """
     某试件对应的边界条件下的数值模拟。
     """
@@ -67,6 +67,8 @@ def workbench(name,loading_cycles=None,copy=True,film_coefficient=0.0,sink_tempe
     if loading_cycles == None:
         loading_cycles = min(int(predicted_life/4.0),5000)
     use_exp_data = True
+    thermal_strain_min = min(thermal_strain_list)/100.0
+    thermal_strain_max = max(thermal_strain_list)/100.0
 #==============================================================================
 # Diamond path TMF IP
 #==============================================================================
@@ -95,7 +97,7 @@ def workbench(name,loading_cycles=None,copy=True,film_coefficient=0.0,sink_tempe
         load.setLoadBiaxial(int(loading_cycles),
                             [0,period/4.0,period/2.0,period/4.0*3.0,period],
                             [temperature_mean,temperature_max,temperature_mean,temperature_min,temperature_mean],
-                            [0,axial_strain,0,-1*axial_strain,0],
+                            [0,axial_strain*1.1,0,-1*axial_strain*1.1,0],
                             [0,shear_strain,0,-1*shear_strain,0])
 #==============================================================================
 # Uniaxial TMF OP

@@ -134,6 +134,58 @@ class ExperimentData:
                 valley.append(minitem)
         return cycle,peak,valley
         
+    def updateStrain(self,period,strain_pv_list):
+        strain_mean = (strain_pv_list[0] + strain_pv_list[1])/2.0
+        strain_min = min(strain_pv_list)
+        strain_max = max(strain_pv_list)
+        time_list = [0,period/4.0,period/2.0,period/4.0*3.0,period]
+        strain_list = [strain_mean,strain_max,strain_mean,strain_min,strain_mean]
+
+        outfile = open(self.filename, 'w')
+        print 'writing: ' + self.filename
+        print
+        outfile.writelines('Axial Segment Count,Running Time,Temperature,Axial Displacement,Axial Force,Axial Strain,Axial Stress,Rotation,Torque,Angle Strain,Shear Stress,Equivalent Plastic Strain,Thermal Strain,Axial Total Strain\n')
+        outfile.writelines('cycles,sec,C,mm,N,mm/mm,MPa,deg,N*m,-,MPa,-,mm/mm,mm/mm\n')
+        
+        for i,time in enumerate(self.runing_time[:]):
+            local_time = time % period
+            time_list_tmp = time_list + [local_time]
+            time_list_tmp.sort()
+            point_front = time_list_tmp.index(local_time) - 1
+            point_after = point_front + 1
+            x = [time_list[point_front],time_list[point_after]]
+            y = [strain_list[point_front],strain_list[point_after]]
+            z = np.polyfit(x, y, 1)
+            p = np.poly1d(z)
+            self.axial_strain[i] = p(local_time)
+
+            line = ''
+            line += '%s,' % (self.axial_count[i])
+            line += '%s,' % (self.runing_time[i])
+            line += '%s,' % (self.temperature[i])
+            line += '%s,' % (self.axial_disp[i])
+            line += '%s,' % (self.axial_force[i])
+            line += '%s,' % (self.axial_strain[i])
+            line += '%s,' % (self.axial_stress[i])
+            line += '%s,' % (self.rotation[i])
+            line += '%s,' % (self.torque[i])
+            line += '%s,' % (self.shear_strain[i])
+            line += '%s,' % (self.shear_stress [i])
+            line += '%s,' % (self.eqpl_strain [i])
+            line += '%s,' % (self.thermal_strain [i])
+            line += '%s,' % (self.total_strain [i])
+
+            print >>outfile, line[:-1]
+
+        outfile.close()
+
+if __name__ == '__main__':
+    name = '7203'
+    exp_filename = ExperimentDirectory + name + '.csv'
+    experiment = ExperimentData(exp_filename)
+    print experiment.runing_time[:10]
+    experiment.updateStrain(240.0,[1,-1])
+    
 #==============================================================================
 # SimulationData
 #==============================================================================

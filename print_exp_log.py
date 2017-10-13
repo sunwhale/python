@@ -74,9 +74,24 @@ exp_all=[
 '7301'
 ]
 
+exp_sem=[
+'7033',
+'7036',
+'7040',
+'7046',
+'7047',
+'7111',
+'7112',
+'7206',
+'7207',
+'7209',
+'7301',
+]
+
 experiment_log = ExperimentLog(ExperimentLogFile)
 
-for name in exp_all:
+#for name in exp_all:
+for name in exp_sem:
     experiment_log.output(name)
     print
     regular = r'.*'

@@ -28,7 +28,7 @@ d = rin*2
 #outfile = open('heat_convection.csv', 'w')
 
 #for name in experiment_type_dict['TC-IP-TGMF']+experiment_type_dict['TC-OP-TGMF']:
-for name in ['7202']:
+for name in ['7201','7202','7301','7302']:
     for volume_flow in [50]:
         velocity = volume_flow/60.0/1000.0/(np.pi*rin**2)
         density = pressure/287.058/air_temperature

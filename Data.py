@@ -453,7 +453,7 @@ class PlotData:
     """
     def __init__(self,figure_path=None,figure_name=None,save_types=[]):
         self.lines = []
-        self.number_of_header_lines = 8
+        self.number_of_header_lines = 15
         self.figure_path = figure_path
         self.figure_name = figure_name
         self.save_types = save_types
@@ -476,7 +476,8 @@ class PlotData:
                 linewidth=2,
                 marker=None,
                 markersize=12,
-                color='auto'):
+                color='auto',
+                skip=1):
         
         self.lines.append({'x':x,
                            'y':y,
@@ -487,20 +488,22 @@ class PlotData:
                            'linewidth':linewidth,
                            'marker':marker,
                            'markersize':markersize,
-                           'color':color})
+                           'color':color,
+                           'skip':skip})
     
     def plot_line(self,line):
+        skip = int(line['skip'])
         if line['color'] == 'auto':
-            plt.plot(line['x'],
-                     line['y'],
+            plt.plot(line['x'][::skip],
+                     line['y'][::skip],
                      label=line['linelabel'],
                      linestyle=line['linestyle'],
                      linewidth=line['linewidth'],
                      marker=line['marker'],
                      markersize=line['markersize'])
         else:
-            plt.plot(line['x'],
-                     line['y'],
+            plt.plot(line['x'][::skip],
+                     line['y'][::skip],
                      label=line['linelabel'],
                      linestyle=line['linestyle'],
                      linewidth=line['linewidth'],
@@ -541,6 +544,9 @@ class PlotData:
             xarray.append(line['marker'])
             xarray.append(line['markersize'])
             xarray.append(line['color'])
+            xarray.append(line['skip'])
+            for i in range(len(xarray),self.number_of_header_lines):
+                xarray.append('')
             for x in line['x']:
                 xarray.append(x)
             data_list.append(xarray)
@@ -554,6 +560,9 @@ class PlotData:
             yarray.append(line['marker'])
             yarray.append(line['markersize'])
             yarray.append(line['color'])
+            yarray.append(line['skip'])
+            for i in range(len(yarray),self.number_of_header_lines):
+                yarray.append('')
             for y in line['y']:
                 yarray.append(y)
             data_list.append(yarray)
@@ -603,6 +612,7 @@ class PlotData:
             marker = x_data[5]
             markersize = int(x_data[6])
             color = x_data[7]
+            skip = x_data[8]
             self.lines.append({'x':x,
                                'y':y,
                                'xlabel':xlabel,
@@ -612,7 +622,8 @@ class PlotData:
                                'linewidth':linewidth,
                                'marker':marker,
                                'markersize':markersize,
-                               'color':color})
+                               'color':color,
+                               'skip':skip})
                                
     def saveFigure(self,figure_path=None,figure_name=None,save_type=[]):
         if figure_path==None:

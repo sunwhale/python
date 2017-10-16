@@ -31,9 +31,7 @@ def create_plot_data_exp_pv_TCTGMF(figure_path=None,figure_name=None):
 #    for name in experiment_type_dict['TC-IP-TGMF']+experiment_type_dict['TC-OP-TGMF']+['7301']:
     for name in experiment_type_dict['TC-IP-TGMF-TBC']:
 #    for name in ['7208']:
-#        print name
-
-#        experiment_log.output(name)
+        experiment_log.output(name)
         regular = r'.*'
         load_type = experiment_log.obtainItem(name,'load_type',regular)[0]
         regular = r'\d+\.?\d*'

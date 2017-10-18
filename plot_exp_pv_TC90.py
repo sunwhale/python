@@ -146,6 +146,12 @@ def plot_exp_pv_TC90(figure_path=None,figure_name=None,save_types=[]):
     title = lg.get_title()
     title.set_fontsize(16)
 #==============================================================================
+# annotate
+#==============================================================================
+    plt.text(10,900,r'Peak stress',fontsize=14)
+    plt.text(10,50,r'Mean stress',fontsize=14)
+    plt.text(10,-900,r'Valley stress',fontsize=14)
+#==============================================================================
 # save figures
 #==============================================================================
     if figure_path <> None and figure_name<> None:
@@ -157,7 +163,7 @@ def plot_exp_pv_TC90(figure_path=None,figure_name=None,save_types=[]):
 
 figure_path=ArticleFigureDirectory
 figure_name='plot_exp_pv_TC90'
-create_plot_data_exp_pv_TC90(figure_path,figure_name)
+#create_plot_data_exp_pv_TC90(figure_path,figure_name)
 plot_exp_pv_TC90(figure_path,figure_name,save_types=['.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

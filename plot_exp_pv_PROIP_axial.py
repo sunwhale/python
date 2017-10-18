@@ -14,7 +14,7 @@ from Constants import *
 from plot_format import plot_format
 from Material import material_in718,material_in718_NASA,material_in718_BHU
 
-def create_plot_data_exp_pv_TCTGMF(figure_path=None,figure_name=None):
+def create_plot_data_exp_pv_PROIP_axial(figure_path=None,figure_name=None):
 #==============================================================================
 # x,y label
 #==============================================================================
@@ -25,12 +25,13 @@ def create_plot_data_exp_pv_TCTGMF(figure_path=None,figure_name=None):
 #==============================================================================
     i = 0
     marker_list = ['s','o','^','D']
-    color_list = ['blue','red','black','green','yellow','orange','magenta','cyan']
+#    color_list = ['blue','red','black','green','cyan','orange','magenta','yellow']
     plot_data = PlotData()
     experiment_log = ExperimentLog(ExperimentLogFile)
-#    for name in experiment_type_dict['TC-IP-TGMF']+experiment_type_dict['TC-OP-TGMF']+['7301']:
-    for name in experiment_type_dict['TC-IP-TGMF-TBC']:
-#    for name in ['7208']:
+#    for name in experiment_type_dict['PRO-IP']:
+    for name in ['7040','7039','7038']:
+        print name
+
         experiment_log.output(name)
         regular = r'.*'
         load_type = experiment_log.obtainItem(name,'load_type',regular)[0]
@@ -43,32 +44,20 @@ def create_plot_data_exp_pv_TCTGMF(figure_path=None,figure_name=None):
         d_out = float(experiment_log.obtainItem(name,'d_out',regular)[0])
         gauge_length = float(experiment_log.obtainItem(name,'gauge_length',regular)[0])
         axial_strain = float(experiment_log.obtainItem(name,'axial_strain',regular)[0])
-        axial_displacement = float(experiment_log.obtainItem(name,'axial_displacement',regular)[0])
         angel_strain = float(experiment_log.obtainItem(name,'angel_strain',regular)[0])
         equivalent_strain = float(experiment_log.obtainItem(name,'equivalent_strain',regular)[0])
         period = float(experiment_log.obtainItem(name,'period',regular)[0])
         axial_temperature_phase = float(experiment_log.obtainItem(name,'axial_temperature_phase',regular)[0])
-        life = float(experiment_log.obtainItem(name,'comments',regular)[0])
-        
+    
         filename = ExperimentDirectory + name + '.csv'
         experiment = ExperimentData(filename)
         cycle,peak,valley = experiment.obtainPeakValley('axial_stress')
-#        cycle,peak,valley = experiment.obtainPeakValley('total_strain')
         mean = (np.array(peak) + np.array(valley))/2
-        
-#        strain_amp = (np.array(peak) - np.array(valley))
-#        
-#        plt.plot(strain_amp[:10])
-#        plt.show()
-#        material = material_in718()
-#        print name,axial_displacement,material.calcStrainAmplitude(peak[int(life/2.0)])*2.0,peak[int(life/2.0)],valley[int(life/2.0)],life
-#        print name,axial_displacement,material.calcStrain(-1.0*valley[0]),(peak[0]-valley[0])/2.0,life
-        
         plot_data.addLine(cycle,
                           peak,
                           xlabel=xlabel,
                           ylabel=ylabel,
-                          linelabel=str(axial_strain) + '%',
+                          linelabel=str(equivalent_strain) + '%',
                           linewidth=2,
                           linestyle='-',
                           marker=None,
@@ -98,7 +87,7 @@ def create_plot_data_exp_pv_TCTGMF(figure_path=None,figure_name=None):
     
     plot_data.writeToFile(figure_path,figure_name)
     
-def plot_exp_pv_TCTGMF(figure_path=None,figure_name=None,save_types=[]):
+def plot_exp_pv_PROIP_axial(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # title
 #==============================================================================
@@ -123,8 +112,8 @@ def plot_exp_pv_TCTGMF(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # x,y limite
 #==============================================================================
-#    plt.xlim(1,10000)
-#    plt.ylim(-200,200)
+    plt.xlim(1,10000)
+    plt.ylim(-1000,1000)
 #==============================================================================
 # xy log scale
 #==============================================================================
@@ -154,9 +143,17 @@ def plot_exp_pv_TCTGMF(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # show legend
 #==============================================================================
-    lg = plt.legend(title='$\Delta\\varepsilon/2$',loc=1)
+    lg = plt.legend(title=r'$\Delta\varepsilon_{eq}/2$',loc=1,frameon=1)
+    lg.get_frame().set_color('white')
+    lg.get_frame().set_alpha(0.8)
     title = lg.get_title()
     title.set_fontsize(16)
+#==============================================================================
+# annotate
+#==============================================================================
+    plt.text(10,750,r'Peak stress',fontsize=14)
+    plt.text(10,0,r'Mean stress',fontsize=14)
+    plt.text(10,-650,r'Valley stress',fontsize=14)
 #==============================================================================
 # save figures
 #==============================================================================
@@ -168,8 +165,8 @@ def plot_exp_pv_TCTGMF(figure_path=None,figure_name=None,save_types=[]):
     plt.close()
 
 figure_path=ArticleFigureDirectory
-figure_name='plot_exp_pv_TCTGMF'
-create_plot_data_exp_pv_TCTGMF(figure_path,figure_name)
-plot_exp_pv_TCTGMF(figure_path,figure_name,save_types=['.png','.pdf'])
+figure_name='plot_exp_pv_PROIP_axial'
+create_plot_data_exp_pv_PROIP_axial(figure_path,figure_name)
+plot_exp_pv_PROIP_axial(figure_path,figure_name,save_types=['.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

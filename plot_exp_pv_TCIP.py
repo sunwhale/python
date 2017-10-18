@@ -146,6 +146,16 @@ def plot_exp_pv_TCIP(figure_path=None,figure_name=None,save_types=[]):
     title = lg.get_title()
     title.set_fontsize(16)
 #==============================================================================
+# annotate
+#==============================================================================
+    plt.text(10,1000,r'Peak stress',fontsize=14)
+    plt.text(10,0,r'Mean stress',fontsize=14)
+    plt.text(10,-900,r'Valley stress',fontsize=14)
+    
+#    plt.annotate(r'Peak stresses',xy=(1,1000),xytext=(100,1000),fontsize=14,color='black',arrowprops=dict(arrowstyle='->',color='black'))
+#    plt.annotate(r'Mean stresses',xy=(1,0),xytext=(100,0),fontsize=14,color='black',arrowprops=dict(arrowstyle='->',color='black'))
+#    plt.annotate(r'Valley stresses',xy=(1,-1000),xytext=(100,-1000),fontsize=14,color='black',arrowprops=dict(arrowstyle='->',color='black'))
+#==============================================================================
 # save figures
 #==============================================================================
     if figure_path <> None and figure_name<> None:

@@ -42,8 +42,8 @@ experiment_type_dict['NPR-IP']=['7036','7034','7045','7046','7028','7037']
 experiment_type_dict['TC-90']=['7025']
 #experiment_type_dict['TC-IF']=['7110','7111','7112','7113','7114','7115','7116']
 experiment_type_dict['TC-IF']=['7116','7112','7110','7111','7113','7115','7114']
-experiment_type_dict['TC-IP-TGMF']=['7203','7204','7205','7206']
-experiment_type_dict['TC-OP-TGMF']=['7207','7208','7209']
+experiment_type_dict['TC-IP-TGMF']=['7204','7203','7206','7205']
+experiment_type_dict['TC-OP-TGMF']=['7209','7207','7208']
 experiment_type_dict['TC-IP-TGMF-TBC']=['7301','7302']
 
 #==============================================================================
@@ -127,3 +127,9 @@ xylabels = {'axial_count':'N [cycle]',
             'experimental_life':'Experimental Fatigue Lifetime $N_{\\rm{f}}$',
             'predicted_life':'Predicted Fatigue Lifetime $N_{\\rm{p}}$',
             }
+            
+#==============================================================================
+# plot
+#==============================================================================
+marker_list = ['s','o','^','D']
+color_list = ['red','green','blue','cyan','magenta','black','yellow','orange']

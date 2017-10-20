@@ -27,8 +27,22 @@ d = rin*2
 
 #outfile = open('heat_convection.csv', 'w')
 
-#for name in experiment_type_dict['TC-IP-TGMF']+experiment_type_dict['TC-OP-TGMF']:
-for name in ['7201','7202','7301','7302']:
+for name in experiment_type_dict['TC-IP-TGMF']+experiment_type_dict['TC-OP-TGMF']+experiment_type_dict['TC-IP-TGMF-TBC']:
+#for name in ['7201','7202','7301','7302']:
+    experiment_log.output(name)
+    regular = r'.*'
+    load_type = experiment_log.obtainItem(name,'load_type',regular)[0]
+    regular = r'\d+\.?\d*'
+    temperature_mode = experiment_log.obtainItem(name,'temperature_mode',regular)
+    d_out = float(experiment_log.obtainItem(name,'d_out',regular)[0])
+    gauge_length = float(experiment_log.obtainItem(name,'gauge_length',regular)[0])
+    axial_strain = float(experiment_log.obtainItem(name,'axial_strain',regular)[0])
+    angel_strain = float(experiment_log.obtainItem(name,'angel_strain',regular)[0])
+    equivalent_strain = float(experiment_log.obtainItem(name,'equivalent_strain',regular)[0])
+    period = float(experiment_log.obtainItem(name,'period',regular)[0])
+    axial_temperature_phase = float(experiment_log.obtainItem(name,'axial_temperature_phase',regular)[0])
+    life = int(experiment_log.obtainItem(name,'comments',regular)[0])
+
     for volume_flow in [50]:
         velocity = volume_flow/60.0/1000.0/(np.pi*rin**2)
         density = pressure/287.058/air_temperature
@@ -49,6 +63,11 @@ for name in ['7201','7202','7301','7302']:
         temperature_list = []
         
         workbench(name,loading_cycles=None,copy=True,
+                  film_coefficient=film_coefficient,
+                  sink_temperature=sink_temperature,
+                  temperature_list=temperature_list)
+                  
+        workbench(name,loading_cycles=life,copy=True,
                   film_coefficient=film_coefficient,
                   sink_temperature=sink_temperature,
                   temperature_list=temperature_list)

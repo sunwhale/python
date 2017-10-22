@@ -25,7 +25,7 @@ def create_plot_data_exp_pv_TCOP(figure_path=None,figure_name=None):
 #==============================================================================
     i = 0
     marker_list = ['s','o','^','D']
-    color_list = ['blue','red','black','green']
+#    color_list = ['blue','red','black','green']
     plot_data = PlotData()
     experiment_log = ExperimentLog(ExperimentLogFile)
     for name in experiment_type_dict['TC-OP']:
@@ -163,7 +163,7 @@ def plot_exp_pv_TCOP(figure_path=None,figure_name=None,save_types=[]):
 
 figure_path=ArticleFigureDirectory
 figure_name='plot_exp_pv_TCOP'
-#create_plot_data_exp_pv_TCOP(figure_path,figure_name)
+create_plot_data_exp_pv_TCOP(figure_path,figure_name)
 plot_exp_pv_TCOP(figure_path,figure_name,save_types=['.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

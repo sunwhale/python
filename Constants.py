@@ -17,7 +17,7 @@ InputTemplate = 'Tension3DTemplate.inp'
 #==============================================================================
 AbaqusTempDirectory = 'F:\\Temp\\IN7183\\'
 ExperimentDirectory = 'F:\\Database\\IN718\\Timed\\'
-SimulationDirectory = 'F:\\Cloud\\Temp\\IN718_Sim\\'
+#SimulationDirectory = 'F:\\Cloud\\Temp\\IN718_Sim\\'
 SimulationDirectory = 'F:\\Cloud\\Temp\\IN718_Sim_TGMF\\'
 ExperimentLogFile = PythonDirectory + 'Inconel718_test_log.csv'
 FatigueDirectory = 'F:\\Database\\Fatigue\\'

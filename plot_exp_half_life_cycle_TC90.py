@@ -60,7 +60,7 @@ def create_plot_data_exp_half_life_cycle_TC90(figure_path=None,figure_name=None)
                           linestyle='-',
                           marker=None,
                           markersize=12,
-                          color='auto')
+                          color=color_list[i])
         i += 1
     
     plot_data.writeToFile(figure_path,figure_name)

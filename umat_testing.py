@@ -17,7 +17,7 @@ from plot_exp_vs_sim_pv import plot_exp_vs_sim_pv
 from plot_exp_pv import plot_exp_pv
 
 #for name in ['7047']: #TC-IP
-for name in ['7209']: #NPR-IP
+for name in ['7201']: #NPR-IP
 #    workbench(name,loading_cycles=30,copy=True)
 
     compare_exp_sim(name,15,'axial_strain','axial_stress')

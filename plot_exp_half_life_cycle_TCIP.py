@@ -60,7 +60,7 @@ def create_plot_data_exp_half_life_cycle_TCIP(figure_path=None,figure_name=None)
                           linestyle='-',
                           marker=None,
                           markersize=12,
-                          color='auto')
+                          color=color_list[i])
         i += 1
     
     plot_data.writeToFile(figure_path,figure_name)
@@ -136,7 +136,7 @@ def plot_exp_half_life_cycle_TCIP(figure_path=None,figure_name=None,save_types=[
 
 figure_path=ArticleFigureDirectory
 figure_name='plot_exp_half_life_cycle_TCIP'
-#create_plot_data_exp_half_life_cycle_TCIP(figure_path,figure_name)
+create_plot_data_exp_half_life_cycle_TCIP(figure_path,figure_name)
 plot_exp_half_life_cycle_TCIP(figure_path,figure_name,save_types=['.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

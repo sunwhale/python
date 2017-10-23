@@ -477,7 +477,8 @@ class PlotData:
                 marker=None,
                 markersize=12,
                 color='auto',
-                skip=1):
+                skip=1,
+                log_skip=1):
         
         self.lines.append({'x':x,
                            'y':y,
@@ -489,21 +490,32 @@ class PlotData:
                            'marker':marker,
                            'markersize':markersize,
                            'color':color,
-                           'skip':skip})
+                           'skip':skip,
+                           'log_skip':log_skip})
     
     def plot_line(self,line):
         skip = int(line['skip'])
+        log_skip = int(line['log_skip']
+        
+        x = []
+        y = []
+        
+        if log_skip <> 1:
+            for i in range(len(line['x'])):
+                if int(math.log(i,log_skip)) == math.log(i,log_skip):
+                    x.append(line['x'][i])
+                    y.append(line['y'][i])
         if line['color'] == 'auto':
-            plt.plot(line['x'][::skip],
-                     line['y'][::skip],
+            plt.plot(x[::skip],
+                     y[::skip],
                      label=line['linelabel'],
                      linestyle=line['linestyle'],
                      linewidth=line['linewidth'],
                      marker=line['marker'],
                      markersize=line['markersize'])
         else:
-            plt.plot(line['x'][::skip],
-                     line['y'][::skip],
+            plt.plot(x[::skip],
+                     y[::skip],
                      label=line['linelabel'],
                      linestyle=line['linestyle'],
                      linewidth=line['linewidth'],

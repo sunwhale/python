@@ -6,6 +6,7 @@ Created on Mon Feb 13 13:46:18 2017
 """
 
 import numpy as np
+import math
 import matplotlib.pyplot as plt
 import re
 import os
@@ -184,7 +185,7 @@ if __name__ == '__main__':
     exp_filename = ExperimentDirectory + name + '.csv'
     experiment = ExperimentData(exp_filename)
     print experiment.runing_time[:10]
-    experiment.updateStrain(240.0,[1,-1])
+#    experiment.updateStrain(240.0,[1,-1])
     
 #==============================================================================
 # SimulationData
@@ -495,27 +496,33 @@ class PlotData:
     
     def plot_line(self,line):
         skip = int(line['skip'])
-        log_skip = int(line['log_skip']
-        
+        log_skip = int(line['log_skip'])
         x = []
         y = []
-        
-        if log_skip <> 1:
-            for i in range(len(line['x'])):
+        if log_skip == 1:
+            x = line['x'][::skip]
+            y = line['y'][::skip]
+        else:
+            x.append(line['x'][0])
+            y.append(line['y'][0])
+            for i in range(1,len(line['x'])-1):
+                print math.log(i,log_skip)
                 if int(math.log(i,log_skip)) == math.log(i,log_skip):
                     x.append(line['x'][i])
                     y.append(line['y'][i])
+            x.append(line['x'][-1])
+            y.append(line['y'][-1])
         if line['color'] == 'auto':
-            plt.plot(x[::skip],
-                     y[::skip],
+            plt.plot(x,
+                     y,
                      label=line['linelabel'],
                      linestyle=line['linestyle'],
                      linewidth=line['linewidth'],
                      marker=line['marker'],
                      markersize=line['markersize'])
         else:
-            plt.plot(x[::skip],
-                     y[::skip],
+            plt.plot(x,
+                     y,
                      label=line['linelabel'],
                      linestyle=line['linestyle'],
                      linewidth=line['linewidth'],
@@ -557,6 +564,7 @@ class PlotData:
             xarray.append(line['markersize'])
             xarray.append(line['color'])
             xarray.append(line['skip'])
+            xarray.append(line['log_skip'])
             for i in range(len(xarray),self.number_of_header_lines):
                 xarray.append('')
             for x in line['x']:
@@ -573,6 +581,7 @@ class PlotData:
             yarray.append(line['markersize'])
             yarray.append(line['color'])
             yarray.append(line['skip'])
+            yarray.append(line['log_skip'])
             for i in range(len(yarray),self.number_of_header_lines):
                 yarray.append('')
             for y in line['y']:
@@ -625,6 +634,7 @@ class PlotData:
             markersize = int(x_data[6])
             color = x_data[7]
             skip = x_data[8]
+            log_skip = x_data[9]
             self.lines.append({'x':x,
                                'y':y,
                                'xlabel':xlabel,
@@ -635,7 +645,8 @@ class PlotData:
                                'marker':marker,
                                'markersize':markersize,
                                'color':color,
-                               'skip':skip})
+                               'skip':skip,
+                               'log_skip':log_skip})
                                
     def saveFigure(self,figure_path=None,figure_name=None,save_type=[]):
         if figure_path==None:

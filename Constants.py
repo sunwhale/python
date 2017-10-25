@@ -21,7 +21,7 @@ SimulationDirectory = 'F:\\Cloud\\Temp\\IN718_Sim\\'
 #SimulationDirectory = 'F:\\Cloud\\Temp\\IN718_Sim_TGMF\\'
 ExperimentLogFile = PythonDirectory + 'Inconel718_test_log.csv'
 FatigueDirectory = 'F:\\Database\\Fatigue\\'
-ArticleFigureDirectory = 'F:\\Cloud\\GitHub\\doctor\\Figs\\python\\'
+ArticleFigureDirectory = 'F:\\Cloud\\GitHub\\doctor\\Figs\\test\\'
 
 experiment_type_list = []
 experiment_type_list.append(['TC-IP',['7031','7047','7030','7018']])

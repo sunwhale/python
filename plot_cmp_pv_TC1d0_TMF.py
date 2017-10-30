@@ -26,6 +26,7 @@ def create_plot_data_cmp_pv_TC1D0_TMF(figure_path=None,figure_name=None):
     i = 0
 #    marker_list = ['s','o','^','D']
 #    color_list = ['blue','red','black','green','yellow','orange','magenta','cyan']
+    label_list = ['TC-IP','TC-90','TC-OP']
     plot_data = PlotData()
     experiment_log = ExperimentLog(ExperimentLogFile)
 #    for name in experiment_type_dict['TC-IP-TGMF']:
@@ -58,14 +59,14 @@ def create_plot_data_cmp_pv_TC1D0_TMF(figure_path=None,figure_name=None):
                           peak,
                           xlabel=xlabel,
                           ylabel=ylabel,
-                          linelabel=str(axial_strain) + '%',
+                          linelabel=label_list[i] + ' Exp.',
                           linewidth=2,
                           linestyle='',
                           marker=marker_list[i],
                           markersize=12,
                           color=color_list[i],
                           skip=5,
-                          log_skip=1)
+                          log_skip=2)
         plot_data.addLine(cycle,
                           mean,
                           xlabel=xlabel,
@@ -77,7 +78,7 @@ def create_plot_data_cmp_pv_TC1D0_TMF(figure_path=None,figure_name=None):
                           markersize=12,
                           color=color_list[i],
                           skip=5,
-                          log_skip=1)
+                          log_skip=2)
         plot_data.addLine(cycle,
                           valley,
                           xlabel=xlabel,
@@ -89,7 +90,7 @@ def create_plot_data_cmp_pv_TC1D0_TMF(figure_path=None,figure_name=None):
                           markersize=12,
                           color=color_list[i],
                           skip=5,
-                          log_skip=1)
+                          log_skip=2)
                           
         sim_filename = SimulationDirectory + name + '.csv'
         simulation = SimulationData(sim_filename,period)
@@ -100,7 +101,7 @@ def create_plot_data_cmp_pv_TC1D0_TMF(figure_path=None,figure_name=None):
                           peak,
                           xlabel=xlabel,
                           ylabel=ylabel,
-                          linelabel=str(axial_strain) + '%',
+                          linelabel=label_list[i] + ' Sim.',
                           linewidth=2,
                           linestyle='-',
                           marker=None,
@@ -156,7 +157,7 @@ def plot_cmp_pv_TC1D0_TMF(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # x,y limite
 #==============================================================================
-    plt.xlim(1,1000)
+    plt.xlim(1,5000)
     plt.ylim(-1500,1500)
 #==============================================================================
 # xy log scale
@@ -187,9 +188,12 @@ def plot_cmp_pv_TC1D0_TMF(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # show legend
 #==============================================================================
-    lg = plt.legend(title='$\Delta\\varepsilon/2$',loc=1)
+    lg = plt.legend(title='',loc=1)
     title = lg.get_title()
     title.set_fontsize(16)
+    plt.text(10,1250,r'Peak stress',fontsize=14)
+    plt.text(10,200,r'Mean stress',fontsize=14)
+    plt.text(10,-800,r'Valley stress',fontsize=14)
 #==============================================================================
 # save figures
 #==============================================================================
@@ -203,6 +207,6 @@ def plot_cmp_pv_TC1D0_TMF(figure_path=None,figure_name=None,save_types=[]):
 figure_path=ArticleFigureDirectory
 figure_name='plot_cmp_pv_TC1D0_TMF'
 create_plot_data_cmp_pv_TC1D0_TMF(figure_path,figure_name)
-plot_cmp_pv_TC1D0_TMF(figure_path,figure_name,save_types=['.pdf'])
+plot_cmp_pv_TC1D0_TMF(figure_path,figure_name,save_types=['.png','.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

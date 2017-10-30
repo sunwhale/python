@@ -701,6 +701,14 @@ class Node:
         self.fatigueLifeLiu2Model(material)
         self.fatigueLifeChuModel(material)
         
+    def Tanaka(self):
+        theta_deg=90.0
+        phi_deg=0.0
+        theta=np.radians(theta_deg)
+        phi=np.radians(phi_deg)
+        stress_list=[[2.0,1.0,0.0],[1.0,0.0,0.0],[0.0,0.0,0.0]]
+        
 n = Node(dimension=3)
 #n.lifeTest()
-n.mathematicsTest()
+#n.mathematicsTest()
+n.Tanaka()

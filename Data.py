@@ -506,12 +506,12 @@ class PlotData:
             x.append(line['x'][0])
             y.append(line['y'][0])
             for i in range(1,len(line['x'])-1):
-                print math.log(i,log_skip)
+#                print math.log(i,log_skip)
                 if int(math.log(i,log_skip)) == math.log(i,log_skip):
                     x.append(line['x'][i])
                     y.append(line['y'][i])
-            x.append(line['x'][-1])
-            y.append(line['y'][-1])
+#            x.append(line['x'][-1])
+#            y.append(line['y'][-1])
         if line['color'] == 'auto':
             plt.plot(x,
                      y,

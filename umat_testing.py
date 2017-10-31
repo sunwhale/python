@@ -20,7 +20,8 @@ from plot_exp_pv import plot_exp_pv
 experiment_log = ExperimentLog(ExperimentLogFile)
 
 #for name in ['7047']: #TC-IP
-for name in ['7018','7025','7017']: #NPR-IP
+for name in ['7005']: #TC-IP
+#for name in ['7018','7025','7017']: #NPR-IP
     experiment_log = ExperimentLog(ExperimentLogFile)
     experiment_log.output(name)
     regular = r'.*'
@@ -36,7 +37,7 @@ for name in ['7018','7025','7017']: #NPR-IP
     axial_temperature_phase = float(experiment_log.obtainItem(name,'axial_temperature_phase',regular)[0])
     life = float(experiment_log.obtainItem(name,'comments',regular)[0])
     
-    workbench(name,loading_cycles=life,copy=True)
+    workbench(name,loading_cycles=10,copy=True)
 
 #    compare_exp_sim(name,15,'axial_strain','axial_stress')
 #    plot_sim_all(name,begin_cycle=1,end_cycle=9,xitem='axial_strain',yitem='axial_stress')

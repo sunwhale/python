@@ -186,7 +186,7 @@ def calc_User(sigma_x,tau,dimension=3,dp=0.01):
         CC = calc_AijklBijkl(C,C,dimension)
         nnnn = calc_AijklBijkl(nn,nn,dimension)
         phi = 1-NCCN/CC
-        print CC
+#        print CC
         phi_list.append(CC)
 
     return phi_list
@@ -211,7 +211,7 @@ tau = [20,41,66,91,116,132,131,132,132,131,130,41,-47,-117,-172,-215,-229,-204,-
 """ Circle path """
 sigma_x = []
 tau = []
-for i in np.arange(0,np.pi*100,0.01):
+for i in np.arange(0,np.pi*2,0.01):
     sigma_x.append(np.sin(i))
     tau.append(np.cos(i+np.pi/4))
 
@@ -229,9 +229,9 @@ user_list = calc_User(sigma_x,tau,dimension=3,dp=0.001)
 #plt.plot(sigma_x,tau)
 #plt.show()
 
-plt.plot(sigma_x,triaxiality_list,label='Triaxiality')
+plt.plot(sigma_x,triaxiality_list,marker='s',color='r',markeredgewidth=float(''),markerfacecolor='none',label='Triaxiality')
 plt.plot(sigma_x,phi_list,label='Tanaka')
-plt.plot(sigma_x,[1,2],label='User')
+# plt.plot(sigma_x,[1,2],label='User')
 lg = plt.legend(title='',loc=0)
 plt.show()
 

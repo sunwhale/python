@@ -479,7 +479,10 @@ class PlotData:
                 markersize=12,
                 color='auto',
                 skip=1,
-                log_skip=1):
+                log_skip=1,
+                markerfacecolor='auto',
+                markeredgecolor='auto',
+                markeredgewidth=1):
         
         self.lines.append({'x':x,
                            'y':y,
@@ -492,7 +495,10 @@ class PlotData:
                            'markersize':markersize,
                            'color':color,
                            'skip':skip,
-                           'log_skip':log_skip})
+                           'log_skip':log_skip,
+                           'markerfacecolor':markerfacecolor,
+                           'markeredgecolor':markeredgecolor,
+                           'markeredgewidth':markeredgewidth})
     
     def plot_line(self,line):
         skip = int(line['skip'])
@@ -506,7 +512,6 @@ class PlotData:
             x.append(line['x'][0])
             y.append(line['y'][0])
             for i in range(1,len(line['x'])-1):
-#                print math.log(i,log_skip)
                 if int(math.log(i,log_skip)) == math.log(i,log_skip):
                     x.append(line['x'][i])
                     y.append(line['y'][i])
@@ -519,7 +524,10 @@ class PlotData:
                      linestyle=line['linestyle'],
                      linewidth=line['linewidth'],
                      marker=line['marker'],
-                     markersize=line['markersize'])
+                     markersize=line['markersize'],
+                     markerfacecolor=line['markerfacecolor'],
+                     markeredgecolor=line['markeredgecolor'],
+                     markeredgewidth=line['markeredgewidth'])
         else:
             plt.plot(x,
                      y,
@@ -528,7 +536,10 @@ class PlotData:
                      linewidth=line['linewidth'],
                      marker=line['marker'],
                      markersize=line['markersize'],
-                     color=line['color'])    
+                     color=line['color'],
+                     markerfacecolor=line['markerfacecolor'],
+                     markeredgecolor=line['markeredgecolor'],
+                     markeredgewidth=line['markeredgewidth'])    
                      
     def plot(self,line_index=[]):
         if line_index == []:
@@ -565,6 +576,9 @@ class PlotData:
             xarray.append(line['color'])
             xarray.append(line['skip'])
             xarray.append(line['log_skip'])
+            xarray.append(line['markerfacecolor'])
+            xarray.append(line['markeredgecolor'])
+            xarray.append(line['markeredgewidth'])
             for i in range(len(xarray),self.number_of_header_lines):
                 xarray.append('')
             for x in line['x']:
@@ -582,6 +596,9 @@ class PlotData:
             yarray.append(line['color'])
             yarray.append(line['skip'])
             yarray.append(line['log_skip'])
+            yarray.append(line['markerfacecolor'])
+            yarray.append(line['markeredgecolor'])
+            yarray.append(line['markeredgewidth'])
             for i in range(len(yarray),self.number_of_header_lines):
                 yarray.append('')
             for y in line['y']:
@@ -633,8 +650,31 @@ class PlotData:
             marker = x_data[5]
             markersize = int(x_data[6])
             color = x_data[7]
-            skip = x_data[8]
-            log_skip = x_data[9]
+            
+            if x_data[8] <> '':
+                skip = x_data[8]
+            else:
+                skip = 1
+                
+            if x_data[9] <> '':
+                log_skip = x_data[9]
+            else:
+                log_skip = 1
+            
+            if x_data[10] <> '':
+                markerfacecolor = x_data[10]
+            else:
+                markerfacecolor = 'auto'
+                
+            if x_data[11] <> '':
+                markeredgecolor = x_data[11]
+            else:
+                markeredgecolor = 'auto'
+                
+            if x_data[12] <> '':
+                markeredgewidth = x_data[12]
+            else:
+                markeredgewidth = 1
             self.lines.append({'x':x,
                                'y':y,
                                'xlabel':xlabel,
@@ -646,7 +686,10 @@ class PlotData:
                                'markersize':markersize,
                                'color':color,
                                'skip':skip,
-                               'log_skip':log_skip})
+                               'log_skip':log_skip,
+                               'markerfacecolor':markerfacecolor,
+                               'markeredgecolor':markeredgecolor,
+                               'markeredgewidth':markeredgewidth})
                                
     def saveFigure(self,figure_path=None,figure_name=None,save_type=[]):
         if figure_path==None:

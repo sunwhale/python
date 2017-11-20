@@ -66,7 +66,10 @@ def create_plot_data_cmp_pv_TC1D0_TMF(figure_path=None,figure_name=None):
                           markersize=12,
                           color=color_list[i],
                           skip=5,
-                          log_skip=2)
+                          log_skip=1,
+                          markerfacecolor='none',
+                          markeredgecolor=color_list[i],
+                          markeredgewidth=2)
         plot_data.addLine(cycle,
                           mean,
                           xlabel=xlabel,
@@ -78,7 +81,7 @@ def create_plot_data_cmp_pv_TC1D0_TMF(figure_path=None,figure_name=None):
                           markersize=12,
                           color=color_list[i],
                           skip=5,
-                          log_skip=2)
+                          log_skip=1)
         plot_data.addLine(cycle,
                           valley,
                           xlabel=xlabel,
@@ -90,7 +93,7 @@ def create_plot_data_cmp_pv_TC1D0_TMF(figure_path=None,figure_name=None):
                           markersize=12,
                           color=color_list[i],
                           skip=5,
-                          log_skip=2)
+                          log_skip=1)
                           
         sim_filename = SimulationDirectory + name + '.csv'
         simulation = SimulationData(sim_filename,period)
@@ -181,14 +184,14 @@ def plot_cmp_pv_TC1D0_TMF(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 #    ax.xaxis.set_major_locator(MultipleLocator(0.5))
 #    ax.xaxis.set_minor_locator(MultipleLocator(0.1))
-#    ax.xaxis.set_major_formatter(ScalarFormatter())
-#    ax.yaxis.set_major_locator(MultipleLocator(500))
+    ax.xaxis.set_major_formatter(ScalarFormatter())
+    ax.yaxis.set_major_locator(MultipleLocator(500))
     ax.yaxis.set_minor_locator(MultipleLocator(100))
-#    ax.yaxis.set_major_formatter(ScalarFormatter())
+    ax.yaxis.set_major_formatter(ScalarFormatter())
 #==============================================================================
 # show legend
 #==============================================================================
-    lg = plt.legend(title='',loc=1)
+    lg = plt.legend(title='',loc=4)
     title = lg.get_title()
     title.set_fontsize(16)
     plt.text(10,1250,r'Peak stress',fontsize=14)
@@ -207,6 +210,6 @@ def plot_cmp_pv_TC1D0_TMF(figure_path=None,figure_name=None,save_types=[]):
 figure_path=ArticleFigureDirectory
 figure_name='plot_cmp_pv_TC1D0_TMF'
 create_plot_data_cmp_pv_TC1D0_TMF(figure_path,figure_name)
-plot_cmp_pv_TC1D0_TMF(figure_path,figure_name,save_types=['.png','.pdf'])
+plot_cmp_pv_TC1D0_TMF(figure_path,figure_name,save_types=['.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

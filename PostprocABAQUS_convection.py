@@ -62,7 +62,7 @@ for filename in filenames:
             header += (S_field_name+'23,')
             header += 'Mises,'
             header += (H_field_name+'1,')
-#            header += (H_field_name+'2,')
+            header += (H_field_name+'2,')
             print >>resultfile, header[:-1]
             
             for frame in frames:
@@ -101,6 +101,6 @@ for filename in filenames:
                 line += '%s,' % (S_field_comp.getScalarField(componentLabel=S_field_name+'23').values[0].data)
                 line += '%s,' % (S_field_comp.getScalarField(invariant=MISES).values[0].data)
                 line += '%s,' % (H_field_comp.getScalarField(componentLabel=H_field_name+'1').values[0].data)
-#                line += '%s,' % (H_field_comp.getScalarField(componentLabel=H_field_name+'2').values[0].data)
+                line += '%s,' % (H_field_comp.getScalarField(componentLabel=H_field_name+'2').values[0].data)
                 print >>resultfile, line[:-1]
             resultfile.close()

@@ -65,7 +65,8 @@ def create_plot_data_cmp_pv_TCIPTGMF(figure_path=None,figure_name=None):
                           marker=marker_list[i],
                           markersize=12,
                           color=color_list[i],
-                          skip=10)
+                          skip=1,
+                          log_skip=2)
         plot_data.addLine(cycle,
                           mean,
                           xlabel=xlabel,
@@ -76,7 +77,8 @@ def create_plot_data_cmp_pv_TCIPTGMF(figure_path=None,figure_name=None):
                           marker=marker_list[i],
                           markersize=12,
                           color=color_list[i],
-                          skip=10)
+                          skip=1,
+                          log_skip=2)
         plot_data.addLine(cycle,
                           valley,
                           xlabel=xlabel,
@@ -87,7 +89,8 @@ def create_plot_data_cmp_pv_TCIPTGMF(figure_path=None,figure_name=None):
                           marker=marker_list[i],
                           markersize=12,
                           color=color_list[i],
-                          skip=5)
+                          skip=1,
+                          log_skip=2)
                           
         sim_filename = SimulationDirectory + name + '.csv'
         simulation = SimulationData(sim_filename,period)

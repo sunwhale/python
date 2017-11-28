@@ -20,6 +20,8 @@ def calculate_data_fatigue_life(data,material,fatigue_model):
     nth = data.axial_count_index_list[-2]
     time = data.obtainNthCycle('runing_time',nth)
     temperature = data.obtainNthCycle('temperature',nth)
+    heat_flux_1 = data.obtainNthCycle('heat_flux_1',nth)
+    heat_flux_2 = data.obtainNthCycle('heat_flux_2',nth)
     length = len(time)
     s11 = data.obtainNthCycle('axial_stress',nth)
     s22 = np.zeros(length)
@@ -39,7 +41,8 @@ def calculate_data_fatigue_life(data,material,fatigue_model):
         stress.append([[s11[i],s12[i],s13[i]],[s12[i],s22[i],s23[i]],[s13[i],s23[i],s33[i]]])
         strain.append([[e11[i],e12[i],e13[i]],[e12[i],e22[i],e23[i]],[e13[i],e23[i],e33[i]]])
     node = Node(nodelabel=nodelabel, dimension=2, time=time, coordinate=[], 
-                displacement=[], stress=stress, strain=strain, temperature=temperature)
+                displacement=[], stress=stress, strain=strain,
+                temperature=temperature, heatflux=heat_flux_1)
 #    if fatigue_model == 'FS':
 #        fatigue_data = node.fatigueLifeFSModel(material,k=1.0)
     if fatigue_model == 'FS':

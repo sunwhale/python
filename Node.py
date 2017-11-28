@@ -11,11 +11,12 @@ from Material import Material
 
 class Node:
     def __init__(self, nodelabel=1, dimension=2, time=[], coordinate=[], 
-                 displacement=[], stress=[], strain=[], temperature=[]):
+                 displacement=[], stress=[], strain=[], temperature=[], heatflux=[]):
         self.nodelabel = nodelabel
         self.dimension = dimension
         self.time_list = [t for t in time]
         self.temperature_list = [t for t in temperature]
+        self.heatflux_list = [t for t in heatflux]
         self.coordinate_list = [[i for i in c[:dimension]] for c in coordinate]
         self.displacement_list = [[i for i in d[:dimension]] for d in displacement]
         self.strain_list = [[i[:dimension] for i in s[:dimension]] for s in strain]
@@ -134,6 +135,15 @@ class Node:
         max_normal_stress_index = normal_stress_list.index(max_normal_stress)
         temperature_at_sigma_nmax = self.temperature_list[max_normal_stress_index]
         return temperature_at_sigma_nmax
+    def heatfluxAtsigmaNMax(self, transformation):
+        if self.heatflux_list <> []:
+            normal_stress_list = self.normalStress(transformation)
+            max_normal_stress = max(normal_stress_list)
+            max_normal_stress_index = normal_stress_list.index(max_normal_stress)
+            heatflux_at_sigma_nmax = self.heatflux_list[max_normal_stress_index]
+            return heatflux_at_sigma_nmax
+        else:
+            return 0.0
         
     def fatigueLifeFSModel(self,Material,k=0.3):
         print '=========================FS model========================='
@@ -167,7 +177,8 @@ class Node:
          tau_nmax_critical_plane,
          delta_tau_critical_plane,
          delta_gamma_critical_plane,
-         temperature_at_sigma_nmax_critical_plane) = self.calcValuesAtCriticalPlane(transformation_critical_plane)
+         temperature_at_sigma_nmax_critical_plane,
+         heatflux_at_sigma_nmax_critical_plane) = self.calcValuesAtCriticalPlane(transformation_critical_plane)
         
         fs_coefficient=delta_gamma_max/2.0*(1.0+k*sigma_nmax_critical_plane/Material.yield_stress)
                 
@@ -190,6 +201,7 @@ class Node:
                                       tau_nmax_critical_plane,
                                       delta_tau_critical_plane,
                                       temperature_at_sigma_nmax_critical_plane,
+                                      heatflux_at_sigma_nmax_critical_plane,
                                       fatigue_coefficient,
                                       fatigue_life)
                 
@@ -225,7 +237,8 @@ class Node:
          tau_nmax_critical_plane,
          delta_tau_critical_plane,
          delta_gamma_critical_plane,
-         temperature_at_sigma_nmax_critical_plane) = self.calcValuesAtCriticalPlane(transformation_critical_plane)
+         temperature_at_sigma_nmax_critical_plane,
+         heatflux_at_sigma_nmax_critical_plane) = self.calcValuesAtCriticalPlane(transformation_critical_plane)
         
         swt_coefficient = sigma_nmax_critical_plane*delta_epsilon_critical_plane/2.0
     
@@ -248,6 +261,7 @@ class Node:
                                       tau_nmax_critical_plane,
                                       delta_tau_critical_plane,
                                       temperature_at_sigma_nmax_critical_plane,
+                                      heatflux_at_sigma_nmax_critical_plane,
                                       fatigue_coefficient,
                                       fatigue_life)
                                       
@@ -283,7 +297,8 @@ class Node:
          tau_nmax_critical_plane,
          delta_tau_critical_plane,
          delta_gamma_critical_plane,
-         temperature_at_sigma_nmax_critical_plane) = self.calcValuesAtCriticalPlane(transformation_critical_plane)
+         temperature_at_sigma_nmax_critical_plane,
+         heatflux_at_sigma_nmax_critical_plane) = self.calcValuesAtCriticalPlane(transformation_critical_plane)
         
         bm_coefficient = delta_gamma_critical_plane/2.0 + S*delta_epsilon_critical_plane
         sigma_nmean_critical_plane = sigma_nmax_critical_plane - delta_sigma_critical_plane/2.0
@@ -307,6 +322,7 @@ class Node:
                                       tau_nmax_critical_plane,
                                       delta_tau_critical_plane,
                                       temperature_at_sigma_nmax_critical_plane,
+                                      heatflux_at_sigma_nmax_critical_plane,
                                       fatigue_coefficient,
                                       fatigue_life)
 
@@ -342,7 +358,8 @@ class Node:
          tau_nmax_critical_plane,
          delta_tau_critical_plane,
          delta_gamma_critical_plane,
-         temperature_at_sigma_nmax_critical_plane) = self.calcValuesAtCriticalPlane(transformation_critical_plane)
+         temperature_at_sigma_nmax_critical_plane,
+         heatflux_at_sigma_nmax_critical_plane) = self.calcValuesAtCriticalPlane(transformation_critical_plane)
         
         delta_w1_max = self.tensionEnergy(transformation_critical_plane) + self.shearEnergy(transformation_critical_plane)
         stress_ratio = (sigma_nmax_critical_plane-delta_sigma_critical_plane)/sigma_nmax_critical_plane
@@ -367,6 +384,7 @@ class Node:
                                       tau_nmax_critical_plane,
                                       delta_tau_critical_plane,
                                       temperature_at_sigma_nmax_critical_plane,
+                                      heatflux_at_sigma_nmax_critical_plane,
                                       fatigue_coefficient,
                                       fatigue_life)
                                       
@@ -402,7 +420,8 @@ class Node:
          tau_nmax_critical_plane,
          delta_tau_critical_plane,
          delta_gamma_critical_plane,
-         temperature_at_sigma_nmax_critical_plane) = self.calcValuesAtCriticalPlane(transformation_critical_plane)
+         temperature_at_sigma_nmax_critical_plane,
+         heatflux_at_sigma_nmax_critical_plane) = self.calcValuesAtCriticalPlane(transformation_critical_plane)
         
         delta_w2_max = self.tensionEnergy(transformation_critical_plane) + self.shearEnergy(transformation_critical_plane)
         sigma_nmean_critical_plane = sigma_nmax_critical_plane - delta_sigma_critical_plane/2.0
@@ -427,6 +446,7 @@ class Node:
                                       tau_nmax_critical_plane,
                                       delta_tau_critical_plane,
                                       temperature_at_sigma_nmax_critical_plane,
+                                      heatflux_at_sigma_nmax_critical_plane,
                                       fatigue_coefficient,
                                       fatigue_life)
                                       
@@ -462,7 +482,8 @@ class Node:
          tau_nmax_critical_plane,
          delta_tau_critical_plane,
          delta_gamma_critical_plane,
-         temperature_at_sigma_nmax_critical_plane) = self.calcValuesAtCriticalPlane(transformation_critical_plane)
+         temperature_at_sigma_nmax_critical_plane,
+         heatflux_at_sigma_nmax_critical_plane) = self.calcValuesAtCriticalPlane(transformation_critical_plane)
         
         delta_w_max = sigma_nmax_critical_plane*delta_epsilon_critical_plane/2.0 + tau_nmax_critical_plane*delta_gamma_critical_plane/2.0
                            
@@ -485,6 +506,7 @@ class Node:
                                       tau_nmax_critical_plane,
                                       delta_tau_critical_plane,
                                       temperature_at_sigma_nmax_critical_plane,
+                                      heatflux_at_sigma_nmax_critical_plane,
                                       fatigue_coefficient,
                                       fatigue_life)
                                       
@@ -533,13 +555,15 @@ class Node:
         delta_tau_critical_plane = self.deltaTau(transformation_critical_plane)
         delta_gamma_critical_plane = self.deltaGamma(transformation_critical_plane)
         temperature_at_sigma_nmax_critical_plane = self.temperatureAtsigmaNMax(transformation_critical_plane)
+        heatflux_at_sigma_nmax_critical_plane = self.temperatureAtsigmaNMax(transformation_critical_plane)
         return (sigma_nmax_critical_plane,
                 delta_sigma_critical_plane,
                 delta_epsilon_critical_plane,
                 tau_nmax_critical_plane,
                 delta_tau_critical_plane,
                 delta_gamma_critical_plane,
-                temperature_at_sigma_nmax_critical_plane)
+                temperature_at_sigma_nmax_critical_plane,
+                heatflux_at_sigma_nmax_critical_plane)
                 
     def outputFatigueLife(self,
                           theta_critical_plane,
@@ -551,6 +575,7 @@ class Node:
                           tau_nmax_critical_plane,
                           delta_tau_critical_plane,
                           temperature_at_sigma_nmax_critical_plane,
+                          heatflux_at_sigma_nmax_critical_plane,
                           fatigue_coefficient,
                           fatigue_life):
         
@@ -586,7 +611,8 @@ class Node:
                     delta_gamma_critical_plane,
                     fatigue_life,
                     fatigue_coefficient,
-                    temperature_at_sigma_nmax_critical_plane]
+                    temperature_at_sigma_nmax_critical_plane,
+                    heatflux_at_sigma_nmax_critical_plane]
                 
     def mathematicsTest(self):
         theta_deg=90.0

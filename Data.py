@@ -216,7 +216,18 @@ class SimulationData:
         self.axial_count_index = {}
         self.axial_count_index_list = []
         self.total_axial_count = []
-        self.item = ['axial_count', 'axial_strain', 'axial_stress', 'frame', 'mises_stress', 'node_label', 'runing_time', 'shear_strain', 'shear_stress', 'temperature']
+        self.item_list = ['axial_count',
+                          'frame',
+                          'runing_time',
+                          'node_label',
+                          'temperature',
+                          'axial_strain',
+                          'axial_stress',
+                          'shear_strain',
+                          'shear_stress',
+                          'mises_stress',
+                          'heat_flux_1',
+                          'heat_flux_2']
         
         for h in self.header:
             if h in ['Frame']:
@@ -269,12 +280,15 @@ class SimulationData:
         """
         截取指定数组的第begin_cycle到end_cycle循环中的数据。
         """
-        if end_cycle is None:
-            end_cycle = begin_cycle
-        if self.total_axial_count == []:
-            print 'self.total_axial_count is empty.'
-        if self.axial_count_index.has_key(begin_cycle) and self.axial_count_index.has_key(end_cycle+1):
-            return eval('self.'+item)[self.axial_count_index[begin_cycle]:self.axial_count_index[end_cycle+1]]
+        if item in self.item_list:
+            if end_cycle is None:
+                end_cycle = begin_cycle
+            if self.total_axial_count == []:
+                print 'self.total_axial_count is empty.'
+            if self.axial_count_index.has_key(begin_cycle) and self.axial_count_index.has_key(end_cycle+1):
+                return eval('self.'+item)[self.axial_count_index[begin_cycle]:self.axial_count_index[end_cycle+1]]
+        else:
+            return []
             
     def obtainPeakValley(self,item):
         """

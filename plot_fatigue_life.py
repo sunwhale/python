@@ -21,9 +21,10 @@ def create_plot_data_fatigue_life(fatigue_data,figure_path=None,figure_name=None
 # plot lines
 #==============================================================================
     i = 0
-    marker_list = ['s','o','^','<','D']
+    marker_list = ['s','o','^','<','D','>','*']
     plot_data = PlotData()
-    for load_type in ['TC-IP','TC-OP','TC-90','PRO-IP','NPR-IP']:
+#    for load_type in ['TC-IP','TC-OP','TC-90','PRO-IP','NPR-IP']:
+    for load_type in ['TC-IP','TC-OP','TC-90','PRO-IP','NPR-IP','TC-IP-TGMF','TC-OP-TGMF']:
         experimental_life = fatigue_data.loadTypeFilter(load_type,'experimental_life')
         predicted_life = fatigue_data.loadTypeFilter(load_type,'predicted_life')
         plot_data.addLine(experimental_life,
@@ -63,8 +64,8 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # x,y limite
 #==============================================================================
-    plt.xlim(1E1,1E4)
-    plt.ylim(1E1,1E4)
+    plt.xlim(1E1,1E5)
+    plt.ylim(1E1,1E5)
 #==============================================================================
 # xy axial equal
 #==============================================================================
@@ -85,18 +86,18 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
 # plot 1x lines
 #==============================================================================
     linewidth = 1.0
-    plt.plot([10,1e4],[10,1e4],color='black',linewidth=linewidth)
+    plt.plot([10,1e5],[10,1e5],color='black',linewidth=linewidth)
 #==============================================================================
 # plot 2x lines
 #==============================================================================
     linewidth = 0.5
-    plt.plot([20,1e4],[10,5e3],color='black',linewidth=linewidth)
-    plt.plot([10,5e3],[20,1e4],color='black',linewidth=linewidth)
+    plt.plot([20,1e5],[10,5e4],color='black',linewidth=linewidth)
+    plt.plot([10,5e4],[20,1e5],color='black',linewidth=linewidth)
 #==============================================================================
 # plot 5x lines
 #==============================================================================
-    plt.plot([50,1e4],[10,2e3],color='black',linewidth=linewidth)
-    plt.plot([10,2e3],[50,1e4],color='black',linewidth=linewidth)
+    plt.plot([50,1e5],[10,2e4],color='black',linewidth=linewidth)
+    plt.plot([10,2e4],[50,1e5],color='black',linewidth=linewidth)
 #==============================================================================
 # show legend
 #==============================================================================
@@ -112,7 +113,8 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
     plt.close()
 
 #fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
-fatigue_model_list = ['FS']
+fatigue_model_list = ['FS
+']
 
 for fatigue_model in fatigue_model_list:
     fatigue_file = '%s%s.csv' % (FatigueDirectory,fatigue_model)

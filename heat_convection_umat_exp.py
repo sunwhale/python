@@ -28,7 +28,7 @@ d = rin*2
 #outfile = open('heat_convection.csv', 'w')
 
 #for name in experiment_type_dict['TC-IP-TGMF']+experiment_type_dict['TC-OP-TGMF']+experiment_type_dict['TC-IP-TGMF-TBC']:
-for name in ['7210']:
+for name in ['7203']:
     experiment_log.output(name)
     regular = r'.*'
     load_type = experiment_log.obtainItem(name,'load_type',regular)[0]

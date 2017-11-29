@@ -22,6 +22,7 @@ def calculate_data_fatigue_life(data,material,fatigue_model):
     temperature = data.obtainNthCycle('temperature',nth)
     heat_flux_1 = data.obtainNthCycle('heat_flux_1',nth)
     heat_flux_2 = data.obtainNthCycle('heat_flux_2',nth)
+    heat_flux_3 = data.obtainNthCycle('heat_flux_3',nth)
     length = len(time)
     s11 = data.obtainNthCycle('axial_stress',nth)
     s22 = np.zeros(length)
@@ -35,14 +36,22 @@ def calculate_data_fatigue_life(data,material,fatigue_model):
     e12 = data.obtainNthCycle('shear_strain',nth)/2.0
     e13 = np.zeros(length)
     e23 = np.zeros(length)
-    stress=[]
-    strain=[]
+    if heat_flux_1 == []:
+        heat_flux_1 = np.zeros(length)
+    if heat_flux_2 == []:
+        heat_flux_2 = np.zeros(length)
+    if heat_flux_3 == []:
+        heat_flux_3 = np.zeros(length)
+    stress = []
+    strain = []
+    heatflux = []
     for i in range(len(time)):
         stress.append([[s11[i],s12[i],s13[i]],[s12[i],s22[i],s23[i]],[s13[i],s23[i],s33[i]]])
         strain.append([[e11[i],e12[i],e13[i]],[e12[i],e22[i],e23[i]],[e13[i],e23[i],e33[i]]])
+        heatflux.append([heat_flux_1[i],heat_flux_2[i],heat_flux_3[i]])
     node = Node(nodelabel=nodelabel, dimension=2, time=time, coordinate=[], 
                 displacement=[], stress=stress, strain=strain,
-                temperature=temperature, heatflux=heat_flux_1)
+                temperature=temperature, heatflux=heatflux)
 #    if fatigue_model == 'FS':
 #        fatigue_data = node.fatigueLifeFSModel(material,k=1.0)
     if fatigue_model == 'FS':
@@ -75,15 +84,32 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
     if not os.path.isdir(FatigueDirectory):
         os.makedirs(FatigueDirectory)
         print 'Create new directory:',FatigueDirectory
-            
-    headers = 'Number of Cycles to Failure N\-(f),Mises Equivalent Strain Amplitude \i(\g(De))\-(eq)/2,Stress Amplitude e \i(\g(Ds))/2,Specimen,Critical Plane,sigma_n_max,delta_sigma,delta_epsilon,tau_n_max,delta_tau,delta_gamma,Predicted Fatigue Lifetime N\-(p),Fatigue Coefficient,Temperature'
-    units = 'cycles,mm/mm,MPa,-,deg,MPa,MPa,mm/mm,MPa,MPa,mm/mm,cycles,-,C'
+    
+    headers = ''
+    units = ''
+    headers += 'Number of Cycles to Failure N\-(f),';                   units +='cycle,'
+    headers += 'Mises Equivalent Strain Amplitude \i(\g(De))\-(eq)/2,'; units +='mm/mm,'
+    headers += 'Stress Amplitude e \i(\g(Ds))/2,';                      units +='MPa,'
+    headers += 'Specimen,';                                             units +='-,'
+    headers += 'Critical Plane,';                                       units +='deg,'
+    headers += 'sigma_n_max,';                                          units +='MPa,'
+    headers += 'delta_sigma,';                                          units +='MPa,'
+    headers += 'delta_epsilon,';                                        units +='mm/mm,'
+    headers += 'tau_n_max,';                                            units +='MPa,'
+    headers += 'delta_tau,';                                            units +='MPa,'
+    headers += 'delta_gamma,';                                          units +='-,'
+    headers += 'Predicted Fatigue Lifetime N\-(p),';                    units +='cycle,'
+    headers += 'Fatigue Coefficient,';                                  units +='-,'
+    headers += 'Temperature,';                                          units +='C,'
+    headers += 'Temperature Gradient 1,';                               units +='C/mm,'
+    headers += 'Temperature Gradient 2,';                               units +='C/mm,'
+    headers += 'Load Type,';                                            units +='-,'
     
     workbook = xlsxwriter.Workbook(FatigueDirectory + fatigue_model + '.xlsx') # write to excel
     
     allresultfile = open(FatigueDirectory + fatigue_model + '.csv', 'w') # write to csv all
-    print >>allresultfile, headers + ',Load Type' # write to csv all
-    print >>allresultfile, units + ',-' # write to csv all
+    print >>allresultfile, headers[:-1] # write to csv all
+    print >>allresultfile, units[:-1] # write to csv all
         
     for experiment_type in experiment_type_list:
 #        resultfile = open(FatigueDirectory + experiment_type[0] + '.csv', 'w') # write to csv

@@ -270,6 +270,55 @@ def calculate_elastic_by_temperature_in718(temperature):
     yield_stress = SY
     return youngs_modulus,poisson_ratio,shear_modulus,yield_stress
 #==============================================================================
+# calculate_elastic_by_temperature_in718
+#==============================================================================
+def calculate_conductivity_by_temperature_in718(temperature):
+    """
+    计算热导率与温度的函数。
+    temperature = [
+    11,
+    100,
+    200,
+    300,
+    400,
+    500,
+    600,
+    700,
+    800,
+    900,
+    1000,
+    ]
+    conductivity =     [
+    13.4,
+    14.7,
+    15.9,
+    17.8,
+    18.3,
+    19.6,
+    21.2,
+    22.8,
+    23.6,
+    27.6,
+    30.4,
+    ]
+    plt.plot(temperature,conductivity)
+    x = np.array(temperature)
+    y = np.array(conductivity)
+    z = np.polyfit(x,y,3)
+    p = np.poly1d(z)
+    print p
+    print z
+    plt.plot(x,p(x))
+    plt.show()
+    
+    >>>
+                   3             2
+    2.232e-08 x - 2.499e-05 x + 0.02007 x + 13.04
+    [  2.23161198e-08  -2.49925116e-05   2.00745430e-02   1.30351905e+01]
+    """
+    conductivity = 1.30351905e+01 + 2.00745430e-02*temperature - 2.49925116e-05*temperature**2 + 2.23161198e-08*temperature**3
+    return conductivity
+#==============================================================================
 # write_umat_output_file
 #==============================================================================
 def write_umat_output_file(fortran_file_name,text_file_name,total_time):

@@ -8,6 +8,7 @@ Created on Thu Jan 05 11:50:47 2017
 import numpy as np
 from scipy.optimize import fsolve
 from Material import Material
+from Functions import calculate_conductivity_by_temperature_in718
 
 class Node:
     def __init__(self, nodelabel=1, dimension=2, time=[], coordinate=[], 
@@ -16,7 +17,7 @@ class Node:
         self.dimension = dimension
         self.time_list = [t for t in time]
         self.temperature_list = [t for t in temperature]
-        self.heatflux_list = [t for t in heatflux]
+        self.heatflux_list = [[i for i in h[:dimension]] for h in heatflux]
         self.coordinate_list = [[i for i in c[:dimension]] for c in coordinate]
         self.displacement_list = [[i for i in d[:dimension]] for d in displacement]
         self.strain_list = [[i[:dimension] for i in s[:dimension]] for s in strain]
@@ -136,14 +137,11 @@ class Node:
         temperature_at_sigma_nmax = self.temperature_list[max_normal_stress_index]
         return temperature_at_sigma_nmax
     def heatfluxAtsigmaNMax(self, transformation):
-        if self.heatflux_list <> []:
-            normal_stress_list = self.normalStress(transformation)
-            max_normal_stress = max(normal_stress_list)
-            max_normal_stress_index = normal_stress_list.index(max_normal_stress)
-            heatflux_at_sigma_nmax = self.heatflux_list[max_normal_stress_index]
-            return heatflux_at_sigma_nmax
-        else:
-            return 0.0
+        normal_stress_list = self.normalStress(transformation)
+        max_normal_stress = max(normal_stress_list)
+        max_normal_stress_index = normal_stress_list.index(max_normal_stress)
+        heatflux_at_sigma_nmax = self.heatflux_list[max_normal_stress_index]
+        return heatflux_at_sigma_nmax
         
     def fatigueLifeFSModel(self,Material,k=0.3):
         print '=========================FS model========================='
@@ -555,7 +553,7 @@ class Node:
         delta_tau_critical_plane = self.deltaTau(transformation_critical_plane)
         delta_gamma_critical_plane = self.deltaGamma(transformation_critical_plane)
         temperature_at_sigma_nmax_critical_plane = self.temperatureAtsigmaNMax(transformation_critical_plane)
-        heatflux_at_sigma_nmax_critical_plane = self.temperatureAtsigmaNMax(transformation_critical_plane)
+        heatflux_at_sigma_nmax_critical_plane = self.heatfluxAtsigmaNMax(transformation_critical_plane)
         return (sigma_nmax_critical_plane,
                 delta_sigma_critical_plane,
                 delta_epsilon_critical_plane,
@@ -581,9 +579,7 @@ class Node:
         
         if self.dimension == 3:
             print 'theta_critical_plane',theta_critical_plane
-            print 'phi_critical_plane',phi_critical_plane
-        if self.dimension == 2:
-            print 'phi_critical_plane',phi_critical_plane
+        print 'phi_critical_plane',phi_critical_plane
             
         line_format = '%-40s'
         line_format_strain = line_format + '%.4f%%'
@@ -601,6 +597,9 @@ class Node:
         print line_format_coefficient % ('fatigue_coefficient',fatigue_coefficient)
         print line_format_life % ('fatigue_life',fatigue_life)
         
+        temperature_gradient_at_sigma_nmax_critical_plane_x = heatflux_at_sigma_nmax_critical_plane[0]/calculate_conductivity_by_temperature_in718(temperature_at_sigma_nmax_critical_plane)
+        temperature_gradient_at_sigma_nmax_critical_plane_y = heatflux_at_sigma_nmax_critical_plane[1]/calculate_conductivity_by_temperature_in718(temperature_at_sigma_nmax_critical_plane)
+        
         if self.dimension == 2:
             return [phi_critical_plane,
                     sigma_nmax_critical_plane,
@@ -612,7 +611,8 @@ class Node:
                     fatigue_life,
                     fatigue_coefficient,
                     temperature_at_sigma_nmax_critical_plane,
-                    heatflux_at_sigma_nmax_critical_plane]
+                    temperature_gradient_at_sigma_nmax_critical_plane_x,
+                    temperature_gradient_at_sigma_nmax_critical_plane_y]
                 
     def mathematicsTest(self):
         theta_deg=90.0

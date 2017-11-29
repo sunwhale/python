@@ -27,8 +27,8 @@ d = rin*2
 
 #outfile = open('heat_convection.csv', 'w')
 
-#for name in experiment_type_dict['TC-IP-TGMF']+experiment_type_dict['TC-OP-TGMF']+experiment_type_dict['TC-IP-TGMF-TBC']:
-for name in ['7203']:
+for name in experiment_type_dict['TC-IP-TGMF']+experiment_type_dict['TC-OP-TGMF']+experiment_type_dict['TC-IP-TGMF-TBC']:
+#for name in ['7203']:
     experiment_log.output(name)
     regular = r'.*'
     load_type = experiment_log.obtainItem(name,'load_type',regular)[0]
@@ -62,15 +62,15 @@ for name in ['7203']:
         sink_temperature = air_temperature - 273.15
         temperature_list = []
         
-#        workbench(name,loading_cycles=None,copy=True,
-#                  film_coefficient=film_coefficient,
-#                  sink_temperature=sink_temperature,
-#                  temperature_list=temperature_list)
-                  
-        workbench(name,loading_cycles=10,copy=True,
+        workbench(name,loading_cycles=None,copy=True,
                   film_coefficient=film_coefficient,
                   sink_temperature=sink_temperature,
                   temperature_list=temperature_list)
+                  
+#        workbench(name,loading_cycles=10,copy=True,
+#                  film_coefficient=film_coefficient,
+#                  sink_temperature=sink_temperature,
+#                  temperature_list=temperature_list)
                   
 #        sim_filename = SimulationDirectory + name + '.csv'
 #        simulation = SimulationData(sim_filename,period=240)

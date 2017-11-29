@@ -170,14 +170,14 @@ def workbench(name,loading_cycles=None,copy=True,film_coefficient=0.0,sink_tempe
 # Job
 #==============================================================================
     job = Job(JobName=name, UMAT=umat, Step=step, Load=load, copy=copy)
-#    job.allProc()
+    job.allProc()
 #    job.createDirectory()
 #    job.copyFiles()
 #    job.creatBatchFile()
 #    job.createAbaqusCAE()
 #    job.createAbaqusInput()
 #    job.run()
-    job.autoPostProc()
+#    job.autoPostProc()
 
 #==============================================================================
 # experiment_log

@@ -213,6 +213,7 @@ class SimulationData:
         self.mises_stress = []
         self.heat_flux_1 = []
         self.heat_flux_2 = []
+        self.heat_flux_3 = []
         self.axial_count_index = {}
         self.axial_count_index_list = []
         self.total_axial_count = []
@@ -227,7 +228,8 @@ class SimulationData:
                           'shear_stress',
                           'mises_stress',
                           'heat_flux_1',
-                          'heat_flux_2']
+                          'heat_flux_2',
+                          'heat_flux_3']
         
         for h in self.header:
             if h in ['Frame']:
@@ -252,6 +254,8 @@ class SimulationData:
                 self.heat_flux_1 = data[:,self.header.index(h)]
             if h in ['HFL2']:
                 self.heat_flux_2 = data[:,self.header.index(h)]
+            if h in ['HFL3']:
+                self.heat_flux_3 = data[:,self.header.index(h)]
         del data
         
         self.length = len(self.runing_time)
@@ -405,10 +409,21 @@ class FatigueData:
     """
     def __init__(self, filename):
         """
-        ['Number of Cycles to Failure N\\-(f)', 'Mises Equivalent Strain Amplitude \\i(\\g(De))\\-(eq)/2', 
-        'Stress Amplitude e \\i(\\g(Ds))/2', 'Specimen', 'Critical Plane', 'sigma_n_max', 'delta_sigma', 
-        'delta_epsilon', 'tau_n_max', 'delta_tau', 'delta_gamma', 'Predicted Fatigue Lifetime N\\-(p)', 
-        'Fatigue Coefficient', 'Temperature', 'Load Type']
+        ['Number of Cycles to Failure N\\-(f)',
+        'Mises Equivalent Strain Amplitude \\i(\\g(De))\\-(eq)/2',
+        'Stress Amplitude e \\i(\\g(Ds))/2',
+        'Specimen',
+        'Critical Plane',
+        'sigma_n_max',
+        'delta_sigma', 
+        'delta_epsilon',
+        'tau_n_max',
+        'delta_tau',
+        'delta_gamma',
+        'Predicted Fatigue Lifetime N\\-(p)', 
+        'Fatigue Coefficient',
+        'Temperature',
+        'Load Type']
         """
         data = np.genfromtxt(filename, delimiter=',', skip_header=0, dtype=None)
         self.header = [i for i in data[0]]

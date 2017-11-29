@@ -113,8 +113,7 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
     plt.close()
 
 #fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
-fatigue_model_list = ['FS
-']
+fatigue_model_list = ['BM']
 
 for fatigue_model in fatigue_model_list:
     fatigue_file = '%s%s.csv' % (FatigueDirectory,fatigue_model)

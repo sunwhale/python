@@ -38,13 +38,13 @@ class ExperimentData:
         文件大于200MB的时候，32位系统中，np.genfromtxt()函数会造成内存溢出。
         这时候使用自定义的read_exp_files()函数
         """
-        if os.path.getsize(filename) < 150*1024*1024: # 如果文件小于150MB
+        if os.path.getsize(filename) < 140*1024*1024: # 如果文件小于150MB
             data = np.genfromtxt(filename, delimiter=',', skip_header=2, dtype=float)
         else:
             data = read_exp_files(filename, n=2)
             
         self.filename = filename
-        self.nodelabel = [36] # 试验对应的有限元模型节点为36号
+        self.node_label = [36] # 试验对应的有限元模型节点为36号
         
         self.axial_count = data[:,0]
         self.runing_time = data[:,1]
@@ -66,7 +66,29 @@ class ExperimentData:
         self.shear_strain_eq = self.shear_strain/np.sqrt(3.0)
         self.axial_log_strain = np.log(1.0+self.axial_strain)
         self.axial_true_stress = self.axial_stress*(1.0+self.axial_strain)
-
+        
+        self.item_list = [
+                        'nodelabel',
+                        'axial_count',
+                        'runing_time',
+                        'temperature',
+                        'axial_disp',
+                        'axial_force',
+                        'axial_strain',
+                        'axial_stress',
+                        'rotation',
+                        'torque',
+                        'shear_strain',
+                        'shear_stress',
+                        'eqpl_strain',
+                        'thermal_strain',
+                        'total_strain',
+                        'shear_stress_eq',
+                        'shear_strain_eq',
+                        'axial_log_strain',
+                        'axial_true_stress',        
+                        ]
+        
         # 数组长度
         self.length = len(self.axial_count)
         # 总试验时间
@@ -108,13 +130,16 @@ class ExperimentData:
         """
         截取指定数组的第begin_cycle到end_cycle循环中的数据。
         """
-        if end_cycle is None:
-            end_cycle = begin_cycle
-        if self.total_axial_count == []:
-            print 'self.total_axial_count is empty.'
-            return []
-        if self.axial_count_begin_index.has_key(begin_cycle) and self.axial_count_end_index.has_key(end_cycle):
-            return eval('self.'+item)[self.axial_count_begin_index[begin_cycle]:self.axial_count_end_index[end_cycle]]
+        if item in self.item_list:
+            if end_cycle is None:
+                end_cycle = begin_cycle
+            if self.total_axial_count == []:
+                print 'self.total_axial_count is empty.'
+                return []
+            if self.axial_count_begin_index.has_key(begin_cycle) and self.axial_count_end_index.has_key(end_cycle):
+                return eval('self.'+item)[self.axial_count_begin_index[begin_cycle]:self.axial_count_end_index[end_cycle]]
+            else:
+                return []
         else:
             return []
             
@@ -448,7 +473,11 @@ class FatigueData:
         del data
         
         data = np.genfromtxt(filename, delimiter=',', skip_header=2, dtype=str)
-        self.load_type = data[:,14]
+        for h in self.header:
+            if h in ['Load Type']:
+                self.load_type = data[:,self.header.index(h)]
+
+#        self.load_type = data[:,14]
         del data
 
     def loadTypeFilter(self,load_type,item):
@@ -511,7 +540,7 @@ class PlotData:
                 log_skip=1,
                 markerfacecolor='auto',
                 markeredgecolor='auto',
-                markeredgewidth=1):
+                markeredgewidth=''):
         
         self.lines.append({'x':x,
                            'y':y,
@@ -704,6 +733,7 @@ class PlotData:
                 markeredgewidth = x_data[12]
             else:
                 markeredgewidth = 1
+                
             self.lines.append({'x':x,
                                'y':y,
                                'xlabel':xlabel,

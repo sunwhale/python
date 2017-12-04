@@ -132,9 +132,16 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
             period = float(experiment_log.obtainItem(name,'period',regular)[0])
             expriment_life = int(experiment_log.obtainItem(name,'comments',regular)[0])
             equivalent_strain = float(experiment_log.obtainItem(name,'equivalent_strain',regular)[0])
+            """
+            使用计算模拟结果。
+            """
             sim = SimulationData(SimulationDirectory+name+'.csv',period)
-#            exp = ExperimentData(ExperimentDirectory+name+'.csv')
             data = calculate_data_fatigue_life(sim,material,fatigue_model)
+            """
+            使用试验结果。
+            """
+#            exp = ExperimentData(ExperimentDirectory+name+'.csv')
+#            data = calculate_data_fatigue_life(exp,material,fatigue_model)
             
             line = '' # write to csv
             line += '%s,' % (expriment_life) # write to csv

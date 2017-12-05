@@ -14,11 +14,11 @@ from Constants import *
 from plot_format import plot_format
 from Material import material_in718,material_in718_NASA,material_in718_BHU
 
-def create_plot_data_cmp_pv_TCIPTGMF(figure_path=None,figure_name=None):
+def create_plot_data_cmp_half_life_cycle_TC90(figure_path=None,figure_name=None):
 #==============================================================================
 # x,y label
 #==============================================================================
-    xlabel = xylabels['axial_count']
+    xlabel = xylabels['axial_strain']
     ylabel = xylabels['axial_stress']
 #==============================================================================
 # plot lines
@@ -29,7 +29,7 @@ def create_plot_data_cmp_pv_TCIPTGMF(figure_path=None,figure_name=None):
     plot_data = PlotData()
     experiment_log = ExperimentLog(ExperimentLogFile)
 #    for name in experiment_type_dict['TC-IP-TGMF']+experiment_type_dict['TC-OP-TGMF']+['7301']:
-    for name in experiment_type_dict['TC-IP-TGMF']:
+    for name in experiment_type_dict['TC-90']:
 #    for name in ['7208']:
         experiment_log.output(name)
         regular = r'.*'
@@ -52,11 +52,11 @@ def create_plot_data_cmp_pv_TCIPTGMF(figure_path=None,figure_name=None):
         
         exp_filename = ExperimentDirectory + name + '.csv'
         experiment = ExperimentData(exp_filename)
-        cycle,peak,valley = experiment.obtainPeakValley('axial_stress')
-        mean = (np.array(peak) + np.array(valley))/2
+        strain = experiment.obtainNthCycle('axial_strain',experiment.half_life_cycle)
+        stress = experiment.obtainNthCycle('axial_stress',experiment.half_life_cycle)
     
-        plot_data.addLine(cycle,
-                          peak,
+        plot_data.addLine(strain*100,
+                          stress,
                           xlabel=xlabel,
                           ylabel=ylabel,
                           linelabel=str(axial_strain) + '%',
@@ -65,63 +65,19 @@ def create_plot_data_cmp_pv_TCIPTGMF(figure_path=None,figure_name=None):
                           marker=marker_list[i],
                           markersize=12,
                           color=color_list[i],
-                          skip=1,
-                          log_skip=2)
-        plot_data.addLine(cycle,
-                          mean,
-                          xlabel=xlabel,
-                          ylabel=ylabel,
-                          linelabel='',
-                          linewidth=2,
-                          linestyle='',
-                          marker=marker_list[i],
-                          markersize=12,
-                          color=color_list[i],
-                          skip=1,
-                          log_skip=2)
-        plot_data.addLine(cycle,
-                          valley,
-                          xlabel=xlabel,
-                          ylabel=ylabel,
-                          linelabel='',
-                          linewidth=2,
-                          linestyle='',
-                          marker=marker_list[i],
-                          markersize=12,
-                          color=color_list[i],
-                          skip=1,
-                          log_skip=2)
+                          skip=10,
+                          log_skip=1)
                           
         sim_filename = SimulationDirectory + name + '.csv'
         simulation = SimulationData(sim_filename,period)
-        cycle,peak,valley = simulation.obtainPeakValley('axial_stress')
-        mean = (np.array(peak) + np.array(valley))/2
+        strain = simulation.obtainNthCycle('axial_strain',simulation.total_axial_count-1)
+        stress = simulation.obtainNthCycle('axial_stress',simulation.total_axial_count-1)
         
-        plot_data.addLine(cycle,
-                          peak,
+        plot_data.addLine(strain*100,
+                          stress,
                           xlabel=xlabel,
                           ylabel=ylabel,
                           linelabel=str(axial_strain) + '%',
-                          linewidth=2,
-                          linestyle='-',
-                          marker=None,
-                          markersize=12,
-                          color=color_list[i])
-        plot_data.addLine(cycle,
-                          mean,
-                          xlabel=xlabel,
-                          ylabel=ylabel,
-                          linelabel='',
-                          linewidth=2,
-                          linestyle='-',
-                          marker=None,
-                          markersize=12,
-                          color=color_list[i])
-        plot_data.addLine(cycle,
-                          valley,
-                          xlabel=xlabel,
-                          ylabel=ylabel,
-                          linelabel='',
                           linewidth=2,
                           linestyle='-',
                           marker=None,
@@ -132,7 +88,7 @@ def create_plot_data_cmp_pv_TCIPTGMF(figure_path=None,figure_name=None):
     
     plot_data.writeToFile(figure_path,figure_name)
     
-def plot_cmp_pv_TCIPTGMF(figure_path=None,figure_name=None,save_types=[]):
+def plot_cmp_half_life_cycle_TC90(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # title
 #==============================================================================
@@ -157,12 +113,12 @@ def plot_cmp_pv_TCIPTGMF(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # x,y limite
 #==============================================================================
-    plt.xlim(1,1e5)
-#    plt.ylim(-200,200)
+    plt.xlim(-1,1)
+    plt.ylim(-1200,1200)
 #==============================================================================
 # xy log scale
 #==============================================================================
-    plt.xscale('log')
+#    plt.xscale('log')
 #    plt.yscale('log')
 #==============================================================================
 # xy axial equal
@@ -179,16 +135,16 @@ def plot_cmp_pv_TCIPTGMF(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # http://stackoverflow.com/questions/21920233/matplotlib-log-scale-tick-label-number-formatting
 #==============================================================================
-#    ax.xaxis.set_major_locator(MultipleLocator(0.5))
-#    ax.xaxis.set_minor_locator(MultipleLocator(0.1))
-#    ax.xaxis.set_major_formatter(ScalarFormatter())
-#    ax.yaxis.set_major_locator(MultipleLocator(500))
+    ax.xaxis.set_major_locator(MultipleLocator(0.5))
+    ax.xaxis.set_minor_locator(MultipleLocator(0.1))
+    ax.xaxis.set_major_formatter(ScalarFormatter())
+    ax.yaxis.set_major_locator(MultipleLocator(400))
     ax.yaxis.set_minor_locator(MultipleLocator(100))
-#    ax.yaxis.set_major_formatter(ScalarFormatter())
+    ax.yaxis.set_major_formatter(ScalarFormatter())
 #==============================================================================
 # show legend
 #==============================================================================
-    lg = plt.legend(title='$\Delta\\varepsilon/2$',loc=1)
+    lg = plt.legend(title='$\Delta\\varepsilon/2$',loc=0)
     title = lg.get_title()
     title.set_fontsize(16)
 #==============================================================================
@@ -202,8 +158,8 @@ def plot_cmp_pv_TCIPTGMF(figure_path=None,figure_name=None,save_types=[]):
     plt.close()
 
 figure_path=ArticleFigureDirectory
-figure_name='plot_cmp_pv_TCIPTGMF'
-#create_plot_data_cmp_pv_TCIPTGMF(figure_path,figure_name)
-plot_cmp_pv_TCIPTGMF(figure_path,figure_name,save_types=['.pdf'])
+figure_name='plot_cmp_half_life_cycle_TC90'
+create_plot_data_cmp_half_life_cycle_TC90(figure_path,figure_name)
+plot_cmp_half_life_cycle_TC90(figure_path,figure_name,save_types=['.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

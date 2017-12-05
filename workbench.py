@@ -63,7 +63,7 @@ def workbench(name,loading_cycles=None,copy=True):
     axial_strain = axial_strain/100.0
     shear_strain = np.deg2rad(angel_strain)*d_out/2.0/gauge_length
     if loading_cycles == None:
-        loading_cycles = int(predicted_life/4.0)
+        loading_cycles = int(predicted_life/2.0)
     use_exp_data = True
 #==============================================================================
 # Diamond path TMF IP
@@ -131,7 +131,7 @@ def workbench(name,loading_cycles=None,copy=True):
 #              min_inc = 0.0001, max_inc = 5, nonlinear = 'ON')
     step = Step(predefined_temperature = temperature_mean, 
               time_period = int(load.total_runing_time), initial_inc = 0.005, 
-              min_inc = 0.0001, max_inc = period/20.0, nonlinear = 'OFF')
+              min_inc = 0.0001, max_inc = period/40.0, nonlinear = 'OFF')
 #==============================================================================
 # UMAT
 #==============================================================================

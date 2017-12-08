@@ -16,7 +16,7 @@ for name in experiment_type_dict['TC-IP']+experiment_type_dict['TC-OP']+experime
 # -*- coding: utf-8 -*-
 from Constants import *
 from Data import *
-from workbench_convection import workbench
+from workbench import workbench
 name = '%s'
 exp_filename = ExperimentDirectory + name + '.csv'
 experiment = ExperimentData(exp_filename)

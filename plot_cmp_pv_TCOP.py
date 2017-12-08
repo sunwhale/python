@@ -14,7 +14,7 @@ from Constants import *
 from plot_format import plot_format
 from Material import material_in718,material_in718_NASA,material_in718_BHU
 
-def create_plot_data_cmp_pv_TCIP(figure_path=None,figure_name=None):
+def create_plot_data_cmp_pv_TCOP(figure_path=None,figure_name=None):
 #==============================================================================
 # x,y label
 #==============================================================================
@@ -29,7 +29,7 @@ def create_plot_data_cmp_pv_TCIP(figure_path=None,figure_name=None):
     plot_data = PlotData()
     experiment_log = ExperimentLog(ExperimentLogFile)
 #    for name in experiment_type_dict['TC-IP-TGMF']+experiment_type_dict['TC-OP-TGMF']+['7301']:
-    for name in experiment_type_dict['TC-IP']:
+    for name in experiment_type_dict['TC-OP']:
 #    for name in ['7208']:
         experiment_log.output(name)
         regular = r'.*'
@@ -132,7 +132,7 @@ def create_plot_data_cmp_pv_TCIP(figure_path=None,figure_name=None):
     
     plot_data.writeToFile(figure_path,figure_name)
     
-def plot_cmp_pv_TCIP(figure_path=None,figure_name=None,save_types=[]):
+def plot_cmp_pv_TCOP(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # title
 #==============================================================================
@@ -202,8 +202,8 @@ def plot_cmp_pv_TCIP(figure_path=None,figure_name=None,save_types=[]):
     plt.close()
 
 figure_path=ArticleFigureDirectory
-figure_name='plot_cmp_pv_TCIP'
-#create_plot_data_cmp_pv_TCIP(figure_path,figure_name)
-plot_cmp_pv_TCIP(figure_path,figure_name,save_types=['.pdf'])
+figure_name='plot_cmp_pv_TCOP'
+create_plot_data_cmp_pv_TCOP(figure_path,figure_name)
+plot_cmp_pv_TCOP(figure_path,figure_name,save_types=['.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

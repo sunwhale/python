@@ -27,7 +27,7 @@ s.sketchOptions.setValues(viewStyle=AXISYM)
 s.setPrimaryObject(option=STANDALONE)
 s.ConstructionLine(point1=(0.0, -100.0), point2=(0.0, 100.0))
 s.FixedConstraint(entity=g[2])
-s.rectangle(point1=(3.25, 0.0), point2=(4.25, 1.0))
+s.rectangle(point1=(3.25, 0.0), point2=(4.25, 3.0))
 p = mdb.models['Model-1'].Part(name='Part-1', dimensionality=AXISYMMETRIC, type=DEFORMABLE_BODY, twist=ON)
 p = mdb.models['Model-1'].parts['Part-1']
 p.BaseShell(sketch=s)
@@ -56,8 +56,8 @@ mdb.models['Model-1'].materials[materialname].Conductivity(temperatureDependency
 #mdb.models['Model-1'].materials[materialname].Conductivity(temperatureDependency=ON, table=((10.0, 11), (14.7, 100), (15.9, 200), (17.8, 300), (18.3, 400), (19.6, 500), (21.2, 600), (22.8, 700), (23.6, 800), (27.6, 900), (30.4, 1000), ))
 #mdb.models['Model-1'].materials[materialname].SpecificHeat(temperatureDependency=ON, table=((481.4E6, 300), (493.9E6, 400), (514.8E6, 500), (539E6, 600), (573.4E6, 700), (615.3E6, 800), (657.2E6, 900), (707.4E6, 1000), ))
 #mdb.models['Model-1'].materials[materialname].Expansion(temperatureDependency=ON, table=((9.1E-6, -253), (11E-6, -183), (11.8E-6, 20), (11.8E-6, 100), (13E-6, 200), (13.5E-6, 300), (14.1E-6, 400), (14.4E-6, 500), (14.8E-6, 600), (15.4E-6, 700), (17E-6, 800), (18.4E-6, 900), (18.7E-6, 1000), ))
-mdb.models['Model-1'].materials['Material-1'].Expansion(table=((0.0e-06, ), ))
-#mdb.models['Model-1'].materials['Material-1'].Expansion(table=((7.5e-06, ), ))
+#mdb.models['Model-1'].materials['Material-1'].Expansion(table=((0.0e-06, ), ))
+mdb.models['Model-1'].materials['Material-1'].Expansion(table=((7.5e-06, ), ))
 mdb.models['Model-1'].HomogeneousSolidSection(name='Section-1', material=materialname, thickness=None)
 
 #materialname='GH4169'
@@ -118,13 +118,23 @@ session.viewports['Viewport: 1'].setValues(displayedObject=p1)
 # seed edges 
 p = mdb.models['Model-1'].parts['Part-1']
 e = p.edges
-pickedEdges = e.getSequenceFromMask(mask=('[#1 ]', ), )
+pickedEdges = e.getSequenceFromMask(mask=('[#1 ]', ), ) # bottom face
 p.seedEdgeByNumber(edges=pickedEdges, number=5, constraint=FINER)
 
 p = mdb.models['Model-1'].parts['Part-1']
 e = p.edges
-pickedEdges = e.getSequenceFromMask(mask=('[#8 ]', ), )
+pickedEdges = e.getSequenceFromMask(mask=('[#4 ]', ), ) # top face
 p.seedEdgeByNumber(edges=pickedEdges, number=5, constraint=FINER)
+
+p = mdb.models['Model-1'].parts['Part-1']
+e = p.edges
+pickedEdges = e.getSequenceFromMask(mask=('[#2 ]', ), ) # outer face
+p.seedEdgeByNumber(edges=pickedEdges, number=9, constraint=FINER)
+
+p = mdb.models['Model-1'].parts['Part-1']
+e = p.edges
+pickedEdges = e.getSequenceFromMask(mask=('[#8 ]', ), ) # inner face
+p.seedEdgeByNumber(edges=pickedEdges, number=9, constraint=FINER)
 # element type
 elemType1 = mesh.ElemType(elemCode=CGAX8T, elemLibrary=STANDARD)
 elemType2 = mesh.ElemType(elemCode=CGAX6MT, elemLibrary=STANDARD, 
@@ -250,7 +260,7 @@ a = mdb.models['Model-1'].rootAssembly
 e1 = a.instances['Part-1-1'].edges
 edges1 = e1.getSequenceFromMask(mask=('[#4 ]', ), )
 region = regionToolset.Region(edges=edges1)
-mdb.models['Model-1'].DisplacementBC(name='BC-3', createStepName='Step-1', region=region, u1=UNSET, u2=1.0, ur2=UNSET, ur3=UNSET, amplitude='DispTriangularWave', fixed=OFF, distributionType=UNIFORM, fieldName='', localCsys=None)
+mdb.models['Model-1'].DisplacementBC(name='BC-3', createStepName='Step-1', region=region, u1=UNSET, u2=3.0, ur2=UNSET, ur3=UNSET, amplitude='DispTriangularWave', fixed=OFF, distributionType=UNIFORM, fieldName='', localCsys=None)
 # top y direction rotation
 a = mdb.models['Model-1'].rootAssembly
 e1 = a.instances['Part-1-1'].edges

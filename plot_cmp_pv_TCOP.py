@@ -196,7 +196,7 @@ def plot_cmp_pv_TCOP(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
     if figure_path <> None and figure_name<> None:
         for save_type in save_types:
-            plt.savefig(figure_path + figure_name + save_type, dpi=150)
+            plt.savefig(figure_path + figure_name + save_type, dpi=150, transparent=True)
             print 'save as', figure_path + figure_name + save_type
     plt.show()
     plt.close()

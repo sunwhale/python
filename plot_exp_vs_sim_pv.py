@@ -54,7 +54,7 @@ def plot_exp_vs_sim_pv(name,item='axial_stress',save_types=['.png','.pdf']):
         print 'Create new directory:',ArticleFigureDirectory
     if figure_path <> None and figure_name<> None:
         for save_type in save_types:
-            plt.savefig(figure_path + figure_name + save_type, dpi=150)
+            plt.savefig(figure_path + figure_name + save_type, dpi=150, transparent=True)
             print 'save as', figure_path + figure_name + save_type
             
     plt.show()

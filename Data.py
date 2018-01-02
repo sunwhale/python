@@ -174,7 +174,7 @@ class ExperimentData:
         outfile.writelines('cycles,sec,C,mm,N,mm/mm,MPa,deg,N*m,-,MPa,-,mm/mm,mm/mm\n')
         
         for i,time in enumerate(self.runing_time[:]):
-            local_time = time % period
+            local_time = (time - self.runing_time[self.axial_count_begin_index[self.axial_count[i]]]) % period
             time_list_tmp = time_list + [local_time]
             time_list_tmp.sort()
             point_front = time_list_tmp.index(local_time) - 1
@@ -205,6 +205,37 @@ class ExperimentData:
 
         outfile.close()
 
+    def updateStress(self):
+        outfile = open(self.filename, 'w')
+        print 'writing: ' + self.filename
+        print
+        outfile.writelines('Axial Segment Count,Running Time,Temperature,Axial Displacement,Axial Force,Axial Strain,Axial Stress,Rotation,Torque,Angle Strain,Shear Stress,Equivalent Plastic Strain,Thermal Strain,Axial Total Strain\n')
+        outfile.writelines('cycles,sec,C,mm,N,mm/mm,MPa,deg,N*m,-,MPa,-,mm/mm,mm/mm\n')
+        
+        for i,time in enumerate(self.runing_time[:]):
+            add_stress = (self.axial_count[i])**0.55 * 2.9
+            print add_stress
+            self.axial_stress[i] += add_stress - 20
+
+            line = ''
+            line += '%s,' % (self.axial_count[i])
+            line += '%s,' % (self.runing_time[i])
+            line += '%s,' % (self.temperature[i])
+            line += '%s,' % (self.axial_disp[i])
+            line += '%s,' % (self.axial_force[i])
+            line += '%s,' % (self.axial_strain[i])
+            line += '%s,' % (self.axial_stress[i])
+            line += '%s,' % (self.rotation[i])
+            line += '%s,' % (self.torque[i])
+            line += '%s,' % (self.shear_strain[i])
+            line += '%s,' % (self.shear_stress [i])
+            line += '%s,' % (self.eqpl_strain [i])
+            line += '%s,' % (self.thermal_strain [i])
+            line += '%s,' % (self.total_strain [i])
+
+            print >>outfile, line[:-1]
+
+        outfile.close()
 if __name__ == '__main__':
     name = '7203'
     exp_filename = ExperimentDirectory + name + '.csv'

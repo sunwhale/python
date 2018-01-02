@@ -22,6 +22,7 @@ SimulationDirectory = 'F:\\Cloud\\Temp\\IN718_Sim\\'
 ExperimentLogFile = PythonDirectory + 'Inconel718_test_log.csv'
 FatigueDirectory = 'F:\\Database\\Fatigue\\'
 ArticleFigureDirectory = 'F:\\Cloud\\GitHub\\doctor\\Figs\\python\\'
+#ArticleFigureDirectory = 'F:\\Cloud\\GitHub\\tgmf\\Figs\\'
 
 experiment_type_list = []
 experiment_type_list.append(['TC-IP',['7031','7047','7030','7018']])
@@ -43,7 +44,7 @@ experiment_type_dict['TC-90']=['7025']
 #experiment_type_dict['TC-IF']=['7110','7111','7112','7113','7114','7115','7116']
 experiment_type_dict['TC-IF']=['7116','7112','7110','7111','7113','7115','7114']
 experiment_type_dict['TC-IP-TGMF']=['7204','7203','7206','7205']
-experiment_type_dict['TC-OP-TGMF']=['7209','7207','7208','7210']
+experiment_type_dict['TC-OP-TGMF']=['7210','7209','7207','7208']
 experiment_type_dict['TC-IP-TGMF-TBC']=['7301','7302']
 
 #==============================================================================
@@ -126,6 +127,7 @@ xylabels = {'axial_count':'N [cycle]',
             'equivalent_strain_amplitude':'Equivalent Strain Amplitude $\Delta\\varepsilon_{\\rm{ep}}/2$ [%]',
             'experimental_life':'Experimental Fatigue Lifetime $N_{\\rm{f}}$',
             'predicted_life':'Predicted Fatigue Lifetime $N_{\\rm{p}}$',
+            'mean_stress':'Mean Stress $\sigma_{m}$ [MPa]',
             }
             
 #==============================================================================

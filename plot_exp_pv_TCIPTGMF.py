@@ -152,6 +152,16 @@ def plot_exp_pv_TCIPTGMF(figure_path=None,figure_name=None,save_types=[]):
     ax.yaxis.set_minor_locator(MultipleLocator(100))
 #    ax.yaxis.set_major_formatter(ScalarFormatter())
 #==============================================================================
+# annotate
+#==============================================================================
+    plt.text(10,1000,r'Peak stress',fontsize=14)
+    plt.text(10,0,r'Mean stress',fontsize=14)
+    plt.text(10,-900,r'Valley stress',fontsize=14)
+    
+#    plt.annotate(r'Peak stresses',xy=(1,1000),xytext=(100,1000),fontsize=14,color='black',arrowprops=dict(arrowstyle='->',color='black'))
+#    plt.annotate(r'Mean stresses',xy=(1,0),xytext=(100,0),fontsize=14,color='black',arrowprops=dict(arrowstyle='->',color='black'))
+#    plt.annotate(r'Valley stresses',xy=(1,-1000),xytext=(100,-1000),fontsize=14,color='black',arrowprops=dict(arrowstyle='->',color='black'))
+#==============================================================================
 # show legend
 #==============================================================================
     lg = plt.legend(title='$\Delta\\varepsilon/2$',loc=1)

@@ -14,7 +14,7 @@ from Constants import *
 from plot_format import plot_format
 from Material import material_in718,material_in718_NASA,material_in718_BHU
 
-def create_plot_data_exp_pv_TCOPTGMF(figure_path=None,figure_name=None):
+def create_plot_data_exp_mean_TCIPTGMF(figure_path=None,figure_name=None):
 #==============================================================================
 # x,y label
 #==============================================================================
@@ -29,7 +29,7 @@ def create_plot_data_exp_pv_TCOPTGMF(figure_path=None,figure_name=None):
     plot_data = PlotData()
     experiment_log = ExperimentLog(ExperimentLogFile)
 #    for name in experiment_type_dict['TC-IP-TGMF']+experiment_type_dict['TC-OP-TGMF']+['7301']:
-    for name in experiment_type_dict['TC-OP-TGMF']:
+    for name in experiment_type_dict['TC-IP-TGMF']:
 #    for name in ['7208']:
         experiment_log.output(name)
         regular = r'.*'
@@ -55,7 +55,7 @@ def create_plot_data_exp_pv_TCOPTGMF(figure_path=None,figure_name=None):
         cycle,peak,valley = experiment.obtainPeakValley('axial_stress')
 #        cycle,peak,valley = experiment.obtainPeakValley('total_strain')
         mean = (np.array(peak) + np.array(valley))/2
-        
+        ylabel = xylabels['mean_stress']
 #        strain_amp = (np.array(peak) - np.array(valley))
 #        
 #        plt.plot(strain_amp[:10])
@@ -64,8 +64,18 @@ def create_plot_data_exp_pv_TCOPTGMF(figure_path=None,figure_name=None):
 #        print name,axial_displacement,material.calcStrainAmplitude(peak[int(life/2.0)])*2.0,peak[int(life/2.0)],valley[int(life/2.0)],life
 #        print name,axial_displacement,material.calcStrain(-1.0*valley[0]),(peak[0]-valley[0])/2.0,life
         
+#        plot_data.addLine(cycle,
+#                          peak,
+#                          xlabel=xlabel,
+#                          ylabel=ylabel,
+#                          linelabel=str(axial_strain) + '%',
+#                          linewidth=2,
+#                          linestyle='-',
+#                          marker=None,
+#                          markersize=12,
+#                          color=color_list[i])
         plot_data.addLine(cycle,
-                          peak,
+                          mean,
                           xlabel=xlabel,
                           ylabel=ylabel,
                           linelabel=str(axial_strain) + '%',
@@ -74,31 +84,21 @@ def create_plot_data_exp_pv_TCOPTGMF(figure_path=None,figure_name=None):
                           marker=None,
                           markersize=12,
                           color=color_list[i])
-        plot_data.addLine(cycle,
-                          mean,
-                          xlabel=xlabel,
-                          ylabel=ylabel,
-                          linelabel='',
-                          linewidth=2,
-                          linestyle='-',
-                          marker=None,
-                          markersize=12,
-                          color=color_list[i])
-        plot_data.addLine(cycle,
-                          valley,
-                          xlabel=xlabel,
-                          ylabel=ylabel,
-                          linelabel='',
-                          linewidth=2,
-                          linestyle='-',
-                          marker=None,
-                          markersize=12,
-                          color=color_list[i])
+#        plot_data.addLine(cycle,
+#                          valley,
+#                          xlabel=xlabel,
+#                          ylabel=ylabel,
+#                          linelabel='',
+#                          linewidth=2,
+#                          linestyle='-',
+#                          marker=None,
+#                          markersize=12,
+#                          color=color_list[i])
         i += 1
     
     plot_data.writeToFile(figure_path,figure_name)
     
-def plot_exp_pv_TCOPTGMF(figure_path=None,figure_name=None,save_types=[]):
+def plot_exp_mean_TCIPTGMF(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # title
 #==============================================================================
@@ -124,7 +124,7 @@ def plot_exp_pv_TCOPTGMF(figure_path=None,figure_name=None,save_types=[]):
 # x,y limite
 #==============================================================================
     plt.xlim(1,10000)
-#    plt.ylim(-200,200)
+    plt.ylim(-150,0)
 #==============================================================================
 # xy log scale
 #==============================================================================
@@ -148,15 +148,15 @@ def plot_exp_pv_TCOPTGMF(figure_path=None,figure_name=None,save_types=[]):
 #    ax.xaxis.set_major_locator(MultipleLocator(0.5))
 #    ax.xaxis.set_minor_locator(MultipleLocator(0.1))
 #    ax.xaxis.set_major_formatter(ScalarFormatter())
-#    ax.yaxis.set_major_locator(MultipleLocator(500))
-    ax.yaxis.set_minor_locator(MultipleLocator(100))
-#    ax.yaxis.set_major_formatter(ScalarFormatter())
+    ax.yaxis.set_major_locator(MultipleLocator(50))
+    ax.yaxis.set_minor_locator(MultipleLocator(10))
+    ax.yaxis.set_major_formatter(ScalarFormatter())
 #==============================================================================
 # annotate
 #==============================================================================
-    plt.text(10,1100,r'Peak stress',fontsize=14)
-    plt.text(10,100,r'Mean stress',fontsize=14)
-    plt.text(10,-700,r'Valley stress',fontsize=14)
+#    plt.text(10,1100,r'Peak stress',fontsize=14)
+#    plt.text(10,100,r'Mean stress',fontsize=14)
+#    plt.text(10,-700,r'Valley stress',fontsize=14)
     
 #    plt.annotate(r'Peak stresses',xy=(1,1000),xytext=(100,1000),fontsize=14,color='black',arrowprops=dict(arrowstyle='->',color='black'))
 #    plt.annotate(r'Mean stresses',xy=(1,0),xytext=(100,0),fontsize=14,color='black',arrowprops=dict(arrowstyle='->',color='black'))
@@ -164,7 +164,7 @@ def plot_exp_pv_TCOPTGMF(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # show legend
 #==============================================================================
-    lg = plt.legend(title='$\Delta\\varepsilon/2$',loc=1)
+    lg = plt.legend(title='$\Delta\\varepsilon/2$',loc=0)
     title = lg.get_title()
     title.set_fontsize(16)
 #==============================================================================
@@ -178,8 +178,8 @@ def plot_exp_pv_TCOPTGMF(figure_path=None,figure_name=None,save_types=[]):
     plt.close()
 
 figure_path=ArticleFigureDirectory
-figure_name='plot_exp_pv_TCOPTGMF'
-#create_plot_data_exp_pv_TCOPTGMF(figure_path,figure_name)
-plot_exp_pv_TCOPTGMF(figure_path,figure_name,save_types=['.pdf'])
+figure_name='plot_exp_mean_TCIPTGMF'
+create_plot_data_exp_mean_TCIPTGMF(figure_path,figure_name)
+plot_exp_mean_TCIPTGMF(figure_path,figure_name,save_types=['.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

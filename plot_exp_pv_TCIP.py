@@ -167,7 +167,7 @@ def plot_exp_pv_TCIP(figure_path=None,figure_name=None,save_types=[]):
 
 figure_path=ArticleFigureDirectory
 figure_name='plot_exp_pv_TCIP'
-create_plot_data_exp_pv_TCIP(figure_path,figure_name)
+#create_plot_data_exp_pv_TCIP(figure_path,figure_name)
 plot_exp_pv_TCIP(figure_path,figure_name,save_types=['.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

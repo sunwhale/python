@@ -115,7 +115,7 @@ def plot_exp_half_life_cycle_TCOPTGMF(figure_path=None,figure_name=None,save_typ
     ax.xaxis.set_major_locator(MultipleLocator(0.5))
     ax.xaxis.set_minor_locator(MultipleLocator(0.1))
     ax.xaxis.set_major_formatter(ScalarFormatter())
-    ax.yaxis.set_major_locator(MultipleLocator(500))
+    ax.yaxis.set_major_locator(MultipleLocator(400))
     ax.yaxis.set_minor_locator(MultipleLocator(100))
     ax.yaxis.set_major_formatter(ScalarFormatter())
 #==============================================================================

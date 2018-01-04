@@ -136,6 +136,7 @@ class Node:
         max_normal_stress_index = normal_stress_list.index(max_normal_stress)
         temperature_at_sigma_nmax = self.temperature_list[max_normal_stress_index]
         return temperature_at_sigma_nmax
+        
     def heatfluxAtsigmaNMax(self, transformation):
         normal_stress_list = self.normalStress(transformation)
         max_normal_stress = max(normal_stress_list)
@@ -678,7 +679,6 @@ class Node:
         print sigma_phi, tau_phi
         print epsilon_phi, gamma_phi_half
 
-        
     def lifeTest(self):
         youngs_modulus = 210000.0
         shear_modulus = 80800.0
@@ -709,6 +709,11 @@ class Node:
         e12 = np.array(gamma)/2.0
         e13 = np.zeros(length)
         e23 = np.zeros(length)
+        heat_flux_1 = np.zeros(length)
+        heat_flux_2 = np.zeros(length)
+        self.heatflux_list = []
+        for i in range(length):
+            self.heatflux_list.append([heat_flux_1[i],heat_flux_2[i]])
         stress=[]
         strain=[]
         for i in range(length):
@@ -727,14 +732,6 @@ class Node:
         self.fatigueLifeLiu2Model(material)
         self.fatigueLifeChuModel(material)
         
-    def Tanaka(self):
-        theta_deg=90.0
-        phi_deg=0.0
-        theta=np.radians(theta_deg)
-        phi=np.radians(phi_deg)
-        stress_list=[[2.0,1.0,0.0],[1.0,0.0,0.0],[0.0,0.0,0.0]]
-        
-n = Node(dimension=3)
-#n.lifeTest()
+n = Node(dimension=2)
+n.lifeTest()
 #n.mathematicsTest()
-n.Tanaka()

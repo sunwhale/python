@@ -74,16 +74,16 @@ def create_plot_data_exp_pv_TCIPTGMF(figure_path=None,figure_name=None):
                           marker=None,
                           markersize=12,
                           color=color_list[i])
-        plot_data.addLine(cycle,
-                          mean,
-                          xlabel=xlabel,
-                          ylabel=ylabel,
-                          linelabel='',
-                          linewidth=2,
-                          linestyle='-',
-                          marker=None,
-                          markersize=12,
-                          color=color_list[i])
+#        plot_data.addLine(cycle,
+#                          mean,
+#                          xlabel=xlabel,
+#                          ylabel=ylabel,
+#                          linelabel='',
+#                          linewidth=2,
+#                          linestyle='-',
+#                          marker=None,
+#                          markersize=12,
+#                          color=color_list[i])
         plot_data.addLine(cycle,
                           valley,
                           xlabel=xlabel,
@@ -124,7 +124,7 @@ def plot_exp_pv_TCIPTGMF(figure_path=None,figure_name=None,save_types=[]):
 # x,y limite
 #==============================================================================
 #    plt.xlim(1,10000)
-#    plt.ylim(-200,200)
+    plt.ylim(-1200,1200)
 #==============================================================================
 # xy log scale
 #==============================================================================
@@ -148,15 +148,15 @@ def plot_exp_pv_TCIPTGMF(figure_path=None,figure_name=None,save_types=[]):
 #    ax.xaxis.set_major_locator(MultipleLocator(0.5))
 #    ax.xaxis.set_minor_locator(MultipleLocator(0.1))
 #    ax.xaxis.set_major_formatter(ScalarFormatter())
-#    ax.yaxis.set_major_locator(MultipleLocator(500))
+    ax.yaxis.set_major_locator(MultipleLocator(400))
     ax.yaxis.set_minor_locator(MultipleLocator(100))
-#    ax.yaxis.set_major_formatter(ScalarFormatter())
+    ax.yaxis.set_major_formatter(ScalarFormatter())
 #==============================================================================
 # annotate
 #==============================================================================
-    plt.text(10,1000,r'Peak stress',fontsize=14)
-    plt.text(10,0,r'Mean stress',fontsize=14)
-    plt.text(10,-900,r'Valley stress',fontsize=14)
+#    plt.text(10,1000,r'Peak stress',fontsize=14)
+#    plt.text(10,0,r'Mean stress',fontsize=14)
+#    plt.text(10,-900,r'Valley stress',fontsize=14)
     
 #    plt.annotate(r'Peak stresses',xy=(1,1000),xytext=(100,1000),fontsize=14,color='black',arrowprops=dict(arrowstyle='->',color='black'))
 #    plt.annotate(r'Mean stresses',xy=(1,0),xytext=(100,0),fontsize=14,color='black',arrowprops=dict(arrowstyle='->',color='black'))
@@ -164,7 +164,7 @@ def plot_exp_pv_TCIPTGMF(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # show legend
 #==============================================================================
-    lg = plt.legend(title='$\Delta\\varepsilon/2$',loc=1)
+    lg = plt.legend(title='$\Delta\\varepsilon/2$',loc=6)
     title = lg.get_title()
     title.set_fontsize(16)
 #==============================================================================
@@ -179,7 +179,7 @@ def plot_exp_pv_TCIPTGMF(figure_path=None,figure_name=None,save_types=[]):
 
 figure_path=ArticleFigureDirectory
 figure_name='plot_exp_pv_TCIPTGMF'
-create_plot_data_exp_pv_TCIPTGMF(figure_path,figure_name)
+#create_plot_data_exp_pv_TCIPTGMF(figure_path,figure_name)
 plot_exp_pv_TCIPTGMF(figure_path,figure_name,save_types=['.png','.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

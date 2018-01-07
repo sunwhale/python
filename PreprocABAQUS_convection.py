@@ -27,7 +27,7 @@ s.sketchOptions.setValues(viewStyle=AXISYM)
 s.setPrimaryObject(option=STANDALONE)
 s.ConstructionLine(point1=(0.0, -100.0), point2=(0.0, 100.0))
 s.FixedConstraint(entity=g[2])
-s.rectangle(point1=(3.25, 0.0), point2=(4.25, 6.0))
+s.rectangle(point1=(3.25, 0.0), point2=(4.25, 12.0))
 p = mdb.models['Model-1'].Part(name='Part-1', dimensionality=AXISYMMETRIC, type=DEFORMABLE_BODY, twist=ON)
 p = mdb.models['Model-1'].parts['Part-1']
 p.BaseShell(sketch=s)
@@ -129,12 +129,12 @@ p.seedEdgeByNumber(edges=pickedEdges, number=5, constraint=FINER)
 p = mdb.models['Model-1'].parts['Part-1']
 e = p.edges
 pickedEdges = e.getSequenceFromMask(mask=('[#2 ]', ), ) # outer face
-p.seedEdgeByNumber(edges=pickedEdges, number=18, constraint=FINER)
+p.seedEdgeByNumber(edges=pickedEdges, number=36, constraint=FINER)
 
 p = mdb.models['Model-1'].parts['Part-1']
 e = p.edges
 pickedEdges = e.getSequenceFromMask(mask=('[#8 ]', ), ) # inner face
-p.seedEdgeByNumber(edges=pickedEdges, number=18, constraint=FINER)
+p.seedEdgeByNumber(edges=pickedEdges, number=36, constraint=FINER)
 # element type
 elemType1 = mesh.ElemType(elemCode=CGAX8T, elemLibrary=STANDARD)
 elemType2 = mesh.ElemType(elemCode=CGAX6MT, elemLibrary=STANDARD, 
@@ -273,8 +273,10 @@ e1 = a.instances['Part-1-1'].edges
 edges1 = e1.getSequenceFromMask(mask=('[#2 ]', ), )
 region = regionToolset.Region(edges=edges1)
 mdb.models['Model-1'].TemperatureBC(name='BC-5', createStepName='Step-1', region=region, fixed=OFF, distributionType=UNIFORM, fieldName='', magnitude=1.0, amplitude='TempTriangularWave')
+#mdb.models['Model-1'].ExpressionField(name='AnalyticalField-1', localCsys=None, 
+#    description='', expression='1-0.00526*Y')
 mdb.models['Model-1'].ExpressionField(name='AnalyticalField-1', localCsys=None, 
-    description='', expression='1-0.00526*Y')
+    description='', expression='(650-0.277778*Y*Y)/650')
 mdb.models['Model-1'].boundaryConditions['BC-5'].setValues(
     distributionType=FIELD, fieldName='AnalyticalField-1')
 # top y direction heat flux

@@ -197,7 +197,7 @@ figure_path = ArticleFigureDirectory
 figure_name = 'plot_elastic_by_temperature_in718'
 plot_data = PlotData(figure_path,figure_name,save_types=['.pdf'])
 
-create_plot_data_elastic_by_temperature_in718(plot_data)
+#create_plot_data_elastic_by_temperature_in718(plot_data)
 plot_elastic_by_temperature_in718(plot_data)
 
 shutil.copy(__file__,ArticleFigureDirectory)

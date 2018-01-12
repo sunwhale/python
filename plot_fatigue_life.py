@@ -101,8 +101,8 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # show legend
 #==============================================================================
-    plt.legend(loc=2)
-    plt.show()
+    plt.legend(loc=0)
+#    plt.show()
 #==============================================================================
 # save figures
 #==============================================================================
@@ -112,19 +112,19 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
             print 'save as', figure_path + figure_name + save_type
     plt.close()
 
-#fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
-fatigue_model_list = ['BM']
+fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
+#fatigue_model_list = ['BM']
 
 for fatigue_model in fatigue_model_list:
     fatigue_file = '%s%s.csv' % (FatigueDirectory,fatigue_model)
     fatigue_data = FatigueData(fatigue_file)
     figure_path = ArticleFigureDirectory
-    figure_name = 'NF-NP-'+fatigue_model
+    figure_name = 'NF-NP-TGMF-'+fatigue_model
     create_plot_data_fatigue_life(fatigue_data,figure_path,figure_name)
     
 for fatigue_model in fatigue_model_list:
     figure_path = ArticleFigureDirectory
-    figure_name = 'NF-NP-'+fatigue_model
+    figure_name = 'NF-NP-TGMF-'+fatigue_model
     plot_fatigue_life(figure_path,figure_name,save_types=['.pdf','.png'])
     
 shutil.copy(__file__,ArticleFigureDirectory)

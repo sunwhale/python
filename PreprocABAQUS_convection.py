@@ -260,7 +260,7 @@ a = mdb.models['Model-1'].rootAssembly
 e1 = a.instances['Part-1-1'].edges
 edges1 = e1.getSequenceFromMask(mask=('[#4 ]', ), )
 region = regionToolset.Region(edges=edges1)
-mdb.models['Model-1'].DisplacementBC(name='BC-3', createStepName='Step-1', region=region, u1=UNSET, u2=6.0, ur2=UNSET, ur3=UNSET, amplitude='DispTriangularWave', fixed=OFF, distributionType=UNIFORM, fieldName='', localCsys=None)
+mdb.models['Model-1'].DisplacementBC(name='BC-3', createStepName='Step-1', region=region, u1=UNSET, u2=12.0, ur2=UNSET, ur3=UNSET, amplitude='DispTriangularWave', fixed=OFF, distributionType=UNIFORM, fieldName='', localCsys=None)
 # top y direction rotation
 a = mdb.models['Model-1'].rootAssembly
 e1 = a.instances['Part-1-1'].edges

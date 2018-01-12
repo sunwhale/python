@@ -163,7 +163,7 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
     allresultfile.close() # write to csv all
     workbook.close() # write to excel
 
-#fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
-fatigue_model_list = ['BM']
+fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
+#fatigue_model_list = ['BM']
 for fatigue_model in fatigue_model_list:
     calculate_fatigue_life(fatigue_model)

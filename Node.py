@@ -520,11 +520,11 @@ class Node:
         transformation_critical_plane = []
 
         if self.dimension == 3:
-            theta_deg_list = range(0,180,1)
-            phi_deg_list = range(0,180,1)
+            theta_deg_list = range(0,180,5)
+            phi_deg_list = range(0,180,5)
         if self.dimension == 2:
             theta_deg_list = [90]
-            phi_deg_list = range(0,180,1)
+            phi_deg_list = range(0,180,5)
             
         return (delta_gamma_max,
                 delta_epsilon_max,

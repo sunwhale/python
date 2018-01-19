@@ -18,7 +18,15 @@ def create_plot_data_exp_fatigue_life(fatigue_data,figure_path=None,figure_name=
 # x,y label
 #==============================================================================
     xlabel = xylabels['experimental_life']
-    ylabel = xylabels['equivalent_strain_amplitude']
+#    ylabel = xylabels['equivalent_strain_amplitude']
+    ylabel = xylabels['axial_strain_amplitude']
+    label_dict = {'TC-IP':'TMF-IP',
+                  'TC-OP':'TMF-OP',
+                  'TC-IP-TGMF':'TGMF-IP',
+                  'TC-OP-TGMF':'TGMF-OP',
+                  'TC-IF':'IF',
+                  'TC-IP-TGMF-TBC':'TGMF-IP-TBC',
+                  }
 #==============================================================================
 # plot lines
 #==============================================================================
@@ -28,14 +36,16 @@ def create_plot_data_exp_fatigue_life(fatigue_data,figure_path=None,figure_name=
     i = 0
     marker_list = ['s','o','^','D','<','^','>']
 #    for load_type in ['TC-IP','TC-OP','PRO-IP','NPR-IP','TC-90','TC-IP-TGMF','TC-OP-TGMF']:
-    for load_type in ['TC-IP','TC-OP','TC-IP-TGMF','TC-OP-TGMF','TC-IP-TGMF-TBC']:
+#    for load_type in ['TC-IP','TC-OP','TC-IP-TGMF','TC-OP-TGMF','TC-IP-TGMF-TBC']:
+#    for load_type in ['TC-IP','TC-IP-TGMF']:
+    for load_type in ['TC-OP','TC-OP-TGMF']:
         experimental_life = fatigue_data.loadTypeFilter(load_type,'experimental_life')
         equivalent_strain_amplitude = fatigue_data.loadTypeFilter(load_type,'equivalent_strain_amplitude')
         plot_data.addLine(experimental_life,
                           equivalent_strain_amplitude,
                           xlabel=xlabel,
                           ylabel=ylabel,
-                          linelabel=load_type,
+                          linelabel=label_dict[load_type],
                           linewidth=2,
                           linestyle='',
                           marker=marker_list[i],
@@ -43,18 +53,18 @@ def create_plot_data_exp_fatigue_life(fatigue_data,figure_path=None,figure_name=
                           color='auto')
         i += 1
 
-    material = material_in718()
-    life,epsilon_amplitude = material.plotMansonCoffinAxial()
-    plot_data.addLine(life,
-                      epsilon_amplitude*100,
-                      xlabel=xlabel,
-                      ylabel=ylabel,
-                      linelabel='TC-IF',
-                      linewidth=2,
-                      linestyle='-',
-                      marker=None,
-                      markersize=12,
-                      color='black')
+#    material = material_in718()
+#    life,epsilon_amplitude = material.plotMansonCoffinAxial()
+#    plot_data.addLine(life,
+#                      epsilon_amplitude*100,
+#                      xlabel=xlabel,
+#                      ylabel=ylabel,
+#                      linelabel='TC-IF',
+#                      linewidth=2,
+#                      linestyle='-',
+#                      marker=None,
+#                      markersize=12,
+#                      color='black')
     
     plot_data.writeToFile(figure_path,figure_name)
     
@@ -125,7 +135,8 @@ def plot_exp_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
 fatigue_file = '%s%s.csv' % (FatigueDirectory,'BM')
 fatigue_data = FatigueData(fatigue_file)
 figure_path = ArticleFigureDirectory
-figure_name = 'plot_exp_fatigue_life'
+figure_name = 'plot_exp_fatigue_life_IP'
+figure_name = 'plot_exp_fatigue_life_OP'
 create_plot_data_exp_fatigue_life(fatigue_data,figure_path,figure_name)
 plot_exp_fatigue_life(figure_path,figure_name,save_types=['.pdf','.png'])
 

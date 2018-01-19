@@ -8,8 +8,8 @@ Created on Mon Feb 13 13:46:18 2017
 from Constants import *
 from Data import *
 
-#for name in experiment_type_dict['BIAXIAL']:
-for name in experiment_type_dict['TC-IP-TGMF']+experiment_type_dict['TC-OP-TGMF']+experiment_type_dict['TC-IP-TGMF-TBC']:
+for name in ['7201','7209']:
+#for name in experiment_type_dict['TC-IP-TGMF']+experiment_type_dict['TC-OP-TGMF']+experiment_type_dict['TC-IP-TGMF-TBC']:
     filename = 'umat_cal_in718_%s.cal' % name
     outfile = open(filename, 'w')
     print >>outfile,"""
@@ -67,7 +67,7 @@ for volume_flow in [50]:
     outfile.close()
 
 outfile = open('multi_calc.bat', 'w')
-#for name in experiment_type_dict['BIAXIAL']:
-for name in experiment_type_dict['TC-IP-TGMF']+experiment_type_dict['TC-OP-TGMF']+experiment_type_dict['TC-IP-TGMF-TBC']:
+for name in ['7201','7209']:
+#for name in experiment_type_dict['TC-IP-TGMF']+experiment_type_dict['TC-OP-TGMF']+experiment_type_dict['TC-IP-TGMF-TBC']:
     print >>outfile,'start python umat_cal_in718_%s.cal' % name
 outfile.close()

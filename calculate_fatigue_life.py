@@ -69,7 +69,7 @@ def calculate_data_fatigue_life(data,material,fatigue_model):
         fatigue_data = node.fatigueLifeLiu2Model(material)
     if fatigue_model == 'Chu':
         fatigue_data = node.fatigueLifeChuModel(material)
-    return fatigue_data
+    return fatigue_data, node
 
 #==============================================================================
 # calculate_fatigue_life
@@ -136,7 +136,7 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
             使用计算模拟结果。
             """
             sim = SimulationData(SimulationDirectory+name+'.csv',period)
-            data = calculate_data_fatigue_life(sim,material,fatigue_model)
+            data, node = calculate_data_fatigue_life(sim,material,fatigue_model)
             """
             使用试验结果。
             """
@@ -148,7 +148,7 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
             line += '%s,' % (equivalent_strain) # write to csv
             line += '%s,' % (0) # write to csv
             line += '%s,' % (name) # write to csv
-            for d in data: # write to csv
+            for d in data[1:]: # write to csv
                 line += '%s,' % (d) # write to csv
 #            print >>resultfile, line[:-1] # write to csv, ignore the last comma
             
@@ -163,7 +163,8 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
     allresultfile.close() # write to csv all
     workbook.close() # write to excel
 
-fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
-#fatigue_model_list = ['BM']
-for fatigue_model in fatigue_model_list:
-    calculate_fatigue_life(fatigue_model)
+if __name__ == '__main__':
+#    fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
+    fatigue_model_list = ['BM']
+    for fatigue_model in fatigue_model_list:
+        calculate_fatigue_life(fatigue_model)

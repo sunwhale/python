@@ -12,7 +12,8 @@ from Functions import calculate_conductivity_by_temperature_in718
 
 class Node:
     def __init__(self, nodelabel=1, dimension=2, time=[], coordinate=[], 
-                 displacement=[], stress=[], strain=[], temperature=[], heatflux=[]):
+                 displacement=[], stress=[], strain=[], temperature=[], heatflux=[],
+                 theta_interval=5, phi_interval=5):
         self.nodelabel = nodelabel
         self.dimension = dimension
         self.time_list = [t for t in time]
@@ -22,6 +23,9 @@ class Node:
         self.displacement_list = [[i for i in d[:dimension]] for d in displacement]
         self.strain_list = [[i[:dimension] for i in s[:dimension]] for s in strain]
         self.stress_list = [[i[:dimension] for i in s[:dimension]] for s in stress]
+        self.theta_interval = theta_interval
+        self.phi_interval = phi_interval
+        self.transformation_critical_plane = self.calcTransformation(0,0)
         
     def __str__(self):
         return 'node %s at time %s' % (str(int(self.nodelabel)),str(self.time))
@@ -143,7 +147,11 @@ class Node:
         max_normal_stress_index = normal_stress_list.index(max_normal_stress)
         heatflux_at_sigma_nmax = self.heatflux_list[max_normal_stress_index]
         return heatflux_at_sigma_nmax
-        
+    
+    def outputValuesAtCriticalPlane(self, transformation):
+        normal_stress_list = self.normalStress(transformation)
+        return [self.time_list,normal_stress_list,self.temperature_list,self.heatflux_list]
+    
     def fatigueLifeFSModel(self,Material,k=0.3):
         print '=========================FS model========================='
 
@@ -520,11 +528,11 @@ class Node:
         transformation_critical_plane = []
 
         if self.dimension == 3:
-            theta_deg_list = range(0,180,5)
-            phi_deg_list = range(0,180,5)
+            theta_deg_list = range(0,180,self.theta_interval)
+            phi_deg_list = range(0,180,self.phi_interval)
         if self.dimension == 2:
             theta_deg_list = [90]
-            phi_deg_list = range(0,180,5)
+            phi_deg_list = range(0,180,self.phi_interval)
             
         return (delta_gamma_max,
                 delta_epsilon_max,
@@ -547,6 +555,7 @@ class Node:
         return transformation
     
     def calcValuesAtCriticalPlane(self,transformation_critical_plane):
+        self.transformation_critical_plane = transformation_critical_plane
         sigma_nmax_critical_plane = self.sigmaNMax(transformation_critical_plane)
         delta_sigma_critical_plane = self.deltaSigma(transformation_critical_plane)
         delta_epsilon_critical_plane = self.deltaEpsilon(transformation_critical_plane)
@@ -601,8 +610,12 @@ class Node:
         temperature_gradient_at_sigma_nmax_critical_plane_x = heatflux_at_sigma_nmax_critical_plane[0]/calculate_conductivity_by_temperature_in718(temperature_at_sigma_nmax_critical_plane)
         temperature_gradient_at_sigma_nmax_critical_plane_y = heatflux_at_sigma_nmax_critical_plane[1]/calculate_conductivity_by_temperature_in718(temperature_at_sigma_nmax_critical_plane)
         
-        if self.dimension == 2:
-            return [phi_critical_plane,
+        if self.dimension == 3:
+            temperature_gradient_at_sigma_nmax_critical_plane_z = heatflux_at_sigma_nmax_critical_plane[2]/calculate_conductivity_by_temperature_in718(temperature_at_sigma_nmax_critical_plane)                    
+
+        if self.dimension == 3:
+            return [theta_critical_plane,
+                    phi_critical_plane,
                     sigma_nmax_critical_plane,
                     delta_sigma_critical_plane,
                     delta_epsilon_critical_plane,
@@ -613,7 +626,22 @@ class Node:
                     fatigue_coefficient,
                     temperature_at_sigma_nmax_critical_plane,
                     temperature_gradient_at_sigma_nmax_critical_plane_x,
-                    temperature_gradient_at_sigma_nmax_critical_plane_y]
+                    temperature_gradient_at_sigma_nmax_critical_plane_y,
+                    temperature_gradient_at_sigma_nmax_critical_plane_z]
+                    
+        return [theta_critical_plane,
+                phi_critical_plane,
+                sigma_nmax_critical_plane,
+                delta_sigma_critical_plane,
+                delta_epsilon_critical_plane,
+                tau_nmax_critical_plane,
+                delta_tau_critical_plane,
+                delta_gamma_critical_plane,
+                fatigue_life,
+                fatigue_coefficient,
+                temperature_at_sigma_nmax_critical_plane,
+                temperature_gradient_at_sigma_nmax_critical_plane_x,
+                temperature_gradient_at_sigma_nmax_critical_plane_y]
                 
     def mathematicsTest(self):
         theta_deg=90.0
@@ -731,7 +759,8 @@ class Node:
         self.fatigueLifeLiu1Model(material)
         self.fatigueLifeLiu2Model(material)
         self.fatigueLifeChuModel(material)
-        
-n = Node(dimension=2)
-n.lifeTest()
-#n.mathematicsTest()
+
+if __name__ == '__main__':
+    n = Node(dimension=2)
+    n.lifeTest()
+    #n.mathematicsTest()

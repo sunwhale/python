@@ -42,3 +42,8 @@ def plot_exp_pv(names,item='axial_stress'):
     
     plt.show()
     plt.close()
+    
+if __name__ == '__main__':
+    plot_exp_pv(['7031','7203'])
+#    plot_exp_pv(['7017','7208'])
+    

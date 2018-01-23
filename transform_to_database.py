@@ -81,7 +81,7 @@ def transform_to_database(inpath,outpath,name):
             FirstUnitLineNumber = None
             if FirstHeaderLineNumber <> None:
                 FirstUnitLineNumber = FirstHeaderLineNumber + 1
-                list2 = [i.strip() for i in list1[FirstHeaderLineNumber:]]
+                list2 = [i.strip() for i in list1[FirstHeaderLineNumber::]]
                 for i in range(1,len(list2)):
                     list2[i] = list2[i].replace('        ',' ')
                     list2[i] = list2[i].replace('       ',' ')
@@ -187,9 +187,12 @@ def transform_to_database(inpath,outpath,name):
                 del list3
                 del lines
 
-name = '7210'
-inpath = 'F:\\Database\\IN718\\Sun Jingyu\\%s\\' % name
-outpath = 'F:\\Database\\IN718\\Sun Jingyu\\'
+#name = '7210'
+#inpath = 'F:\\Database\\IN718\\Sun Jingyu\\%s\\' % name
+#outpath = 'F:\\Database\\IN718\\Sun Jingyu\\'
+name = '22'
+inpath = 'F:\\Database\\CMSX4\\CMSX4\\%s\\' % name
+outpath = 'F:\\Database\\CMSX4\\CMSX4\\'
 transform_to_database(inpath,outpath,name)
 print 'end'
 

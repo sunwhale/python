@@ -10,7 +10,7 @@ from Constants import *
 from Data import *
 
 #for name in experiment_type_dict['TC-IP-TGMF']+experiment_type_dict['TC-OP-TGMF']:
-for name in ['7210']:
+for name in ['14']:
     experiment_log = ExperimentLog(ExperimentLogFile)
     experiment_log.output(name)
     regular = r'.*'

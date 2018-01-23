@@ -44,7 +44,7 @@ def create_values_at_critical_plane(figure_path=None,figure_name=None):
     plot_data = PlotData()
     experiment_log = ExperimentLog(ExperimentLogFile)
     material=material_in718()
-    for name in ['7208']:
+    for name in ['7205']:
         experiment_log.output(name)
         regular = r'.*'
         load_type = experiment_log.obtainItem(name,'load_type',regular)[0]

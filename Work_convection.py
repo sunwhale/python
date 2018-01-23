@@ -110,12 +110,13 @@ class Load:
         self.torque = np.array(self.torque)
         
     def setLoadBiaxial(self, cycles, runing_time, temperature, axial_strain, shear_strain):
+        cycles += 2
         for n in range(cycles):
             self.runing_time += [ n*(runing_time[-1]-runing_time[0]) + time for time in runing_time[:-1]]
         self.temperature += temperature[:-1] * cycles
         self.axial_strain += axial_strain[:-1] * cycles
         self.shear_strain += shear_strain[:-1] * cycles
-        
+        cycles -= 2
         self.runing_time.append(cycles*(runing_time[-1]-runing_time[0]))
         self.temperature.append(temperature[-1])
         self.axial_strain.append(axial_strain[-1])
@@ -276,7 +277,7 @@ class Job:
         output_filename = self.AbaqusWorkDirectory + Name1
         outfile = open(output_filename, 'w')
         outfile.writelines('*Amplitude, name=DispTriangularWave\n')
-        for i in range(0,self.Load.length,self.Load.segment):
+        for i in range(0,self.Load.length-1,self.Load.segment):
             line = '%-20.10f,%-20.10f\n' % (self.Load.runing_time[i],self.Load.axial_strain[i])
             outfile.writelines(line)
         print 'Create ', output_filename
@@ -287,7 +288,7 @@ class Job:
         output_filename = self.AbaqusWorkDirectory + Name2
         outfile = open(output_filename, 'w')
         outfile.writelines('*Amplitude, name=TempTriangularWave\n')
-        for i in range(0,self.Load.length,self.Load.segment):
+        for i in range(0,self.Load.length-1,self.Load.segment):
             line = '%-20.10f,%-20.10f\n' % (self.Load.runing_time[i],self.Load.temperature[i])
             outfile.writelines(line)
         print 'Create ', output_filename
@@ -298,7 +299,7 @@ class Job:
         output_filename = self.AbaqusWorkDirectory + Name3
         outfile = open(output_filename, 'w')
         outfile.writelines('*Amplitude, name=PressureTriangularWave\n')
-        for i in range(0,self.Load.length,self.Load.segment):
+        for i in range(0,self.Load.length-1,self.Load.segment):
             line = '%-20.10f,%-20.10f\n' % (self.Load.runing_time[i],self.Load.axial_stress[i])
             outfile.writelines(line)
         print 'Create ', output_filename
@@ -309,7 +310,7 @@ class Job:
         output_filename = self.AbaqusWorkDirectory + Name4
         outfile = open(output_filename, 'w')
         outfile.writelines('*Amplitude, name=RotaTriangularWave\n')
-        for i in range(0,self.Load.length,self.Load.segment):
+        for i in range(0,self.Load.length-1,self.Load.segment):
             line = '%-20.10f,%-20.10f\n' % (self.Load.runing_time[i],self.Load.shear_strain[i]/-6.0)
             outfile.writelines(line)
         print 'Create ', output_filename
@@ -320,7 +321,7 @@ class Job:
         output_filename = self.AbaqusWorkDirectory + Name5
         outfile = open(output_filename, 'w')
         outfile.writelines('*Amplitude, name=TorqTriangularWave\n')
-        for i in range(0,self.Load.length,self.Load.segment):
+        for i in range(0,self.Load.length-1,self.Load.segment):
             line = '%-20.10f,%-20.10f\n' % (self.Load.runing_time[i],self.Load.torque[i])
             outfile.writelines(line)
         print 'Create ', output_filename

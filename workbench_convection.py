@@ -97,7 +97,7 @@ def workbench(name,loading_cycles=None,copy=True,film_coefficient=0.0,sink_tempe
         load.setLoadBiaxial(int(loading_cycles),
                             [0,period/4.0,period/2.0,period/4.0*3.0,period],
                             [temperature_mean,temperature_max,temperature_mean,temperature_min,temperature_mean],
-                            [0,axial_strain*1.1,0,-1*axial_strain*1.1,0],
+                            [0,axial_strain*1,0,-1*axial_strain*1,0],
                             [0,shear_strain,0,-1*shear_strain,0])
 #==============================================================================
 # Uniaxial TMF OP
@@ -138,8 +138,8 @@ def workbench(name,loading_cycles=None,copy=True,film_coefficient=0.0,sink_tempe
 #              time_period = int(load.total_runing_time), initial_inc = 0.005, 
 #              min_inc = 0.0001, max_inc = 5, nonlinear = 'ON')
     step = Step(predefined_temperature = temperature_mean, 
-              time_period = int(load.total_runing_time), initial_inc = 0.005, 
-              min_inc = 0.0001, max_inc = period/30.0, nonlinear = 'OFF')
+              time_period = int(load.total_runing_time), initial_inc = 0.00001, 
+              min_inc = 0.00000001, max_inc = period/40.0, nonlinear = 'OFF')
 #==============================================================================
 # UMAT
 #==============================================================================

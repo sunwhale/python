@@ -217,6 +217,15 @@ mdb.models['Model-1'].TabularAmplitude(name='TorqTriangularWave', timeSpan=STEP,
 # Temperature Triangular Wave
 mdb.models['Model-1'].TabularAmplitude(name='TempTriangularWave', timeSpan=STEP, smooth=SOLVER_DEFAULT, data=((0.0, 0.0), (1.0, 1.0)))
 
+# Displacement Triangular Wave 1
+mdb.models['Model-1'].TabularAmplitude(name='Displacement_1', timeSpan=STEP, smooth=SOLVER_DEFAULT, data=((0.0, 0.0), (60.0, 1.0*0.0099)))
+# Displacement Triangular Wave 2
+mdb.models['Model-1'].TabularAmplitude(name='Displacement_2', timeSpan=STEP, smooth=SOLVER_DEFAULT, data=((0.0, 0.0), (60.0, 0.0*0.0099)))
+# Displacement Triangular Wave 3
+mdb.models['Model-1'].TabularAmplitude(name='Displacement_3', timeSpan=STEP, smooth=SOLVER_DEFAULT, data=((0.0, 0.0), (60.0, -1.0*0.0099)))
+# Displacement Triangular Wave 4
+mdb.models['Model-1'].TabularAmplitude(name='Displacement_4', timeSpan=STEP, smooth=SOLVER_DEFAULT, data=((0.0, 0.0), (60.0, 0.0*0.0099)))
+
 
 
 
@@ -343,9 +352,46 @@ mdb.models['Model-1'].FilmCondition(name='inner_convection',
 
 
 
+#==============================================================================
+# step 2,3,4,5
+#==============================================================================
+mdb.models['Model-1'].CoupledTempDisplacementStep(name='Step-2', 
+    previous='Step-1', response=STEADY_STATE, timePeriod=60.0,
+    maxNumInc=1000000, initialInc=initial_inc, minInc=min_inc, maxInc=max_inc, deltmx=None, 
+    cetol=None, creepIntegration=None, amplitude=RAMP
+    , nlgeom=nonlinear
+    )
+mdb.models['Model-1'].boundaryConditions['BC-3'].setValuesInStep(
+    stepName='Step-2', amplitude='Displacement_1')
+mdb.models['Model-1'].boundaryConditions['BC-5'].setValuesInStep(
+    stepName='Step-2', amplitude='TempTriangularWave')
 
-
-
+mdb.models['Model-1'].CoupledTempDisplacementStep(name='Step-3', 
+    previous='Step-2', response=STEADY_STATE, timePeriod=60.0,
+    maxNumInc=1000000, initialInc=initial_inc, minInc=min_inc, maxInc=max_inc, deltmx=None, 
+    cetol=None, creepIntegration=None, amplitude=RAMP
+    , nlgeom=nonlinear
+    )
+mdb.models['Model-1'].boundaryConditions['BC-3'].setValuesInStep(
+    stepName='Step-3', amplitude='Displacement_2')
+    
+mdb.models['Model-1'].CoupledTempDisplacementStep(name='Step-4', 
+    previous='Step-3', response=STEADY_STATE, timePeriod=60.0,
+    maxNumInc=1000000, initialInc=initial_inc, minInc=min_inc, maxInc=max_inc, deltmx=None, 
+    cetol=None, creepIntegration=None, amplitude=RAMP
+    , nlgeom=nonlinear
+    )
+mdb.models['Model-1'].boundaryConditions['BC-3'].setValuesInStep(
+    stepName='Step-4', amplitude='Displacement_3')
+    
+mdb.models['Model-1'].CoupledTempDisplacementStep(name='Step-5', 
+    previous='Step-4', response=STEADY_STATE, timePeriod=60.0,
+    maxNumInc=1000000, initialInc=initial_inc, minInc=min_inc, maxInc=max_inc, deltmx=None, 
+    cetol=None, creepIntegration=None, amplitude=RAMP
+    , nlgeom=nonlinear
+    )
+mdb.models['Model-1'].boundaryConditions['BC-3'].setValuesInStep(
+    stepName='Step-5', amplitude='Displacement_4')
 
 #==============================================================================
 # field output

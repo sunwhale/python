@@ -165,6 +165,6 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
 
 if __name__ == '__main__':
 #    fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
-    fatigue_model_list = ['BM']
+    fatigue_model_list = ['FS']
     for fatigue_model in fatigue_model_list:
         calculate_fatigue_life(fatigue_model)

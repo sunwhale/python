@@ -95,13 +95,13 @@ experiment_type_dict['TC-IP-TGMF-TBC']=['7301','7302']
 #==============================================================================
 # CMSX4
 #==============================================================================
-#ExperimentDirectory = 'F:\\Database\\CMSX4\\Timed\\'
-#ExperimentLogFile = PythonDirectory + 'CMSX4_test_log.csv'
-#ArticleFigureDirectory = 'F:\\Database\\CMSX4\\'
-#experiment_type_dict = {}
-#experiment_type_dict['TC-IP']=['08','09','10']
-#experiment_type_dict['TC-OP']=['11','12']
-#experiment_type_dict['TC-IF']=['03','04','05','06','07']
+ExperimentDirectory = 'F:\\Database\\CMSX4\\Timed\\'
+ExperimentLogFile = PythonDirectory + 'CMSX4_test_log.csv'
+ArticleFigureDirectory = 'F:\\Database\\CMSX4\\figs\\'
+experiment_type_dict = {}
+experiment_type_dict['TC-IP']=['08','09','10']
+experiment_type_dict['TC-OP']=['11','12']
+experiment_type_dict['TC-IF']=['03','04','05','06','07']
 
 #==============================================================================
 # dictionary

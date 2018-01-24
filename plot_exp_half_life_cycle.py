@@ -26,7 +26,8 @@ def create_plot_data_exp_half_life_cycle(figure_path=None,figure_name=None):
     i = 0
     marker_list = ['s','o','^','D']
     plot_data = PlotData()
-    for name in experiment_type_dict['TC-IF']:
+#    for name in experiment_type_dict['TC-IF']:
+    for name in ['08','16']:
 #        print name
         filename = ExperimentDirectory + name + '.csv'
         experiment = ExperimentData(filename)
@@ -116,7 +117,7 @@ def plot_exp_half_life_cycle(figure_path=None,figure_name=None,save_types=[]):
 
 figure_path=ArticleFigureDirectory
 figure_name='plot_exp_half_life_cycle'
-#create_plot_data_exp_half_life_cycle(figure_path,figure_name)
+create_plot_data_exp_half_life_cycle(figure_path,figure_name)
 plot_exp_half_life_cycle(figure_path,figure_name,save_types=['.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

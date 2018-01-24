@@ -14,7 +14,7 @@ from Constants import *
 from plot_format import plot_format
 from Material import material_in718,material_in718_NASA,material_in718_BHU
 
-def create_plot_data_exp_half_life_cycle(figure_path=None,figure_name=None):
+def create_plot_data_exp_half_life_cycle(figure_path=None,figure_name=None,name_list=[]):
 #==============================================================================
 # x,y label
 #==============================================================================
@@ -26,13 +26,16 @@ def create_plot_data_exp_half_life_cycle(figure_path=None,figure_name=None):
     i = 0
     marker_list = ['s','o','^','D']
     plot_data = PlotData()
-    for name in experiment_type_dict['TC-IP']:
+#    for name in experiment_type_dict['TC-IP']:
+    for name in name_list:
         print name
         filename = ExperimentDirectory + name + '.csv'
         experiment = ExperimentData(filename)
         print experiment.half_life_cycle
-        strain = experiment.obtainNthCycle('axial_strain',experiment.half_life_cycle)
-        stress = experiment.obtainNthCycle('axial_stress',experiment.half_life_cycle)
+#        strain = experiment.obtainNthCycle('axial_strain',experiment.half_life_cycle)
+#        stress = experiment.obtainNthCycle('axial_stress',experiment.half_life_cycle)
+        strain = experiment.obtainNthCycle('axial_strain',1)
+        stress = experiment.obtainNthCycle('axial_stress',1)
         plot_data.addLine(strain*100,
                           stress,
                           xlabel=xlabel,
@@ -115,8 +118,10 @@ def plot_exp_half_life_cycle(figure_path=None,figure_name=None,save_types=[]):
     plt.close()
 
 figure_path=ArticleFigureDirectory
-figure_name='plot_exp_half_life_cycle'
-create_plot_data_exp_half_life_cycle(figure_path,figure_name)
-plot_exp_half_life_cycle(figure_path,figure_name,save_types=['.pdf'])
+for name in ['14','15','16','17','18','19','20','21','22']:
+#    figure_name='plot_exp_half_life_cycle_%s' % (name)
+    figure_name='plot_1st_life_cycle_%s' % (name)
+    create_plot_data_exp_half_life_cycle(figure_path,figure_name,name_list=[name])
+    plot_exp_half_life_cycle(figure_path,figure_name,save_types=['.png'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

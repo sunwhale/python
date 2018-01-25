@@ -6,6 +6,7 @@ Created on Thu Jan 05 11:50:47 2017
 """
 
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import shutil
 from Data import FatigueData,PlotData
 from Constants import xylabels,FatigueDirectory,ArticleFigureDirectory
@@ -17,6 +18,13 @@ def create_plot_data_fatigue_life(fatigue_data,figure_path=None,figure_name=None
 #==============================================================================
     xlabel = xylabels['experimental_life']
     ylabel = xylabels['predicted_life']
+    label_dict = {'TC-IP':'TMF-IP',
+              'TC-OP':'TMF-OP',
+              'TC-IP-TGMF':'TGMF-IP',
+              'TC-OP-TGMF':'TGMF-OP',
+              'TC-IF':'IF',
+              'TC-IP-TGMF-TBC':'TGMF-IP-TBC',
+              }
 #==============================================================================
 # plot lines
 #==============================================================================
@@ -24,14 +32,15 @@ def create_plot_data_fatigue_life(fatigue_data,figure_path=None,figure_name=None
     marker_list = ['s','o','^','<','D','>','*']
     plot_data = PlotData()
 #    for load_type in ['TC-IP','TC-OP','TC-90','PRO-IP','NPR-IP']:
-    for load_type in ['TC-IP','TC-OP','TC-90','PRO-IP','NPR-IP','TC-IP-TGMF','TC-OP-TGMF']:
+#    for load_type in ['TC-IP','TC-OP','TC-90','PRO-IP','NPR-IP','TC-IP-TGMF','TC-OP-TGMF']:
+    for load_type in ['TC-IP','TC-OP','TC-IP-TGMF','TC-OP-TGMF']:
         experimental_life = fatigue_data.loadTypeFilter(load_type,'experimental_life')
         predicted_life = fatigue_data.loadTypeFilter(load_type,'predicted_life')
         plot_data.addLine(experimental_life,
                           predicted_life,
                           xlabel=xlabel,
                           ylabel=ylabel,
-                          linelabel=load_type,
+                          linelabel=label_dict[load_type],
                           linewidth=2,
                           linestyle='',
                           marker=marker_list[i],
@@ -49,6 +58,7 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
 # http://matplotlib.org/users/customizing.html?highlight=rcparams
 #==============================================================================
     plot_format()
+    mpl.rcParams['figure.figsize'] = (8,8)
     fig, ax = plt.subplots()
 #==============================================================================
 # grid set up
@@ -69,7 +79,7 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # xy axial equal
 #==============================================================================
-#    plt.gca().set_aspect('equal')
+    plt.gca().set_aspect('equal')
     plt.gca().set_aspect('auto')
 #==============================================================================
 # xy log scale
@@ -112,8 +122,8 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
             print 'save as', figure_path + figure_name + save_type
     plt.close()
 
-fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
-#fatigue_model_list = ['BM']
+#fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
+fatigue_model_list = ['Our']
 
 for fatigue_model in fatigue_model_list:
     fatigue_file = '%s%s.csv' % (FatigueDirectory,fatigue_model)

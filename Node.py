@@ -187,8 +187,13 @@ class Node:
          temperature_at_sigma_nmax_critical_plane,
          heatflux_at_sigma_nmax_critical_plane) = self.calcValuesAtCriticalPlane(transformation_critical_plane)
         
+        thermal_corrected_term = self.thermalCorrectedTerm(heatflux_at_sigma_nmax_critical_plane,temperature_at_sigma_nmax_critical_plane)
+        thermal_corrected_term = 1.0
+        
         fs_coefficient=delta_gamma_max/2.0*(1.0+k*sigma_nmax_critical_plane/Material.yield_stress)
-                
+        
+        fs_coefficient *= thermal_corrected_term
+        
         def f(x):
             x0 = float(x[0])
             return [
@@ -517,6 +522,70 @@ class Node:
                                       fatigue_coefficient,
                                       fatigue_life)
                                       
+    def fatigueLifeOurModel(self,Material):
+        print '=========================Our model========================='
+
+        (delta_gamma_max,
+         delta_epsilon_max,
+         tension_energy_max,
+         shear_energy_max,
+         total_energy_max,
+         theta_critical_plane,
+         phi_critical_plane,
+         transformation_critical_plane,
+         theta_deg_list,
+         phi_deg_list) = self.initialValues()
+        
+        for theta_deg in theta_deg_list:
+            theta=np.radians(theta_deg)
+            for phi_deg in phi_deg_list:
+                phi=np.radians(phi_deg)
+                transformation = self.calcTransformation(theta,phi)
+                total_energy_theta_phi = self.sigmaNMax(transformation)*self.deltaEpsilon(transformation)/2.0+self.tauNMax(transformation)*self.deltaGamma(transformation)/2.0
+                if total_energy_theta_phi > total_energy_max:
+                    total_energy_max = total_energy_theta_phi
+                    theta_critical_plane = theta_deg
+                    phi_critical_plane = phi_deg
+                    transformation_critical_plane = transformation
+                    
+        (sigma_nmax_critical_plane,
+         delta_sigma_critical_plane,
+         delta_epsilon_critical_plane,
+         tau_nmax_critical_plane,
+         delta_tau_critical_plane,
+         delta_gamma_critical_plane,
+         temperature_at_sigma_nmax_critical_plane,
+         heatflux_at_sigma_nmax_critical_plane) = self.calcValuesAtCriticalPlane(transformation_critical_plane)
+        
+        delta_w_max = sigma_nmax_critical_plane*delta_epsilon_critical_plane/2.0 + tau_nmax_critical_plane*delta_gamma_critical_plane/2.0
+        
+        thermal_corrected_term = self.thermalCorrectedTerm(heatflux_at_sigma_nmax_critical_plane,temperature_at_sigma_nmax_critical_plane)
+        
+        delta_w_max *= thermal_corrected_term
+        
+        def f(x):
+            x0 = float(x[0])
+            return [
+                1.02*Material.sigma_f*Material.sigma_f/Material.youngs_modulus*(2*x0)**(2*Material.b) + 1.04*Material.sigma_f*Material.epsilon_f*(2*x0)**(Material.b+Material.c)-delta_w_max
+            ]
+                
+        fatigue_coefficient = delta_w_max
+        result = fsolve(f, [1])
+        fatigue_life = int(result[0])
+        
+        return self.outputFatigueLife(theta_critical_plane,
+                                      phi_critical_plane,
+                                      delta_gamma_critical_plane,
+                                      sigma_nmax_critical_plane,
+                                      delta_sigma_critical_plane,
+                                      delta_epsilon_critical_plane,
+                                      tau_nmax_critical_plane,
+                                      delta_tau_critical_plane,
+                                      temperature_at_sigma_nmax_critical_plane,
+                                      heatflux_at_sigma_nmax_critical_plane,
+                                      fatigue_coefficient,
+                                      fatigue_life)
+                                      
     def initialValues(self):
         delta_gamma_max = 0.0
         delta_epsilon_max = 0.0
@@ -553,7 +622,14 @@ class Node:
         ]
         transformation=[t[:self.dimension] for t in transformation[:self.dimension]]
         return transformation
-    
+        
+    def thermalCorrectedTerm(self,heatflux_at_sigma_nmax_critical_plane,temperature_at_sigma_nmax_critical_plane):
+        hf_norm = 0.0
+        for hf in heatflux_at_sigma_nmax_critical_plane:
+            hf_norm += (hf/calculate_conductivity_by_temperature_in718(temperature_at_sigma_nmax_critical_plane))**2
+        thermal_corrected_term = 1.0 + hf_norm/(750.0-temperature_at_sigma_nmax_critical_plane)
+        return thermal_corrected_term
+        
     def calcValuesAtCriticalPlane(self,transformation_critical_plane):
         self.transformation_critical_plane = transformation_critical_plane
         sigma_nmax_critical_plane = self.sigmaNMax(transformation_critical_plane)

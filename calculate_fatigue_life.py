@@ -69,6 +69,8 @@ def calculate_data_fatigue_life(data,material,fatigue_model):
         fatigue_data = node.fatigueLifeLiu2Model(material)
     if fatigue_model == 'Chu':
         fatigue_data = node.fatigueLifeChuModel(material)
+    if fatigue_model == 'Our':
+        fatigue_data = node.fatigueLifeOurModel(material)
     return fatigue_data, node
 
 #==============================================================================

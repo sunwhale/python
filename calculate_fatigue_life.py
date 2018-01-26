@@ -7,7 +7,7 @@ Created on Thu Jan 05 11:50:47 2017
 
 import xlsxwriter
 from Node import Node
-from Material import Material,material_in718
+from Material import Material,material_in718,material_cmsx4
 from Data import SimulationData,ExperimentData,ExperimentLog
 from Constants import *
 from Work import *
@@ -81,7 +81,7 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
     experiment_log = ExperimentLog(ExperimentLogFile)
     
 #    FatigueDirectory = 'F:\\Database\\Fatigue\\%s\\' % fatigue_model
-    FatigueDirectory = 'F:\\Database\\Fatigue\\'
+#    FatigueDirectory = 'F:\\Database\\Fatigue\\'
 
     if not os.path.isdir(FatigueDirectory):
         os.makedirs(FatigueDirectory)
@@ -137,13 +137,13 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
             """
             使用计算模拟结果。
             """
-            sim = SimulationData(SimulationDirectory+name+'.csv',period)
-            data, node = calculate_data_fatigue_life(sim,material,fatigue_model)
+#            sim = SimulationData(SimulationDirectory+name+'.csv',period)
+#            data, node = calculate_data_fatigue_life(sim,material,fatigue_model)
             """
             使用试验结果。
             """
-#            exp = ExperimentData(ExperimentDirectory+name+'.csv')
-#            data = calculate_data_fatigue_life(exp,material,fatigue_model)
+            exp = ExperimentData(ExperimentDirectory+name+'.csv')
+            data, node = calculate_data_fatigue_life(exp,material,fatigue_model)
             
             line = '' # write to csv
             line += '%s,' % (expriment_life) # write to csv
@@ -166,7 +166,8 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
     workbook.close() # write to excel
 
 if __name__ == '__main__':
-#    fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
-    fatigue_model_list = ['FS']
+    fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
+#    fatigue_model_list = ['FS']
     for fatigue_model in fatigue_model_list:
-        calculate_fatigue_life(fatigue_model)
+#        calculate_fatigue_life(fatigue_model,material=material_in718())
+        calculate_fatigue_life(fatigue_model,material=material_cmsx4())

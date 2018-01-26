@@ -136,11 +136,12 @@ def plot_exp_half_life_cycle(figure_path=None,figure_name=None,save_types=[]):
         for save_type in save_types:
             plt.savefig(figure_path + figure_name + save_type, dpi=150, transparent=None)
             print 'save as', figure_path + figure_name + save_type
-#    plt.show()
+    plt.show()
     plt.close()
 
 figure_path=ArticleFigureDirectory
-for name in ['14','15','16','17','18','19','20','21','22']:
+#for name in ['14','15','16','17','18','19','20','21','22']:
+for name in ['05','06','07']:
 #for name in ['14']:
 #    figure_name='plot_exp_half_life_cycle_%s' % (name)
     figure_name='plot_1st_life_cycle_%s' % (name)

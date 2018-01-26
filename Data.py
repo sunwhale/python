@@ -518,6 +518,36 @@ class FatigueData:
             result.append(eval('self.%s[number]' % item))
         return result
         
+    def quantitativeTN(self):
+        """
+        \[\bar E = \frac{1}{n}\sum\limits_{i = 1}^n {\log \left( {\frac{{{N_{f,i}}}}{{{N_{p,i}}}}} \right)} \]
+        """
+        Nf = self.experimental_life
+        Np = self.predicted_life
+        n = len(Nf)
+        E_bar = 0
+        for i in range(n):
+            E_bar += np.log(Nf[i]/Np[i])
+        E_bar = E_bar/n
+        
+        TN = 10**E_bar
+        return TN
+        
+    def quantitativeTRMS(self):
+        """
+        \[\bar E = \frac{1}{n}\sum\limits_{i = 1}^n {\log \left( {\frac{{{N_{f,i}}}}{{{N_{p,i}}}}} \right)} \]
+        """
+        Nf = self.experimental_life
+        Np = self.predicted_life
+        n = len(Nf)
+        E_RMS = 0
+        for i in range(n):
+            E_RMS += np.log(Nf[i]/Np[i])**2
+        E_RMS = E_RMS/n
+        
+        TRMS = 10**E_RMS
+        return TRMS
+        
 #==============================================================================
 # PlotData
 #==============================================================================

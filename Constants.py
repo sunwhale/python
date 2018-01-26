@@ -98,11 +98,26 @@ experiment_type_dict['TC-IP-TGMF-TBC']=['7301','7302']
 #ExperimentDirectory = 'F:\\Database\\CMSX4\\Timed\\'
 #ExperimentLogFile = PythonDirectory + 'CMSX4_test_log.csv'
 #ArticleFigureDirectory = 'F:\\Database\\CMSX4\\figs\\'
+#FatigueDirectory = 'F:\\Database\\CMSX4\\Fatigue\\'
 #experiment_type_dict = {}
-#experiment_type_dict['TC-IP']=['08','09','10']
-#experiment_type_dict['TC-OP']=['11','12']
-#experiment_type_dict['TC-IF']=['03','04','05','06','07']
-
+#experiment_type_dict['TMF-IP']=['08','09','10']
+#experiment_type_dict['TMF-OP']=['11','12']
+#experiment_type_dict['IF-500']=['03','04']
+#experiment_type_dict['IF-1000']=['05','06','07']
+#experiment_type_dict['TGMF-IP']=['15','14','18']
+#experiment_type_dict['TGMF-OP']=['20','19']
+#experiment_type_dict['TGMF-IP-TBC']=['07','16']
+#experiment_type_dict['TGMF-OP-TBC']=['22','21']
+#
+#experiment_type_list = []
+#experiment_type_list.append(['TMF-IP',['08','09','10']])
+#experiment_type_list.append(['TMF-OP',['11','12']])
+#experiment_type_list.append(['IF-500',['03','04']])
+#experiment_type_list.append(['IF-1000',['05','06','07']])
+#experiment_type_list.append(['TGMF-IP',['15','14','18']])
+#experiment_type_list.append(['TGMF-OP',['20','19']])
+#experiment_type_list.append(['TGMF-IP-TBC',['07','16']])
+#experiment_type_list.append(['TGMF-OP-TBC',['22','21']])
 #==============================================================================
 # dictionary
 #==============================================================================

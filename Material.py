@@ -128,10 +128,12 @@ class Material:
                 sigma_list.append(sigma[i])
         epsilon_p = np.array(epsilon_p_list)
         sigma = np.array(sigma_list)
+        
         self.K_cyclic = self.calculateRambergOsgood(epsilon_p,sigma)[0]
         self.n_cyclic = self.calculateRambergOsgood(epsilon_p,sigma)[1]
+               
 #        plt.plot(epsilon_p,sigma)
-#        plt.plot(epsilon_p,self.K*epsilon_p**self.n)
+#        plt.plot(epsilon_p,self.K_cyclic*epsilon_p**self.n_cyclic)
 #        plt.show()
 
     def calculateStrengthCoefficient(self,epsilon,sigma):
@@ -300,6 +302,7 @@ def calc_material_in718():
     material.plotStrengthCoefficient()
     print material.K*0.002**material.n
     return material
+    
 #==============================================================================
 # material ss304 at 20
 #==============================================================================
@@ -320,3 +323,27 @@ def material_ss304():
     life_x2, gamma_amp  = np.genfromtxt(r'F:\Work\2017-01-07_Exercise\gammaN.txt', unpack=True)
     material.calculateMansonCoffinTorsion(gamma_amp/100.0,life_x2)
     return material
+    
+#==============================================================================
+# material cmsx-4 at 1000
+#==============================================================================
+def material_cmsx4():
+    material = Material()
+    material.setName(name='CMSX-4')
+    material.setTemperature(temperature=1000.0)
+    material.setMonotonic(youngs_modulus=77120.0,poisson_ratio=0.3,yield_stress=500.0)
+
+    epsilon, sigma = np.genfromtxt(r'F:\Cloud\Database\CMSX4\MonotonicData.txt', unpack=True)
+    material.calculateCyclicStrengthCoefficient(epsilon,sigma)
+    
+    life_x2 = np.array([1300,476,249])*2.0
+    epsilon_amp = np.array([0.5,0.6,0.7])
+    material.calculateMansonCoffinAxial(epsilon_amp/100.0,life_x2)
+    
+#    material.setCyclicAxial(sigma_f=1700.22,b=-0.189252,epsilon_f=0.0,c=-0.0)
+    material.setCyclicTorsion()
+    return material
+    
+if __name__ == '__main__':
+    material = material_cmsx4()
+    material.show()

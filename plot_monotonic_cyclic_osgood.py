@@ -38,17 +38,7 @@ def create_plot_data_monotonic_cyclic_osgood(figure_path=None,figure_name=None):
         strain_amplitude = (max(strain) - min(strain))/2.0*100
         cyclic_strain.append(strain_amplitude)
         cyclic_stress.append(stress_amplitude)
-    plot_data.addLine(cyclic_strain,
-                      cyclic_stress,
-                      xlabel=xlabel,
-                      ylabel=ylabel,
-                      linelabel='Experiment',
-                      linewidth=2,
-                      linestyle='',
-                      marker=marker_list[i],
-                      markersize=12,
-                      color='red')
-    i += 1
+
 
     name = '7102' # 650C monotonic tension
     filename = ExperimentDirectory + name + '.csv'
@@ -59,12 +49,24 @@ def create_plot_data_monotonic_cyclic_osgood(figure_path=None,figure_name=None):
                       monotonic_stress,
                       xlabel=xlabel,
                       ylabel=ylabel,
-                      linelabel='Experiment',
+                      linelabel='Monotonic Exp.',
                       linewidth=2,
                       linestyle='',
                       marker=marker_list[i],
                       markersize=12,
                       color='blue')
+    i += 1
+    
+    plot_data.addLine(cyclic_strain,
+                      cyclic_stress,
+                      xlabel=xlabel,
+                      ylabel=ylabel,
+                      linelabel='Cyclic Exp.',
+                      linewidth=2,
+                      linestyle='',
+                      marker=marker_list[i],
+                      markersize=12,
+                      color='red')
     i += 1
         
     material = material_in718()
@@ -73,7 +75,7 @@ def create_plot_data_monotonic_cyclic_osgood(figure_path=None,figure_name=None):
                       sigma,
                       xlabel=xlabel,
                       ylabel=ylabel,
-                      linelabel='Monotonic',
+                      linelabel='Monotonic Fit.',
                       linewidth=2,
                       linestyle='-',
                       marker=None,
@@ -85,7 +87,7 @@ def create_plot_data_monotonic_cyclic_osgood(figure_path=None,figure_name=None):
                       sigma,
                       xlabel=xlabel,
                       ylabel=ylabel,
-                      linelabel='Cyclic',
+                      linelabel='Cyclic Fit.',
                       linewidth=2,
                       linestyle='-',
                       marker=None,
@@ -149,7 +151,7 @@ def plot_monotonic_cyclic_osgood(figure_path=None,figure_name=None,save_types=[]
 #==============================================================================
 # show legend
 #==============================================================================
-    plt.legend(loc=0)
+    plt.legend(loc=4)
 #==============================================================================
 # save figures
 #==============================================================================
@@ -162,7 +164,7 @@ def plot_monotonic_cyclic_osgood(figure_path=None,figure_name=None,save_types=[]
 
 figure_path=ArticleFigureDirectory
 figure_name='plot_monotonic_cyclic_osgood'
-create_plot_data_monotonic_cyclic_osgood(figure_path,figure_name)
+#create_plot_data_monotonic_cyclic_osgood(figure_path,figure_name)
 plot_monotonic_cyclic_osgood(figure_path,figure_name,save_types=['.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

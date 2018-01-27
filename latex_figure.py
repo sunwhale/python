@@ -28,8 +28,14 @@ def isTextFile(filename):
             b = True
     return b
 
-latex_name = 'F:\\GitHub\\tgmf\\tgmf.tex'
-figures_directory = 'F:\\GitHub\\tgmf\\figures\\'
+#latex_name = 'F:\\GitHub\\tgmf\\tgmf.tex'
+#figures_directory = 'F:\\GitHub\\tgmf\\figures\\'
+
+#latex_name = 'F:\\GitHub\\tmf\\tmf.tex'
+#figures_directory = 'F:\\GitHub\\tmf\\figures\\'
+
+latex_name = 'F:\\GitHub\\fatigue\\fatigue.tex'
+figures_directory = 'F:\\GitHub\\fatigue\\figures\\'
 
 lines = read_file(latex_name)
 

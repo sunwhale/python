@@ -137,13 +137,13 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
             """
             使用计算模拟结果。
             """
-            sim = SimulationData(SimulationDirectory+name+'.csv',period)
-            data, node = calculate_data_fatigue_life(sim,material,fatigue_model)
+#            sim = SimulationData(SimulationDirectory+name+'.csv',period)
+#            data, node = calculate_data_fatigue_life(sim,material,fatigue_model)
             """
             使用试验结果。
             """
-#            exp = ExperimentData(ExperimentDirectory+name+'.csv')
-#            data, node = calculate_data_fatigue_life(exp,material,fatigue_model)
+            exp = ExperimentData(ExperimentDirectory+name+'.csv')
+            data, node = calculate_data_fatigue_life(exp,material,fatigue_model)
             
             line = '' # write to csv
             line += '%s,' % (expriment_life) # write to csv
@@ -166,8 +166,8 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
     workbook.close() # write to excel
 
 if __name__ == '__main__':
-    fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu','Our']
-#    fatigue_model_list = ['BM']
+#    fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu','Our']
+    fatigue_model_list = ['BM']
     for fatigue_model in fatigue_model_list:
-        calculate_fatigue_life(fatigue_model,material=material_in718())
-#        calculate_fatigue_life(fatigue_model,material=material_cmsx4())
+#        calculate_fatigue_life(fatigue_model,material=material_in718())
+        calculate_fatigue_life(fatigue_model,material=material_cmsx4())

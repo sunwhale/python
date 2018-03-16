@@ -139,6 +139,15 @@ class Load:
     def setConvection(self, film_coefficient, sink_temperature):
         self.film_coefficient = film_coefficient
         self.sink_temperature = sink_temperature
+    
+    def setThermal(self, heat_flux, film_coefficient_outer, film_coefficient_inner, emissivity, sink_temperature_inner ,sink_temperature_outer):
+        self.heat_flux = heat_flux
+        self.film_coefficient_outer = film_coefficient_outer
+        self.film_coefficient_inner = film_coefficient_inner
+        self.emissivity = emissivity
+        self.sink_temperature_inner = sink_temperature_inner
+        self.sink_temperature_outer = sink_temperature_outer
+
         
     def showLoadPath(self, directory):
         os.chdir(directory)
@@ -207,8 +216,8 @@ class Job:
         self.InputName = JobName + '.inp'
         self.AbaqusWorkDirectory = AbaqusTempDirectory + JobName + '\\'
         self.AbaqusWorkUMATDirectory = AbaqusTempDirectory + JobName + '\\UMAT\\'
-        self.PythonPostProc = 'PostprocABAQUS_convection.py'
-        self.PythonPreproc = 'PreprocABAQUS_convection.py'
+        self.PythonPostProc = 'PostprocABAQUS_thermal.py'
+        self.PythonPreproc = 'PreprocABAQUS_thermal.py'
         self.PythonConstants = 'Constants.py'
         self.PythonPreprocParameters = 'PreprocABAQUSParameters.py'
         self.ExpCSVFile = []
@@ -222,7 +231,7 @@ class Job:
         self.creatBatchFile()
         self.createAbaqusCAE()
         self.createAbaqusInput()
-        self.createUMATFile()
+#        self.createUMATFile()
         self.run()
         self.autoPostProc()
         
@@ -253,6 +262,12 @@ class Job:
         print >>outfile, 'AbaqusWorkDirectory = %r' % (self.AbaqusWorkDirectory)
         print >>outfile, 'film_coefficient = %r' % (self.Load.film_coefficient)
         print >>outfile, 'sink_temperature = %r' % (self.Load.sink_temperature)
+        print >>outfile, 'heat_flux = %r' % (self.Load.heat_flux)
+        print >>outfile, 'emissivity = %r' % (self.Load.emissivity)
+        print >>outfile, 'sink_temperature_inner = %r' % (self.Load.sink_temperature_inner)
+        print >>outfile, 'sink_temperature_outer = %r' % (self.Load.sink_temperature_outer)
+        print >>outfile, 'film_coefficient_outer = %r' % (self.Load.film_coefficient_outer)
+        print >>outfile, 'film_coefficient_inner = %r' % (self.Load.film_coefficient_inner)    
         outfile.close()
 
         shutil.copy(PythonDirectory + self.PythonPreproc, self.AbaqusWorkDirectory)
@@ -374,7 +389,8 @@ class Job:
         print >>outfile, r'call del %JobName%.prt'
         print >>outfile, r'call del %JobName%.sim'
         print >>outfile, r'call del %JobName%.sta'
-        print >>outfile, r'call abaqus job=%JobName% user=%UMAT% cpus=1 int'
+#        print >>outfile, r'call abaqus job=%JobName% user=%UMAT% cpus=1 int'
+        print >>outfile, r'call abaqus job=%JobName% cpus=1 int'
         outfile.close()
 
         outfile = open(self.AbaqusWorkDirectory + 'AutoPostProc.bat', 'w')

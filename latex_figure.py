@@ -61,7 +61,7 @@ suffix_list = ['.pdf','.png','.eps','.jpg']
 
 for suffix in suffix_list:
 #    regular = '{\w+-?\w?%s}' % (suffix)
-    regular = '{[a-z|_|A-Z|0-9|-]+%s}' % (suffix)
+    regular = '{[a-z|_|+|-|A-Z|0-9|-]+%s}' % (suffix)
     result_list = re.findall(regular, lines)
     for result in result_list:
         print result

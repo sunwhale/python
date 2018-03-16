@@ -340,7 +340,7 @@ def material_cmsx4():
     epsilon_amp = np.array([0.5,0.6,0.7])
     material.calculateMansonCoffinAxial(epsilon_amp/100.0,life_x2)
     
-#    material.setCyclicAxial(sigma_f=1700.22,b=-0.189252,epsilon_f=0.0,c=-0.0)
+    material.setCyclicAxial(sigma_f=1700.22,b=-0.189252,epsilon_f=0.0,c=-0.0)
     material.setCyclicTorsion()
     return material
     

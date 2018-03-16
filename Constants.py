@@ -117,7 +117,7 @@ experiment_type_dict['TC-IP-TGMF-TBC']=['7301','7302']
 #experiment_type_list.append(['IF-1000',['05','06','07']])
 #experiment_type_list.append(['TGMF-IP',['15','14','18']])
 #experiment_type_list.append(['TGMF-OP',['20','19']])
-#experiment_type_list.append(['TGMF-IP-TBC',['07','16']])
+#experiment_type_list.append(['TGMF-IP-TBC',['17','16']])
 #experiment_type_list.append(['TGMF-OP-TBC',['22','21']])
 #==============================================================================
 # dictionary

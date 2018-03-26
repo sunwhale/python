@@ -103,7 +103,7 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
 # show legend
 #==============================================================================
     plt.legend(loc=0)
-    plt.show()
+#    plt.show()
 #==============================================================================
 # save figures
 #==============================================================================
@@ -115,7 +115,7 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
 
 fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
 #fatigue_model_list = ['Our']
-fatigue_model_list = ['Liu1']
+#fatigue_model_list = ['Liu1']
 
 ArticleFigureDirectory = 'F:\\Cloud\\Github\\fatigue\\figs\\'
 

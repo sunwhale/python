@@ -252,6 +252,7 @@ class Node:
         thermal_corrected_term = self.thermalCorrectedTerm(heatflux_at_sigma_nmax_critical_plane,temperature_at_sigma_nmax_critical_plane)
         thermal_corrected_term = 1.0
         tmf_corrected_term = self.TMFCorrectedTerm(transformation_critical_plane)
+        tmf_corrected_term = 1.0
         
         fs_coefficient=delta_gamma_max/2.0*(1.0+k*sigma_nmax_critical_plane*tmf_corrected_term/Material.yield_stress)
         
@@ -439,7 +440,7 @@ class Node:
         tmf_corrected_term = self.TMFCorrectedTerm(transformation_critical_plane)
 #        delta_w1_max = self.tensionIntegralEnergy(transformation_critical_plane)*tmf_corrected_term + self.shearIntegralEnergy(transformation_critical_plane)
 #        delta_w1_max *= 1.732
-        delta_w1_max = self.tensionEnergy(transformation_critical_plane)*tmf_corrected_term + self.shearEnergy(transformation_critical_plane)
+        delta_w1_max = self.tensionEnergy(transformation_critical_plane)*tmf_corrected_term + self.shearEnergy(transformation_critical_plane)*0.5
         stress_ratio = (sigma_nmax_critical_plane-delta_sigma_critical_plane)/sigma_nmax_critical_plane
         delta_w1_max *= 2.0/(1.0-stress_ratio)
         
@@ -705,8 +706,8 @@ class Node:
         sigma_alt = 1000
         R = 8.31e-3
         T = 650 + 273.15
-        C5 = 1.0e12
-        k = 0.9
+        C5 = 1.2e12
+        k = 1.2
 
 #        print transformation
 #        print self.stress_list
@@ -731,7 +732,7 @@ class Node:
 #                sigma_alt = abs(sigma_alt)
 #                integral -= np.exp(-1.0*(Q0-nu0*sigma_alt*abs(triaxiality)*(1.0-0.5*sigma_alt/sigma_ult))/(R*T)) * (self.time_list[i+1]-self.time_list[i])
                 
-        print integral
+#        print integral
         print (1+C5*integral)**k
         return (1+C5*integral)**k            
         

@@ -61,15 +61,16 @@ def calc_Mean(A,dimension=3):
     return Mean
 
 def calc_Diviatoric(A,dimension=3):
-    D = A - calc_Mean(A,dimension)
+    D = A
+    trace = calc_Mean(A,dimension)
+    for i in range(dimension):        
+        D[i,i] = A[i,i] - trace
     return D
     
 def calc_Mises(A,dimension=3):
     D = calc_Diviatoric(A,dimension)
     Mises = np.sqrt(1.5*calc_AijBij(D,D,dimension))
     return Mises
-
-
     
 def calc_Tanaka(sigma_x,tau,dimension=3,dp=0.01):
     coef = 1
@@ -140,9 +141,9 @@ def calc_Triaxiality(sigma_x,tau,dimension=3,dp=0.01):
         s[2][0] = s31
         s[2][1] = s32
         s[2][2] = s33
-    
+           
         triaxiality = calc_Mean(s,dimension)/calc_Mises(s,dimension)
-        
+
         triaxiality_list.append(triaxiality)
 
     return triaxiality_list
@@ -199,7 +200,7 @@ tau = [20,41,66,91,116,132,131,132,132,131,130,41,-47,-117,-172,-215,-229,-204,-
 #tau = []
 #for i in np.arange(-100,100,1):
 #    sigma_x.append(i)
-#    tau.append(i)
+#    tau.append(0)
     
 """ Proportional path """
 #sigma_x = []
@@ -229,7 +230,7 @@ user_list = calc_User(sigma_x,tau,dimension=3,dp=0.001)
 #plt.plot(sigma_x,tau)
 #plt.show()
 
-plt.plot(sigma_x,triaxiality_list,marker='s',color='r',markeredgewidth=float(''),markerfacecolor='none',label='Triaxiality')
+plt.plot(sigma_x,triaxiality_list,marker='s',color='r',markeredgewidth=float(0),markerfacecolor='none',label='Triaxiality')
 plt.plot(sigma_x,phi_list,label='Tanaka')
 # plt.plot(sigma_x,[1,2],label='User')
 lg = plt.legend(title='',loc=0)

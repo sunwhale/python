@@ -197,15 +197,17 @@ power_percent_list = [0.3,0.4,0.5,0.6]
 power_percent_list = [0.3,0.6]
 
 result_list = []
-
+threshold = 0.10
 name = '0000'
+
 for power_percent in power_percent_list:
-    film_coefficient_outer = 10.0
-    film_coefficient_inner = 0.000
-    sink_temperature_inner = 200/0.6*power_percent+20+273.15
+    film_coefficient_inner =0.8
+    film_coefficient_outer = 0.020
+    sink_temperature_inner = 100/0.6*(power_percent-threshold)*(1.0)/(1.0-threshold)+20+273.15
 #    sink_temperature_inner = 20+273.15
-    sink_temperature_outer = 500/0.6*power_percent+20+273.15
-    heat_flux = emissivity*reflect*total_power*power_percent/np.pi/d_out/height*1.0e-3
+    sink_temperature_outer = 500/0.6*(power_percent-threshold)*(1.0)/(1.0-threshold)+20+273.15
+#    sink_temperature_outer = 20+273.15
+    heat_flux = emissivity*reflect*total_power*(power_percent-threshold)*(1.0)/(1.0-threshold)/np.pi/d_out/height*1.0e-3
     workbench(name,loading_cycles=1,
               heat_flux=heat_flux,
               film_coefficient_outer=film_coefficient_outer,

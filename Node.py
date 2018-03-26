@@ -7,8 +7,10 @@ Created on Thu Jan 05 11:50:47 2017
 
 import numpy as np
 from scipy.optimize import fsolve
-from Material import Material
-from Functions import calculate_conductivity_by_temperature_in718
+from Material import Material,material_in718
+from Data import ExperimentData
+from Functions import calculate_conductivity_by_temperature_in718,calculate_elastic_by_temperature_in718
+from Constants import *
 
 class Node:
     def __init__(self, nodelabel=1, dimension=2, time=[], coordinate=[], 
@@ -29,7 +31,33 @@ class Node:
         
     def __str__(self):
         return 'node %s at time %s' % (str(int(self.nodelabel)),str(self.time))
-        
+    
+    def stressTriaxiality(self):
+        if self.dimension == 2:
+            stress_tensor = [[i[:self.dimension]+[0.0] for i in s[:self.dimension]] + [[0.0,0.0,0.0]] for s in self.stress_list]
+        if self.dimension == 3:
+            stress_tensor = [[i[:self.dimension] for i in s[:self.dimension]] for s in self.stress_list]
+        stress_tensor_deviatoric = []
+        stress_hydrostatic = []
+        stress_mises = []
+        stress_triaxiality = []
+#        stress_tensor = [[[1,0,0],[0,0,0],[0,0,0]]]
+        for s in stress_tensor:
+            hydrostatic = np.trace(s)/3.0
+            s[0][0] -= hydrostatic
+            s[1][1] -= hydrostatic
+            s[2][2] -= hydrostatic
+            stress_hydrostatic.append(hydrostatic)
+            stress_tensor_deviatoric.append(s)
+            J2 = 0.0
+            for i in range(3):
+                for j in range(3):
+                    J2 += s[i][j]**2/2.0
+            mises = np.sqrt(3.0*J2)
+            stress_mises.append(mises)
+            stress_triaxiality.append(hydrostatic/mises)
+        return stress_hydrostatic,stress_mises,stress_triaxiality
+    
     def stressTransform(self, transformation):
         stress_list = []
         for stress in self.stress_list:
@@ -130,10 +158,44 @@ class Node:
         
     def tensionEnergy(self, transformation):
         return self.deltaSigma(transformation)*self.deltaEpsilon(transformation)
-
+        
     def shearEnergy(self, transformation):
         return self.deltaTau(transformation)*self.deltaGamma(transformation)
         
+    def tensionIntegralEnergy(self,transformation):
+        epsilon = self.normalStrain(transformation)
+        sigma = self.normalStress(transformation)
+        integral = 0.0
+        for i in range(len(epsilon)-1):
+            integral += (sigma[i]+sigma[i+1])/2*(epsilon[i+1]-epsilon[i])
+        temperature = 475.0
+        youngs_modulus,poisson_ratio,shear_modulus,yield_stress = calculate_elastic_by_temperature_in718(temperature)
+        (max(sigma)-min(sigma))**2/youngs_modulus
+        return integral + (max(sigma)-min(sigma))**2/youngs_modulus*2.0
+        
+    def shearIntegralEnergy(self,transformation):
+        gamma = self.shearStrain(transformation)
+        tau = self.shearStress(transformation)
+        integral = 0.0
+        for i in range(len(gamma)-1):
+            integral += (tau[i][0]+tau[i+1][0])/2*(gamma[i+1][0]-gamma[i][0]) + (tau[i][1]+tau[i+1][1])/2*(gamma[i+1][1]-gamma[i][1])
+        temperature = 475.0
+        youngs_modulus,poisson_ratio,shear_modulus,yield_stress = calculate_elastic_by_temperature_in718(temperature)
+        tau = np.array(tau)
+        return integral + (max(tau[:,0])-min(tau[:,0]))**2/shear_modulus*2.0 + (max(tau[:,1])-min(tau[:,1]))**2/shear_modulus*2.0
+        
+    def totalIntegralEnergy(self):
+        transformation = self.calcTransformation(np.radians(90),np.radians(0))
+        transform_stress_list = self.stressTransform(transformation)
+        transform_strain_list = self.strainTransform(transformation)
+        integral = 0.0
+        for i in range(len(transform_stress_list)-1):
+            for j in range(self.dimension):
+                for k in range(self.dimension):
+                    integral += abs((transform_stress_list[i][j][k]+transform_stress_list[i+1][j][k])/2*(transform_strain_list[i+1][j][k]-transform_strain_list[i][j][k]))
+
+        return integral
+
     def temperatureAtsigmaNMax(self, transformation):
         normal_stress_list = self.normalStress(transformation)
         max_normal_stress = max(normal_stress_list)
@@ -189,8 +251,9 @@ class Node:
         
         thermal_corrected_term = self.thermalCorrectedTerm(heatflux_at_sigma_nmax_critical_plane,temperature_at_sigma_nmax_critical_plane)
         thermal_corrected_term = 1.0
+        tmf_corrected_term = self.TMFCorrectedTerm(transformation_critical_plane)
         
-        fs_coefficient=delta_gamma_max/2.0*(1.0+k*sigma_nmax_critical_plane/Material.yield_stress)
+        fs_coefficient=delta_gamma_max/2.0*(1.0+k*sigma_nmax_critical_plane*tmf_corrected_term/Material.yield_stress)
         
         fs_coefficient *= thermal_corrected_term
         
@@ -373,7 +436,10 @@ class Node:
          temperature_at_sigma_nmax_critical_plane,
          heatflux_at_sigma_nmax_critical_plane) = self.calcValuesAtCriticalPlane(transformation_critical_plane)
         
-        delta_w1_max = self.tensionEnergy(transformation_critical_plane) + self.shearEnergy(transformation_critical_plane)
+        tmf_corrected_term = self.TMFCorrectedTerm(transformation_critical_plane)
+#        delta_w1_max = self.tensionIntegralEnergy(transformation_critical_plane)*tmf_corrected_term + self.shearIntegralEnergy(transformation_critical_plane)
+#        delta_w1_max *= 1.732
+        delta_w1_max = self.tensionEnergy(transformation_critical_plane)*tmf_corrected_term + self.shearEnergy(transformation_critical_plane)
         stress_ratio = (sigma_nmax_critical_plane-delta_sigma_critical_plane)/sigma_nmax_critical_plane
         delta_w1_max *= 2.0/(1.0-stress_ratio)
         
@@ -556,10 +622,12 @@ class Node:
          delta_gamma_critical_plane,
          temperature_at_sigma_nmax_critical_plane,
          heatflux_at_sigma_nmax_critical_plane) = self.calcValuesAtCriticalPlane(transformation_critical_plane)
-        
-        delta_w_max = sigma_nmax_critical_plane*delta_epsilon_critical_plane/2.0 + tau_nmax_critical_plane*delta_gamma_critical_plane/2.0
+         
+        tmf_corrected_term = self.TMFCorrectedTerm(transformation_critical_plane)
         
         thermal_corrected_term = self.thermalCorrectedTerm(heatflux_at_sigma_nmax_critical_plane,temperature_at_sigma_nmax_critical_plane)
+        
+        delta_w_max = sigma_nmax_critical_plane*tmf_corrected_term*delta_epsilon_critical_plane/2.0 + tau_nmax_critical_plane*delta_gamma_critical_plane/2.0
         
         delta_w_max *= thermal_corrected_term
         
@@ -629,6 +697,43 @@ class Node:
             hf_norm += (hf/calculate_conductivity_by_temperature_in718(temperature_at_sigma_nmax_critical_plane))**2
         thermal_corrected_term = 1.0 + hf_norm/(750.0-temperature_at_sigma_nmax_critical_plane)
         return thermal_corrected_term
+
+    def TMFCorrectedTerm(self,transformation):
+        Q0 = 240
+        nu0 = 3.75e-4
+        sigma_ult = 1300
+        sigma_alt = 1000
+        R = 8.31e-3
+        T = 650 + 273.15
+        C5 = 1.0e12
+        k = 0.9
+
+#        print transformation
+#        print self.stress_list
+#        print self.temperature_list
+#        print self.time_list
+#        print self.normalStress(transformation)
+
+        stress_hydrostatic,stress_mises,stress_triaxiality = self.stressTriaxiality()
+        
+        integral = 0.0
+        for i in range(1,len(self.stress_list)-1):
+            sigma_alt = self.normalStress(transformation)[i] - self.shearStress(transformation)[i][0]
+#            sigma_alt = abs(sigma_alt)
+            triaxiality = stress_triaxiality[i]
+#            triaxiality = 1.0
+            T = self.temperature_list[i] + 273.15
+            integral += triaxiality * np.exp(-1.0*(Q0-nu0*sigma_alt*(1.0-0.5*sigma_alt/sigma_ult))/(R*T)) * (self.time_list[i+1]-self.time_list[i])
+
+#            if sigma_alt >= 0:
+#                integral += np.exp(-1.0*(Q0-nu0*sigma_alt*abs(triaxiality)*(1.0-0.5*sigma_alt/sigma_ult))/(R*T)) * (self.time_list[i+1]-self.time_list[i])
+#            if sigma_alt <= 0:
+#                sigma_alt = abs(sigma_alt)
+#                integral -= np.exp(-1.0*(Q0-nu0*sigma_alt*abs(triaxiality)*(1.0-0.5*sigma_alt/sigma_ult))/(R*T)) * (self.time_list[i+1]-self.time_list[i])
+                
+        print integral
+        print (1+C5*integral)**k
+        return (1+C5*integral)**k            
         
     def calcValuesAtCriticalPlane(self,transformation_critical_plane):
         self.transformation_critical_plane = transformation_critical_plane
@@ -829,14 +934,65 @@ class Node:
         self.strain_list = [[i[:dimension] for i in s[:dimension]] for s in strain]
         self.stress_list = [[i[:dimension] for i in s[:dimension]] for s in stress]
         
-        self.fatigueLifeBMModel(material)
-        self.fatigueLifeFSModel(material)
-        self.fatigueLifeSWTModel(material)
-        self.fatigueLifeLiu1Model(material)
-        self.fatigueLifeLiu2Model(material)
-        self.fatigueLifeChuModel(material)
+#        self.fatigueLifeBMModel(material)
+#        self.fatigueLifeFSModel(material)
+#        self.fatigueLifeSWTModel(material)
+#        self.fatigueLifeLiu1Model(material)
+#        self.fatigueLifeLiu2Model(material)
+#        self.fatigueLifeChuModel(material)
+        
+        transformation = self.calcTransformation(np.radians(90),np.radians(0))
+#        print self.tensionIntegralEnergy(transformation)
+#        print self.shearIntegralEnergy(transformation)
+#        print self.tensionIntegralEnergy(transformation) + self.shearIntegralEnergy(transformation)
+#        print self.totalIntegralEnergy()
+        self.stressTriaxiality()
 
+def calculate_data_fatigue_life(data,material):
+    nodelabel = data.node_label[0]
+    nth = data.axial_count_index_list[-2]
+    nth = data.half_life_cycle
+    time = data.obtainNthCycle('runing_time',nth)
+    temperature = data.obtainNthCycle('temperature',nth)
+    heat_flux_1 = data.obtainNthCycle('heat_flux_1',nth)
+    heat_flux_2 = data.obtainNthCycle('heat_flux_2',nth)
+    heat_flux_3 = data.obtainNthCycle('heat_flux_3',nth)
+    length = len(time)
+    s11 = data.obtainNthCycle('axial_stress',nth)
+    s22 = np.zeros(length)
+    s33 = np.zeros(length)
+    s12 = data.obtainNthCycle('shear_stress',nth)
+    s13 = np.zeros(length)
+    s23 = np.zeros(length)
+    e11 = data.obtainNthCycle('axial_strain',nth)
+    e22 = e11*-1.0*material.poisson_ratio
+    e33 = e11*-1.0*material.poisson_ratio
+    e12 = data.obtainNthCycle('shear_strain',nth)/2.0
+    e13 = np.zeros(length)
+    e23 = np.zeros(length)
+    if heat_flux_1 == []:
+        heat_flux_1 = np.zeros(length)
+    if heat_flux_2 == []:
+        heat_flux_2 = np.zeros(length)
+    if heat_flux_3 == []:
+        heat_flux_3 = np.zeros(length)
+    stress = []
+    strain = []
+    heatflux = []
+    for i in range(len(time)):
+        stress.append([[s11[i],s12[i],s13[i]],[s12[i],s22[i],s23[i]],[s13[i],s23[i],s33[i]]])
+        strain.append([[e11[i],e12[i],e13[i]],[e12[i],e22[i],e23[i]],[e13[i],e23[i],e33[i]]])
+        heatflux.append([heat_flux_1[i],heat_flux_2[i],heat_flux_3[i]])
+    node = Node(nodelabel=nodelabel, dimension=2, time=time, coordinate=[], 
+                displacement=[], stress=stress, strain=strain,
+                temperature=temperature, heatflux=heatflux)
+    node.TMFCorrectedTerm(node.calcTransformation(np.radians(90),0))
+                
 if __name__ == '__main__':
     n = Node(dimension=2)
-    n.lifeTest()
-    #n.mathematicsTest()
+#    n.lifeTest()
+#
+    for name in ['7114','7018','7017','7025','7037']:
+#    for name in ['7114']:
+        exp = ExperimentData(ExperimentDirectory+name+'.csv')
+        calculate_data_fatigue_life(exp,material=material_in718())    

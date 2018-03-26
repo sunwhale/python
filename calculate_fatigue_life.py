@@ -18,6 +18,7 @@ from Work import *
 def calculate_data_fatigue_life(data,material,fatigue_model):
     nodelabel = data.node_label[0]
     nth = data.axial_count_index_list[-2]
+    nth = data.half_life_cycle
     time = data.obtainNthCycle('runing_time',nth)
     temperature = data.obtainNthCycle('temperature',nth)
     heat_flux_1 = data.obtainNthCycle('heat_flux_1',nth)
@@ -167,7 +168,8 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
 
 if __name__ == '__main__':
 #    fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu','Our']
-    fatigue_model_list = ['BM']
+    fatigue_model_list = ['Our']
+    fatigue_model_list = ['Liu1']
     for fatigue_model in fatigue_model_list:
-#        calculate_fatigue_life(fatigue_model,material=material_in718())
-        calculate_fatigue_life(fatigue_model,material=material_cmsx4())
+        calculate_fatigue_life(fatigue_model,material=material_in718())
+#        calculate_fatigue_life(fatigue_model,material=material_cmsx4())

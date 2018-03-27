@@ -6,12 +6,38 @@ Created on Thu Jan 05 11:50:47 2017
 """
 
 import xlsxwriter
+import json
+from scipy.optimize import fmin
 from Node import Node
 from Material import Material,material_in718,material_cmsx4
 from Data import SimulationData,ExperimentData,ExperimentLog
 from Constants import *
 from Work import *
 
+"""
+## Writing JSON data
+with open(r'F:\Temp\test.txt', 'w') as f:
+    json.dump(data, f)
+
+## Reading data back
+with open(r'F:\Temp\test.txt', 'r') as f:
+    data = json.load(f)
+"""
+
+def read_file(file_name):
+    """
+    Writing JSON data to file.
+    """
+    with open(file_name,'r') as data_file:
+        return json.loads(data_file.read())
+
+def write_file(file_name, data):
+    """
+    Reading JSON data to file.
+    """
+    with open(file_name,'w') as data_file:
+        return json.dump(data, data_file)
+        
 #==============================================================================
 # calculate_data_fatigue_life
 #==============================================================================
@@ -72,7 +98,9 @@ def calculate_data_fatigue_life(data,material,fatigue_model):
         fatigue_data = node.fatigueLifeChuModel(material)
     if fatigue_model == 'Our':
         fatigue_data = node.fatigueLifeOurModel(material)
-    return fatigue_data, node
+    if fatigue_model == 'Study':
+        fatigue_data = node.fatigueLifeStudyModel(material)
+    return fatigue_data, node, nth
 
 #==============================================================================
 # calculate_fatigue_life
@@ -113,8 +141,10 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
     allresultfile = open(FatigueDirectory + fatigue_model + '.csv', 'w') # write to csv all
     print >>allresultfile, headers[:-1] # write to csv all
     print >>allresultfile, units[:-1] # write to csv all
-        
-    for experiment_type in experiment_type_list:
+    
+    json_data_list=[]
+    
+    for experiment_type in experiment_type_list[:]:
 #        resultfile = open(FatigueDirectory + experiment_type[0] + '.csv', 'w') # write to csv
 #        print >>resultfile, headers # write to csv
 #        print >>resultfile, units # write to csv
@@ -139,12 +169,23 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
             使用计算模拟结果。
             """
 #            sim = SimulationData(SimulationDirectory+name+'.csv',period)
-#            data, node = calculate_data_fatigue_life(sim,material,fatigue_model)
+#            data, node, nth = calculate_data_fatigue_life(sim,material,fatigue_model)
             """
             使用试验结果。
             """
             exp = ExperimentData(ExperimentDirectory+name+'.csv')
-            data, node = calculate_data_fatigue_life(exp,material,fatigue_model)
+            data, node, nth = calculate_data_fatigue_life(exp,material,fatigue_model)
+            """
+            取出Nf/2循环数据。
+            """
+            json_data = {'experiment_type':experiment_type[0],
+                         'name':name,
+                         'expriment_life':expriment_life,
+                         'equivalent_strain':equivalent_strain,
+                         'period':period,
+                         'nth':nth,
+                         'node':node.outputJson()}
+            json_data_list.append(json_data)
             
             line = '' # write to csv
             line += '%s,' % (expriment_life) # write to csv
@@ -165,11 +206,62 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
         
     allresultfile.close() # write to csv all
     workbook.close() # write to excel
+            
+    file_name = 'node.txt'
+    write_file(file_name, json_data_list)
 
+    
+def fuction(C):
+    material = material_in718()
+    fatigue_model = 'Liu1'
+    file_name = 'node.txt'
+    N_f_list = []
+    N_p_list = []
+    json_data_list = read_file(file_name)
+    L = 1.0
+    for json_data in json_data_list:
+        node = Node()
+        node.inputJson(json_data['node'],2)
+        node.phi_interval = 10
+        node.TMFCefficient(C=C[0])
+        if fatigue_model == 'SWT':
+            fatigue_data = node.fatigueLifeSWTModel(material)
+        if fatigue_model == 'BM':
+            fatigue_data = node.fatigueLifeBMModel(material,S=0.36)
+        if fatigue_model == 'Liu1':
+            fatigue_data = node.fatigueLifeLiu1Model(material)
+        if fatigue_model == 'Liu2':
+            fatigue_data = node.fatigueLifeLiu2Model(material)
+        if fatigue_model == 'Chu':
+            fatigue_data = node.fatigueLifeChuModel(material)
+        if fatigue_model == 'Our':
+            fatigue_data = node.fatigueLifeOurModel(material)
+        if fatigue_model == 'Study':
+            fatigue_data = node.fatigueLifeStudyModel(material)
+        N_f = json_data['expriment_life']
+        N_p = fatigue_data[8]
+        print N_f,N_p
+        x = float(N_f)/float(N_p)
+        pi = 1/(np.sqrt(2*np.pi))*np.exp(-0.5*(x-1)**2)
+        
+        L += np.log(x)**2
+#        [  1.28710938e+12] 5.85338825429
+    print C,L
+        
+    return L
+
+def myfunc(x):
+        return x**2-4*x+8
+        
 if __name__ == '__main__':
-    fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu','Our']
+#    fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu','Our']
 #    fatigue_model_list = ['Our']
-#    fatigue_model_list = ['Liu1']
+    fatigue_model_list = ['Study']
     for fatigue_model in fatigue_model_list:
         calculate_fatigue_life(fatigue_model,material=material_in718())
 #        calculate_fatigue_life(fatigue_model,material=material_cmsx4())
+#    print fuction(1.2e12)
+    
+#    x0 = [1.0e12]    #猜一个初值 
+#    xopt = fmin(fuction, x0)    #求解
+#    print xopt    #打印结果

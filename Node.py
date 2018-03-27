@@ -28,10 +28,39 @@ class Node:
         self.theta_interval = theta_interval
         self.phi_interval = phi_interval
         self.transformation_critical_plane = self.calcTransformation(0,0)
+        self.TMFCefficient()
         
     def __str__(self):
         return 'node %s at time %s' % (str(int(self.nodelabel)),str(self.time))
-    
+
+    def outputJson(self):
+        return {'nodelabel':self.nodelabel,
+                'dimension':self.dimension,
+                'time_list':self.time_list,
+                'temperature_list':self.temperature_list,
+                'heatflux_list':self.heatflux_list,
+                'coordinate_list':self.coordinate_list,
+                'displacement_list':self.displacement_list,
+                'strain_list':self.strain_list,
+                'stress_list':self.stress_list,
+                'theta_interval':self.theta_interval,
+                'phi_interval':self.phi_interval
+                }
+                
+    def inputJson(self,node,interval=1):
+        interval = int(interval)
+        self.nodelabel = node['nodelabel']
+        self.dimension = node['dimension']
+        self.time_list = node['time_list'][::interval]
+        self.temperature_list = node['temperature_list'][::interval]
+        self.heatflux_list = node['heatflux_list'][::interval]
+        self.coordinate_list = node['coordinate_list'][::interval]
+        self.displacement_list = node['displacement_list'][::interval]
+        self.strain_list = node['strain_list'][::interval]
+        self.stress_list = node['stress_list'][::interval]
+        self.theta_interval = node['theta_interval']
+        self.phi_interval = node['phi_interval']
+        
     def stressTriaxiality(self):
         if self.dimension == 2:
             stress_tensor = [[i[:self.dimension]+[0.0] for i in s[:self.dimension]] + [[0.0,0.0,0.0]] for s in self.stress_list]
@@ -437,10 +466,7 @@ class Node:
          temperature_at_sigma_nmax_critical_plane,
          heatflux_at_sigma_nmax_critical_plane) = self.calcValuesAtCriticalPlane(transformation_critical_plane)
         
-        tmf_corrected_term = self.TMFCorrectedTerm(transformation_critical_plane)
-#        delta_w1_max = self.tensionIntegralEnergy(transformation_critical_plane)*tmf_corrected_term + self.shearIntegralEnergy(transformation_critical_plane)
-#        delta_w1_max *= 1.732
-        delta_w1_max = self.tensionEnergy(transformation_critical_plane)*tmf_corrected_term + self.shearEnergy(transformation_critical_plane)*0.5
+        delta_w1_max = self.tensionEnergy(transformation_critical_plane) + self.shearEnergy(transformation_critical_plane)
         stress_ratio = (sigma_nmax_critical_plane-delta_sigma_critical_plane)/sigma_nmax_critical_plane
         delta_w1_max *= 2.0/(1.0-stress_ratio)
         
@@ -588,6 +614,71 @@ class Node:
                                       heatflux_at_sigma_nmax_critical_plane,
                                       fatigue_coefficient,
                                       fatigue_life)
+
+    def fatigueLifeStudyModel(self,Material):
+        print '=========================Study model========================='
+
+        (delta_gamma_max,
+         delta_epsilon_max,
+         tension_energy_max,
+         shear_energy_max,
+         total_energy_max,
+         theta_critical_plane,
+         phi_critical_plane,
+         transformation_critical_plane,
+         theta_deg_list,
+         phi_deg_list) = self.initialValues()
+        
+        for theta_deg in theta_deg_list:
+            theta=np.radians(theta_deg)
+            for phi_deg in phi_deg_list:
+                phi=np.radians(phi_deg)
+                transformation = self.calcTransformation(theta,phi)
+                tension_energy_theta_phi = self.tensionEnergy(transformation)
+                if tension_energy_theta_phi > tension_energy_max:
+                    tension_energy_max = tension_energy_theta_phi
+                    theta_critical_plane = theta_deg
+                    phi_critical_plane = phi_deg
+                    transformation_critical_plane = transformation
+                    
+        (sigma_nmax_critical_plane,
+         delta_sigma_critical_plane,
+         delta_epsilon_critical_plane,
+         tau_nmax_critical_plane,
+         delta_tau_critical_plane,
+         delta_gamma_critical_plane,
+         temperature_at_sigma_nmax_critical_plane,
+         heatflux_at_sigma_nmax_critical_plane) = self.calcValuesAtCriticalPlane(transformation_critical_plane)
+        
+        tmf_corrected_term = self.TMFCorrectedTerm(transformation_critical_plane)
+#        delta_w1_max = self.tensionIntegralEnergy(transformation_critical_plane)*tmf_corrected_term + self.shearIntegralEnergy(transformation_critical_plane)
+#        delta_w1_max *= 1.732
+        delta_w1_max = self.tensionEnergy(transformation_critical_plane)*tmf_corrected_term + self.shearEnergy(transformation_critical_plane)*0.5
+        stress_ratio = (sigma_nmax_critical_plane-delta_sigma_critical_plane)/sigma_nmax_critical_plane
+        delta_w1_max *= 2.0/(1.0-stress_ratio)
+        
+        def f(x):
+            x0 = float(x[0])
+            return [
+                4*Material.sigma_f*Material.sigma_f/Material.youngs_modulus*(2*x0)**(2*Material.b) + 4*Material.sigma_f*Material.epsilon_f*(2*x0)**(Material.b+Material.c)-delta_w1_max
+            ]
+                
+        fatigue_coefficient = delta_w1_max
+        result = fsolve(f, [1])
+        fatigue_life = int(result[0])
+        
+        return self.outputFatigueLife(theta_critical_plane,
+                                      phi_critical_plane,
+                                      delta_gamma_critical_plane,
+                                      sigma_nmax_critical_plane,
+                                      delta_sigma_critical_plane,
+                                      delta_epsilon_critical_plane,
+                                      tau_nmax_critical_plane,
+                                      delta_tau_critical_plane,
+                                      temperature_at_sigma_nmax_critical_plane,
+                                      heatflux_at_sigma_nmax_critical_plane,
+                                      fatigue_coefficient,
+                                      fatigue_life)
                                       
     def fatigueLifeOurModel(self,Material):
         print '=========================Our model========================='
@@ -699,22 +790,22 @@ class Node:
         thermal_corrected_term = 1.0 + hf_norm/(750.0-temperature_at_sigma_nmax_critical_plane)
         return thermal_corrected_term
 
+    def TMFCefficient(self,Q0=240,upsilon0=3.75e-4,sigma_ult=1300.0,R=8.31e-3,C=1.28710938e+12,k=1.2):
+        self.Q0 = Q0
+        self.upsilon0 = upsilon0
+        self.sigma_ult = sigma_ult
+        self.R = R
+        self.C = C
+        self.k = k
+        
     def TMFCorrectedTerm(self,transformation):
-        Q0 = 240
-        nu0 = 3.75e-4
-        sigma_ult = 1300
-        sigma_alt = 1000
-        R = 8.31e-3
-        T = 650 + 273.15
-        C5 = 1.2e12
-        k = 1.2
-
-#        print transformation
-#        print self.stress_list
-#        print self.temperature_list
-#        print self.time_list
-#        print self.normalStress(transformation)
-
+        Q0 = self.Q0
+        upsilon0 = self.upsilon0
+        sigma_ult = self.sigma_ult
+        R = self.R
+        C = self.C
+        k = self.k
+        
         stress_hydrostatic,stress_mises,stress_triaxiality = self.stressTriaxiality()
         
         integral = 0.0
@@ -722,19 +813,16 @@ class Node:
             sigma_alt = self.normalStress(transformation)[i] - self.shearStress(transformation)[i][0]
 #            sigma_alt = abs(sigma_alt)
             triaxiality = stress_triaxiality[i]
-#            triaxiality = 1.0
             T = self.temperature_list[i] + 273.15
-            integral += triaxiality * np.exp(-1.0*(Q0-nu0*sigma_alt*(1.0-0.5*sigma_alt/sigma_ult))/(R*T)) * (self.time_list[i+1]-self.time_list[i])
-
+            integral += triaxiality * np.exp(-1.0*(Q0-upsilon0*sigma_alt*(1.0-0.5*sigma_alt/sigma_ult))/(R*T)) * (self.time_list[i+1]-self.time_list[i])
 #            if sigma_alt >= 0:
 #                integral += np.exp(-1.0*(Q0-nu0*sigma_alt*abs(triaxiality)*(1.0-0.5*sigma_alt/sigma_ult))/(R*T)) * (self.time_list[i+1]-self.time_list[i])
 #            if sigma_alt <= 0:
 #                sigma_alt = abs(sigma_alt)
 #                integral -= np.exp(-1.0*(Q0-nu0*sigma_alt*abs(triaxiality)*(1.0-0.5*sigma_alt/sigma_ult))/(R*T)) * (self.time_list[i+1]-self.time_list[i])
-                
-#        print integral
-        print (1+C5*integral)**k
-        return (1+C5*integral)**k            
+
+#        print (1.0+C*integral)**k
+        return (1.0+C*integral)**k            
         
     def calcValuesAtCriticalPlane(self,transformation_critical_plane):
         self.transformation_critical_plane = transformation_critical_plane
@@ -769,25 +857,25 @@ class Node:
                           fatigue_coefficient,
                           fatigue_life):
         
-        if self.dimension == 3:
-            print 'theta_critical_plane',theta_critical_plane
-        print 'phi_critical_plane',phi_critical_plane
-            
-        line_format = '%-40s'
-        line_format_strain = line_format + '%.4f%%'
-        line_format_stress = line_format + '%.2fMPa'
-        line_format_coefficient = line_format + '%.6f'
-        line_format_life = line_format + '%d'
-        line_format_temperature = line_format + '%.1fC'
-        print line_format_strain % ('delta_gamma_critical_plane',delta_gamma_critical_plane*100)
-        print line_format_stress % ('sigma_nmax_critical_plane',sigma_nmax_critical_plane)
-        print line_format_stress % ('delta_sigma_critical_plane',delta_sigma_critical_plane)
-        print line_format_strain % ('delta_epsilon_critical_plane',delta_epsilon_critical_plane*100)
-        print line_format_stress % ('tau_nmax_critical_plane',tau_nmax_critical_plane)
-        print line_format_stress % ('delta_tau_critical_plane',delta_tau_critical_plane)
-        print line_format_temperature % ('temperature_at_sigma_nmax_critical_plane',temperature_at_sigma_nmax_critical_plane)
-        print line_format_coefficient % ('fatigue_coefficient',fatigue_coefficient)
-        print line_format_life % ('fatigue_life',fatigue_life)
+#        if self.dimension == 3:
+#            print 'theta_critical_plane',theta_critical_plane
+#        print 'phi_critical_plane',phi_critical_plane
+#            
+#        line_format = '%-40s'
+#        line_format_strain = line_format + '%.4f%%'
+#        line_format_stress = line_format + '%.2fMPa'
+#        line_format_coefficient = line_format + '%.6f'
+#        line_format_life = line_format + '%d'
+#        line_format_temperature = line_format + '%.1fC'
+#        print line_format_strain % ('delta_gamma_critical_plane',delta_gamma_critical_plane*100)
+#        print line_format_stress % ('sigma_nmax_critical_plane',sigma_nmax_critical_plane)
+#        print line_format_stress % ('delta_sigma_critical_plane',delta_sigma_critical_plane)
+#        print line_format_strain % ('delta_epsilon_critical_plane',delta_epsilon_critical_plane*100)
+#        print line_format_stress % ('tau_nmax_critical_plane',tau_nmax_critical_plane)
+#        print line_format_stress % ('delta_tau_critical_plane',delta_tau_critical_plane)
+#        print line_format_temperature % ('temperature_at_sigma_nmax_critical_plane',temperature_at_sigma_nmax_critical_plane)
+#        print line_format_coefficient % ('fatigue_coefficient',fatigue_coefficient)
+#        print line_format_life % ('fatigue_life',fatigue_life)
         
         temperature_gradient_at_sigma_nmax_critical_plane_x = heatflux_at_sigma_nmax_critical_plane[0]/calculate_conductivity_by_temperature_in718(temperature_at_sigma_nmax_critical_plane)
         temperature_gradient_at_sigma_nmax_critical_plane_y = heatflux_at_sigma_nmax_critical_plane[1]/calculate_conductivity_by_temperature_in718(temperature_at_sigma_nmax_critical_plane)

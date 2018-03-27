@@ -46,7 +46,8 @@ def saveFigure(figure_path=None,figure_name=None,save_types=[]):
             plt.savefig(figure_path + figure_name + save_type, dpi=150, transparent=True)
             print 'save as', figure_path + figure_name + save_type
                 
-fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
+#fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
+fatigue_model_list = ['BM','FS','SWT','Chu','Liu1','Study']
 #fatigue_model_list = ['BM']
 
 TN_list = []
@@ -94,12 +95,12 @@ ax = plt.gca()
 #ax.yaxis.set_major_locator(MultipleLocator(1))
 #ax.yaxis.set_minor_locator(MultipleLocator(1))
 #ax.yaxis.set_major_formatter(ScalarFormatter())
+fatigue_model_list = ['BM','FS','SWT','Chu','Liu I','Study']
 #==============================================================================
 # annotate
 #==============================================================================
-plt.text(1,1.3,r'safe',fontsize=20,color='red')
-plt.text(1,0.7,r'unsafe',fontsize=20,color='red')
-
+plt.text(0.0,1.3,r'conservative',fontsize=20,color='red')
+plt.text(0.0,0.7,r'non-conservative',fontsize=20,color='red')
 
 n = range(len(TN_list))
 plt.plot([-10,10],[1,1],ls='--',lw='4',color='red')
@@ -117,3 +118,5 @@ figure_name = 'plot_fatigue_life_quantitative_evaluation_tmf_TN'
 saveFigure(figure_path,figure_name,save_types=['.pdf','.png'])
     
 shutil.copy(__file__,ArticleFigureDirectory)
+
+plt.show()

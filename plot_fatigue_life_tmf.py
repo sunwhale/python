@@ -115,6 +115,7 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
 
 fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
 #fatigue_model_list = ['Our']
+fatigue_model_list = ['Liu1']
 fatigue_model_list = ['Study']
 
 ArticleFigureDirectory = 'F:\\Cloud\\Github\\fatigue\\figs\\'

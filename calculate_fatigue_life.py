@@ -161,6 +161,7 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
         
         for name in experiment_type[1]:
             print name
+            print experiment_type[0]
             regular = r'\d+\.?\d*'
             period = float(experiment_log.obtainItem(name,'period',regular)[0])
             expriment_life = int(experiment_log.obtainItem(name,'comments',regular)[0])

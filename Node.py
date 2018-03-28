@@ -790,7 +790,7 @@ class Node:
         thermal_corrected_term = 1.0 + hf_norm/(750.0-temperature_at_sigma_nmax_critical_plane)
         return thermal_corrected_term
 
-    def TMFCefficient(self,Q0=240,upsilon0=3.75e-4,sigma_ult=1300.0,R=8.31e-3,C=1.28710938e+12,k=1.2):
+    def TMFCefficient(self,Q0=240,upsilon0=3.50e-4,sigma_ult=1305.0,R=8.31e-3,C=1.28710938e+12,k=1.2):
         self.Q0 = Q0
         self.upsilon0 = upsilon0
         self.sigma_ult = sigma_ult

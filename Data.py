@@ -335,6 +335,7 @@ class SimulationData:
                 count = int(self.runing_time[i]/period) + 1
                 self.axial_count_index[count] = i
         self.axial_count_index_list = list(self.axial_count_index.keys())
+        self.half_life_cycle = self.axial_count_index_list[-2]
 
     def obtainNthCycle(self,item,begin_cycle,end_cycle=None):
         """

@@ -8,6 +8,7 @@ Created on Mon Feb 13 13:46:18 2017
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import subprocess
 import shutil
 from Constants import *
 from Data import SimulationData,ExperimentData,ExperimentLog
@@ -140,13 +141,15 @@ class Load:
         self.film_coefficient = film_coefficient
         self.sink_temperature = sink_temperature
     
-    def setThermal(self, heat_flux, film_coefficient_outer, film_coefficient_inner, emissivity, sink_temperature_inner ,sink_temperature_outer):
+    def setThermal(self, heat_flux, film_coefficient_outer, film_coefficient_inner, 
+                   emissivity, sink_temperature_inner ,sink_temperature_outer, outer_temperature):
         self.heat_flux = heat_flux
         self.film_coefficient_outer = film_coefficient_outer
         self.film_coefficient_inner = film_coefficient_inner
         self.emissivity = emissivity
         self.sink_temperature_inner = sink_temperature_inner
         self.sink_temperature_outer = sink_temperature_outer
+        self.outer_temperature = outer_temperature
 
         
     def showLoadPath(self, directory):
@@ -267,7 +270,8 @@ class Job:
         print >>outfile, 'sink_temperature_inner = %r' % (self.Load.sink_temperature_inner)
         print >>outfile, 'sink_temperature_outer = %r' % (self.Load.sink_temperature_outer)
         print >>outfile, 'film_coefficient_outer = %r' % (self.Load.film_coefficient_outer)
-        print >>outfile, 'film_coefficient_inner = %r' % (self.Load.film_coefficient_inner)    
+        print >>outfile, 'film_coefficient_inner = %r' % (self.Load.film_coefficient_inner)
+        print >>outfile, 'outer_temperature = %r' % (self.Load.outer_temperature)    
         outfile.close()
 
         shutil.copy(PythonDirectory + self.PythonPreproc, self.AbaqusWorkDirectory)
@@ -276,7 +280,7 @@ class Job:
         os.chdir(self.AbaqusWorkDirectory)
         self.creatBatchFile()
         cmd ='AutoPreProc'
-        os.system(cmd)
+        subprocess.call(cmd,shell=True)
         
     def createAbaqusInput(self):
         self.Load.showLoadPath(self.AbaqusWorkDirectory)
@@ -409,7 +413,7 @@ class Job:
         self.creatBatchFile()
         os.chdir(self.AbaqusWorkDirectory)
         cmd = 'Run'
-        os.system(cmd)
+        subprocess.call(cmd,shell=True)
 
     def createUMATFile(self):
         fortran_file_name = self.UMAT.UMATDirectory + self.UMAT.OutputFortranFile
@@ -432,7 +436,7 @@ class Job:
         shutil.copy(PythonDirectory + self.PythonPostProc, self.AbaqusWorkDirectory)
         os.chdir(self.AbaqusWorkDirectory)
         cmd ='AutoPostProc'
-        os.system(cmd)
+        subprocess.call(cmd,shell=True)
         if self.copy:
             copy_suffix_files(self.AbaqusWorkDirectory,SimulationDirectory,suffixs=['csv'])
         

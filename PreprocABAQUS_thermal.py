@@ -261,8 +261,16 @@ a = mdb.models['Model-1'].rootAssembly
 s1 = a.instances['Part-1-1'].edges
 side1Edges1 = s1.getSequenceFromMask(mask=('[#2 ]', ), )
 region = a.Surface(side1Edges=side1Edges1, name='Surf-Outer')
-mdb.models['Model-1'].SurfaceHeatFlux(name='Outer-Heatflux', 
-    createStepName='Step-1', region=region, magnitude=heat_flux)
+#mdb.models['Model-1'].SurfaceHeatFlux(name='Outer-Heatflux', 
+#    createStepName='Step-1', region=region, magnitude=heat_flux)
+
+a = mdb.models['Model-1'].rootAssembly
+e1 = a.instances['Part-1-1'].edges
+edges1 = e1.getSequenceFromMask(mask=('[#2 ]', ), )
+region = regionToolset.Region(edges=edges1)
+mdb.models['Model-1'].TemperatureBC(name='BC-Outer-Temperature', createStepName='Step-1', 
+    region=region, fixed=OFF, distributionType=UNIFORM, fieldName='', 
+    magnitude=outer_temperature, amplitude=UNSET)
 
 a = mdb.models['Model-1'].rootAssembly
 s1 = a.instances['Part-1-1'].edges

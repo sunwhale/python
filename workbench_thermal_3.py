@@ -258,19 +258,21 @@ outer_temperature_list = [
 exp_list.append([power_percent_list,outer_temperature_list,0.0])
 
 print exp_list
-result_list = []
+plot_list = []
+out_list = []
 threshold = 0.10
 name = '0000'
 
-#for power_percent in power_percent_list:
-for exp in exp_list:
+for exp in exp_list[:]:
+    result_list = []
     for i in range(4):
-        outer_temperature = exp[0][i] + 273.15
-        power_percent = exp[1][i]
-        film_coefficient_inner = 0.050
-        film_coefficient_outer = 0.050
-    #    sink_temperature_inner = 100/0.6*(power_percent-threshold)*(1.0)/(1.0-threshold)+20+273.15
-        sink_temperature_inner = 20+273.15
+        outer_temperature = exp[1][i] + 273.15
+        power_percent = exp[0][i]
+        volume_flow = exp[2]
+        film_coefficient_inner = calculate_film_coefficient(volume_flow)
+        film_coefficient_outer = 0.025
+        sink_temperature_inner = 100/0.6*(power_percent-threshold)*(1.0)/(1.0-threshold)+20+273.15
+#        sink_temperature_inner = 20+273.15
     #    sink_temperature_outer = 500/0.6*(power_percent-threshold)*(1.0)/(1.0-threshold)+20+273.15
         sink_temperature_outer = 20+273.15
         heat_flux = emissivity*reflect*total_power*(power_percent-threshold)*(1.0)/(1.0-threshold)/np.pi/d_out/height*1.0e-3
@@ -289,12 +291,23 @@ for exp in exp_list:
         heat_flux_1 = simulation.heat_flux_1[-1]
         heat_flux_2 = simulation.heat_flux_2[-1]
         result_list.append([power_percent,film_coefficient_inner,temperature,heat_flux_1])
-    
-for r in result_list:
-    print r[0],r[1],r[2],r[3]
+        out_list.append([exp[2],power_percent,film_coefficient_inner,temperature,heat_flux_1])
+    plot_list.append([exp[2],result_list])
+
 
 AbaqusWorkDirectory = AbaqusTempDirectory + name + '\\'
+
+for plot in plot_list:
+    p = np.array(plot[1])
+    plt.plot(p[:,0],p[:,3],label=plot[0])
+plt.legend(loc=0)
+plt.savefig(AbaqusWorkDirectory + 'out.png', dpi=150, transparent=False)
+plt.show()
+            
+for r in out_list:
+    print r[0],r[1],r[2],r[3]
+
 outfile = open(AbaqusWorkDirectory + 'out.csv', 'w')
-for r in result_list:
-    print >>outfile, r[0],r[1],r[2],r[3]
+for r in out_list:
+    print >>outfile, '%s,%s,%s,%s,%s' % (r[0],r[1],r[2],r[3],r[4])
 outfile.close()

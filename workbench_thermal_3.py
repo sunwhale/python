@@ -260,8 +260,8 @@ exp_list.append([power_percent_list,outer_temperature_list,0.0])
 print exp_list
 plot_list = []
 out_list = []
-threshold = 0.10
-name = '0000'
+threshold = 0.15
+name = '0001'
 
 for exp in exp_list[:]:
     result_list = []
@@ -269,11 +269,11 @@ for exp in exp_list[:]:
         outer_temperature = exp[1][i] + 273.15
         power_percent = exp[0][i]
         volume_flow = exp[2]
-        film_coefficient_inner = calculate_film_coefficient(volume_flow)
+        film_coefficient_inner = calculate_film_coefficient(volume_flow) * 1.0
         film_coefficient_outer = 0.025
-        sink_temperature_inner = 100/0.6*(power_percent-threshold)*(1.0)/(1.0-threshold)+20+273.15
-#        sink_temperature_inner = 20+273.15
-    #    sink_temperature_outer = 500/0.6*(power_percent-threshold)*(1.0)/(1.0-threshold)+20+273.15
+#        sink_temperature_inner = 100/0.6*(power_percent-threshold)*(1.0)/(1.0-threshold)+20+273.15
+        sink_temperature_inner = 20+273.15
+#        sink_temperature_outer = 500/0.6*(power_percent-threshold)*(1.0)/(1.0-threshold)+20+273.15
         sink_temperature_outer = 20+273.15
         heat_flux = emissivity*reflect*total_power*(power_percent-threshold)*(1.0)/(1.0-threshold)/np.pi/d_out/height*1.0e-3
         heat_flux = 0.0
@@ -290,24 +290,23 @@ for exp in exp_list[:]:
         temperature = simulation.temperature[-1] - 273.15
         heat_flux_1 = simulation.heat_flux_1[-1]
         heat_flux_2 = simulation.heat_flux_2[-1]
+        power_percent_cal = -1.0*heat_flux_1*np.pi*8.5e-3*80e-3/6.4
+        efficiency = power_percent_cal/power_percent
         result_list.append([power_percent,film_coefficient_inner,temperature,heat_flux_1])
-        out_list.append([exp[2],power_percent,film_coefficient_inner,temperature,heat_flux_1])
+        out_list.append([exp[2],power_percent,film_coefficient_inner,temperature,heat_flux_1,power_percent_cal,efficiency])
     plot_list.append([exp[2],result_list])
-
 
 AbaqusWorkDirectory = AbaqusTempDirectory + name + '\\'
 
+out_name = '%s_%s_%s_%s' % (film_coefficient_inner,sink_temperature_inner,film_coefficient_outer,sink_temperature_outer)
 for plot in plot_list:
     p = np.array(plot[1])
-    plt.plot(p[:,0],p[:,3],label=plot[0])
+    plt.plot(p[:,0],p[:,3],label=plot[0],marker='s')
 plt.legend(loc=0)
-plt.savefig(AbaqusWorkDirectory + 'out.png', dpi=150, transparent=False)
+plt.savefig(AbaqusWorkDirectory + out_name + '.png', dpi=150, transparent=False)
 plt.show()
-            
-for r in out_list:
-    print r[0],r[1],r[2],r[3]
 
-outfile = open(AbaqusWorkDirectory + 'out.csv', 'w')
+outfile = open(AbaqusWorkDirectory + out_name + '.csv', 'w')
 for r in out_list:
-    print >>outfile, '%s,%s,%s,%s,%s' % (r[0],r[1],r[2],r[3],r[4])
+    print >>outfile, '%s,%s,%s,%s,%s,%s,%s' % (r[0],r[1],r[2],r[3],r[4],r[5],r[6])
 outfile.close()

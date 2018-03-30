@@ -694,6 +694,87 @@ class Node:
                                       heatflux_at_sigma_nmax_critical_plane,
                                       fatigue_coefficient,
                                       fatigue_life)
+                                      
+    def fatigueLifeVoseModel(self,Material):
+        print '=========================Vose model========================='
+
+        (delta_gamma_max,
+         delta_epsilon_max,
+         tension_energy_max,
+         shear_energy_max,
+         total_energy_max,
+         theta_critical_plane,
+         phi_critical_plane,
+         transformation_critical_plane,
+         theta_deg_list,
+         phi_deg_list) = self.initialValues()
+        
+        for theta_deg in theta_deg_list:
+            theta=np.radians(90)
+            for phi_deg in phi_deg_list:
+                phi=np.radians(0)
+                transformation = self.calcTransformation(theta,phi)
+                theta_critical_plane = theta_deg
+                phi_critical_plane = phi_deg
+                transformation_critical_plane = transformation
+                    
+        (sigma_nmax_critical_plane,
+         delta_sigma_critical_plane,
+         delta_epsilon_critical_plane,
+         tau_nmax_critical_plane,
+         delta_tau_critical_plane,
+         delta_gamma_critical_plane,
+         temperature_at_sigma_nmax_critical_plane,
+         heatflux_at_sigma_nmax_critical_plane) = self.calcValuesAtCriticalPlane(transformation_critical_plane)
+
+        Q0=240.0
+        upsilon0=3.50e-4
+        sigma_ult=1305.0
+        R=8.31e-3
+        C5=1.28710938e+12
+        k=1.2
+        C1,C2,C3,C4 = [  9.94816905e-02,  -2.30395385e-01,   1.79726262e-07,   7.85958724e-01]
+#        C1,C2,C3,C4 = [ 0.54659446, -0.04706091, -0.4971955,  -0.04087346]
+        stress_ratio = (sigma_nmax_critical_plane-delta_sigma_critical_plane)/sigma_nmax_critical_plane
+        m = 1
+
+        integral = 0.0
+        for i in range(1,len(self.stress_list)-1):
+            sigma_alt = delta_sigma_critical_plane/2.0
+            T = self.temperature_list[i] + 273.15
+            integral += np.exp(-1.0*(Q0-upsilon0*sigma_alt*(1.0-0.5*sigma_alt/sigma_ult))/(R*T)) * (self.time_list[i+1]-self.time_list[i])
+        
+        fatigue_coefficient = delta_epsilon_critical_plane * 2.0**(1-m)*(1.0-stress_ratio)**(m-1) * (1.0+C5*integral)**k
+
+        def f(x):
+            x0 = float(x[0])
+            return [
+#                Material.sigma_f/Material.youngs_modulus*(2*x0)**(Material.b) + Material.epsilon_f*(2*x0)**(Material.c)-fatigue_coefficient
+                C1*(2*x0)**(C2) + C3*(2*x0)**(C4)-fatigue_coefficient
+            ]
+        
+        result = fsolve(f, [1])
+        fatigue_life = int(result[0])
+        
+#        C1 = 10**(-3.40627845)
+#        C2 = -3.68266722
+                
+#        fatigue_life = int(C1*fatigue_coefficient**C2)
+        
+        print fatigue_life   
+        
+        return self.outputFatigueLife(theta_critical_plane,
+                                      phi_critical_plane,
+                                      delta_gamma_critical_plane,
+                                      sigma_nmax_critical_plane,
+                                      delta_sigma_critical_plane,
+                                      delta_epsilon_critical_plane,
+                                      tau_nmax_critical_plane,
+                                      delta_tau_critical_plane,
+                                      temperature_at_sigma_nmax_critical_plane,
+                                      heatflux_at_sigma_nmax_critical_plane,
+                                      fatigue_coefficient,
+                                      fatigue_life)
 
     def fatigueLifeStudyModel(self,Material):
         print '=========================Study model========================='
@@ -982,7 +1063,7 @@ class Node:
 #                integral -= np.exp(-1.0*(Q0-nu0*sigma_alt*abs(triaxiality)*(1.0-0.5*sigma_alt/sigma_ult))/(R*T)) * (self.time_list[i+1]-self.time_list[i])
 
 #        print (1.0+C*integral)**k
-        return (1.0+C*integral)**k            
+        return (1.0+C*integral)**k
         
     def calcValuesAtCriticalPlane(self,transformation_critical_plane):
         self.transformation_critical_plane = transformation_critical_plane

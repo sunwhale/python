@@ -1,4 +1,4 @@
-﻿number,din mm,dout mm,gauge length mm,load type,axial control mode,rotational control mode,temperature mode,axial displacement,axial strain %,axial force,rotation,angel strain deg,torque,equivalent strain %,axial rotational phase deg,axial temperature phase deg,Period,load rate or frequence,test date,comments,calculate
+number,din mm,dout mm,gauge length mm,load type,axial control mode,rotational control mode,temperature mode,axial displacement,axial strain %,axial force,rotation,angel strain deg,torque,equivalent strain %,axial rotational phase deg,axial temperature phase deg,Period,load rate or frequence,test date,comments,calculate
 7005,10.00 ,12.00 ,25.00 ,cyclic circle path,strain,strain,300,-,sin:+-0.6,-,-,sin:+-3,-,-,90 ,0 ,T:20s,0.05Hz,2014-11-13,stop at 400,1
 7006,10.00 ,12.00 ,25.00 ,cyclic torsion,force,strain,300,-,-,0,-,ramp:+-3.5,-,-,0 ,0 ,T:20s,0.05Hz,2014-11-13,stop at 400 + 1355fracture,1
 7007,10.00 ,12.00 ,25.00 ,cyclic torsion,force,strain,550,-,-,0,-,ramp:+-3.5,-,-,0 ,0 ,T:20s,0.05Hz,2014-11-14,stop at 400,1
@@ -61,4 +61,7 @@
 7210,6.50 ,8.50 ,12.00 ,cyclic tension compression,strain,rotation,300-650,ramp:+-0.40,ramp:+-0.40,-,0,-,-,+-0.4,0 ,180 ,T:240s,T:240s,2017-10-13,fracture at 3387,1
 7301,6.50 ,8.50 ,12.00 ,cyclic tension compression,strain,rotation,300-650,ramp:+-0.55,ramp:+-0.65,-,0,-,-,+-0.65,0 ,0 ,T:240s,T:240s,2017-09-01,fracture at 624,1
 7302,6.50 ,8.50 ,12.00 ,cyclic tension compression,strain,rotation,300-650,ramp:+-0.70,ramp:+-0.90,-,0,-,-,+-0.90,0 ,0 ,T:240s,T:240s,2017-09-01,fracture at 147,1
-0000,0.00 ,6.50 ,8.50 ,cyclic tension compression,strain,rotation,650,-,ramp:+-0.0,-,0,-,-,0,0 ,0 ,T:1s,0.001mm/mm,2016-11-16,fracture at 864,1
+0000,0.00 ,6.50 ,8.50 ,cyclic tension compression,strain,rotation,650,-,ramp:+-0.0,-,0,-,-,0,0 ,0 ,T:1s,0.001mm/mm,2016-11-16,fracture at 1000,1
+0001,0.00 ,6.50 ,8.50 ,cyclic tension compression,strain,rotation,650,-,ramp:+-0.0,-,0,-,-,0,0 ,0 ,T:1s,0.001mm/mm,2016-11-16,fracture at 1000,1
+0002,0.00 ,6.50 ,8.50 ,cyclic tension compression,strain,rotation,650,-,ramp:+-0.0,-,0,-,-,0,0 ,0 ,T:1s,0.001mm/mm,2016-11-16,fracture at 1000,1
+0003,0.00 ,6.50 ,8.50 ,cyclic tension compression,strain,rotation,650,-,ramp:+-0.0,-,0,-,-,0,0 ,0 ,T:1s,0.001mm/mm,2016-11-16,fracture at 1000,1

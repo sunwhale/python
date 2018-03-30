@@ -98,6 +98,8 @@ def calculate_data_fatigue_life(data,material,fatigue_model):
         fatigue_data = node.fatigueLifeChuModel(material)
     if fatigue_model == 'Zamrik':
         fatigue_data = node.fatigueLifeZamrikModel(material)
+    if fatigue_model == 'Vose':
+        fatigue_data = node.fatigueLifeVoseModel(material)
     if fatigue_model == 'Our':
         fatigue_data = node.fatigueLifeOurModel(material)
     if fatigue_model == 'Study':
@@ -173,13 +175,13 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
             """
             使用计算模拟结果。
             """
-            sim = SimulationData(SimulationDirectory+name+'.csv',period)
-            data, node, nth = calculate_data_fatigue_life(sim,material,fatigue_model)
+#            sim = SimulationData(SimulationDirectory+name+'.csv',period)
+#            data, node, nth = calculate_data_fatigue_life(sim,material,fatigue_model)
             """
             使用试验结果。
             """
-#            exp = ExperimentData(ExperimentDirectory+name+'.csv')
-#            data, node, nth = calculate_data_fatigue_life(exp,material,fatigue_model)
+            exp = ExperimentData(ExperimentDirectory+name+'.csv')
+            data, node, nth = calculate_data_fatigue_life(exp,material,fatigue_model)
             """
             取出Nf/2循环数据。
             """
@@ -241,6 +243,8 @@ def fuction(C):
             fatigue_data = node.fatigueLifeChuModel(material)
         if fatigue_model == 'Zamrik':
             fatigue_data = node.fatigueLifeZamrikModel(material)
+        if fatigue_model == 'Vose':
+            fatigue_data = node.fatigueLifeVoseModel(material)
         if fatigue_model == 'Our':
             fatigue_data = node.fatigueLifeOurModel(material)
         if fatigue_model == 'Study':
@@ -267,6 +271,7 @@ if __name__ == '__main__':
     fatigue_model_list = ['Our']
 #    fatigue_model_list = ['Zamrik']
     fatigue_model_list = ['Study2']
+    fatigue_model_list = ['Vose']
     for fatigue_model in fatigue_model_list:
         calculate_fatigue_life(fatigue_model,material=material_in718())
 #        calculate_fatigue_life(fatigue_model,material=material_cmsx4())

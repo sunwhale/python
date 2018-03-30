@@ -12,7 +12,7 @@ from Data import FatigueData,PlotData
 from Constants import xylabels,FatigueDirectory,ArticleFigureDirectory
 from plot_format import plot_format
 
-def create_plot_data_fatigue_life(fatigue_data,figure_path=None,figure_name=None):
+def create_plot_data_fatigue_coefficient(fatigue_data,figure_path=None,figure_name=None):
 #==============================================================================
 # x,y label
 #==============================================================================
@@ -26,9 +26,9 @@ def create_plot_data_fatigue_life(fatigue_data,figure_path=None,figure_name=None
     plot_data = PlotData()
     for load_type in ['TC-IF','TC-IP','TC-OP','TC-90','PRO-IP','NPR-IP']:
         experimental_life = fatigue_data.loadTypeFilter(load_type,'experimental_life')
-        predicted_life = fatigue_data.loadTypeFilter(load_type,'predicted_life')
+        fatigue_coefficient = fatigue_data.loadTypeFilter(load_type,'fatigue_coefficient')
         plot_data.addLine(experimental_life,
-                          predicted_life,
+                          fatigue_coefficient,
                           xlabel=xlabel,
                           ylabel=ylabel,
                           linelabel=load_type,
@@ -39,7 +39,7 @@ def create_plot_data_fatigue_life(fatigue_data,figure_path=None,figure_name=None
         i += 1
     plot_data.writeToFile(figure_path,figure_name)
     
-def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
+def plot_fatigue_coefficient(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # title
 #==============================================================================
@@ -49,7 +49,7 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
 # http://matplotlib.org/users/customizing.html?highlight=rcparams
 #==============================================================================
     plot_format()
-    mpl.rcParams['figure.figsize'] = (8,8)
+    mpl.rcParams['figure.figsize'] = (8,6)
     fig, ax = plt.subplots()
 #==============================================================================
 # grid set up
@@ -65,8 +65,8 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # x,y limite
 #==============================================================================
-    plt.xlim(1E1,1E5)
-    plt.ylim(1E1,1E5)
+#    plt.xlim(1E1,1E5)
+#    plt.ylim(1E1,1E5)
 #==============================================================================
 # xy axial equal
 #==============================================================================
@@ -86,14 +86,14 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # plot 1x lines
 #==============================================================================
-    linewidth = 1.0
-    plt.plot([10,1e5],[10,1e5],color='black',linewidth=linewidth)
+#    linewidth = 1.0
+#    plt.plot([10,1e5],[10,1e5],color='black',linewidth=linewidth)
 #==============================================================================
 # plot 2x lines
 #==============================================================================
-    linewidth = 0.5
-    plt.plot([20,1e5],[10,5e4],color='black',linewidth=linewidth)
-    plt.plot([10,5e4],[20,1e5],color='black',linewidth=linewidth)
+#    linewidth = 0.5
+#    plt.plot([20,1e5],[10,5e4],color='black',linewidth=linewidth)
+#    plt.plot([10,5e4],[20,1e5],color='black',linewidth=linewidth)
 #==============================================================================
 # plot 5x lines
 #==============================================================================
@@ -126,12 +126,12 @@ for fatigue_model in fatigue_model_list:
     fatigue_file = '%s%s.csv' % (FatigueDirectory,fatigue_model)
     fatigue_data = FatigueData(fatigue_file)
     figure_path = ArticleFigureDirectory
-    figure_name = 'NF-NP-TMF-'+fatigue_model
-    create_plot_data_fatigue_life(fatigue_data,figure_path,figure_name)
+    figure_name = 'F-NF-TMF-'+fatigue_model
+    create_plot_data_fatigue_coefficient(fatigue_data,figure_path,figure_name)
     
 for fatigue_model in fatigue_model_list:
     figure_path = ArticleFigureDirectory
-    figure_name = 'NF-NP-TMF-'+fatigue_model
-    plot_fatigue_life(figure_path,figure_name,save_types=['.pdf','.png'])
+    figure_name = 'F-NF-TMF-'+fatigue_model
+    plot_fatigue_coefficient(figure_path,figure_name,save_types=['.pdf','.png'])
     
 shutil.copy(__file__,ArticleFigureDirectory)

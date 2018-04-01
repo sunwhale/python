@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import shutil
 import matplotlib as mpl
 from matplotlib.ticker import MultipleLocator,ScalarFormatter,FormatStrFormatter 
-from Data import FatigueData,PlotData,ExperimentData
+from Data import FatigueData,PlotData,ExperimentData,SimulationData
 from Constants import *
 from plot_format import plot_format
 from Material import material_in718,material_in718_NASA,material_in718_BHU
@@ -26,10 +26,10 @@ def create_plot_data_exp_temperature(figure_path=None,figure_name=None):
     i = 0
     marker_list = ['s','o','^','D']
     plot_data = PlotData()
-#    for name in ['30_0_','50_0_','70_0_','90_0_']:
+    for name in ['30_0_','50_0_','70_0_','90_0_']:
 #    for name in ['30_25_','50_25_','70_25_','90_25_']:
 #    for name in ['30_50_','50_50_','70_50_','90_50_']:
-    for name in ['30_67_','50_67_','70_67_','90_67_']:
+#    for name in ['30_67_','50_67_','70_67_','90_67_']:
 #    for name in ['90_0_','90_25_','90_50_','90_67_']:
 #    for name in ['70_0_','70_25_','70_50_','70_67_']:
 #    for name in ['50_0_','50_25_','50_50_','50_67_']:
@@ -39,6 +39,22 @@ def create_plot_data_exp_temperature(figure_path=None,figure_name=None):
         experiment = ExperimentData(filename)
         time = experiment.runing_time
         temperature = experiment.temperature
+        plot_data.addLine(time,
+                          temperature,
+                          xlabel=xlabel,
+                          ylabel=ylabel,
+                          linelabel=name.split('_')[0] + '%',
+                          linewidth=2,
+                          linestyle='-',
+                          marker=marker_list[i],
+                          markersize=12,
+                          color='auto')
+        
+        SimulationDirectory = 'F:\\Cloud\\Simulation\\Temperature\\'
+        filename = SimulationDirectory + name + '.csv'
+        simulation = SimulationData(filename,1)
+        time = simulation.runing_time
+        temperature = simulation.temperature - 273.15
         plot_data.addLine(time,
                           temperature,
                           xlabel=xlabel,
@@ -78,12 +94,12 @@ def plot_exp_temperature(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # x,y limite
 #==============================================================================
-    plt.xlim(1,1e4)
+    plt.xlim(1,1e2)
     plt.ylim(0,1100)
 #==============================================================================
 # xy log scale
 #==============================================================================
-    plt.xscale('log')
+#    plt.xscale('log')
 #    plt.yscale('log')
 #==============================================================================
 # xy axial equal

@@ -105,18 +105,24 @@ plt.text(0.0,0.7,r'non-conservative',fontsize=20,color='red')
 n = range(len(TN_list))
 plt.plot([-10,10],[1,1],ls='--',lw='4',color='red')
 plt.bar(n,TN_list)
-
+    
 #n = range(len(TRMS_list))
 #plt.bar(n,TRMS_list)
 
+for t in TN_list:
+    print t
+    
+for t in TRMS_list:
+    print t
+    
 n = [i+0.5 for i in n]
 plt.xticks(n, fatigue_model_list)
 
 figure_path = ArticleFigureDirectory
 #figure_name = 'plot_fatigue_life_quantitative_evaluation_tmf_TRMS'
-figure_name = 'plot_fatigue_life_quantitative_evaluation_tmf_TN'
-saveFigure(figure_path,figure_name,save_types=['.pdf','.png'])
-    
-shutil.copy(__file__,ArticleFigureDirectory)
-
-plt.show()
+#figure_name = 'plot_fatigue_life_quantitative_evaluation_tmf_TN'
+#saveFigure(figure_path,figure_name,save_types=['.pdf','.png'])
+#    
+#shutil.copy(__file__,ArticleFigureDirectory)
+#
+#plt.show()

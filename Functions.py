@@ -58,6 +58,14 @@ def copy_suffix_files(input_directory,output_directory,suffixs=[]):
             shutil.copy(fullname, output_directory)
             print 'copy %-s  to  %-s' % (fullname,output_directory)
 #==============================================================================
+# copy_suffix_files
+#==============================================================================
+def copy_file(input_file,output_file):
+    """
+    """
+    shutil.copy(input_file, output_file)
+    print 'copy %-s  to  %-s' % (input_file,output_file)
+#==============================================================================
 # obtain_masing_curve
 #==============================================================================
 def obtain_masing_curve(strain_stress_curve):

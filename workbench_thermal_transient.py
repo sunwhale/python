@@ -12,7 +12,8 @@ from Constants import *
 from Data import SimulationData,ExperimentData,ExperimentLog
 from Material import Material
 from Work_thermal_transient import Step,UMAT,Load,Job
-from Functions import copy_file
+from Functions import copy_file,read_json_file,write_json_file
+from ambient_temperature import *
 
 def workbench(name,loading_cycles=None,copy=True,film_coefficient=0.0,sink_temperature=0.0,
               temperature_list=[],thermal_strain_list=[0.0,-0.0],heat_flux=0.0,
@@ -191,7 +192,7 @@ def workbench(name,loading_cycles=None,copy=True,film_coefficient=0.0,sink_tempe
 
 def calculate_film_coefficient(volume_flow):
     if volume_flow == 0.0:
-        return 0.00010
+        return 0.02
     air_temperature = 20.0 + 273.15
     pressure = 6.5e5
     dynamic_viscosity_0 = 1.7894e-5
@@ -218,31 +219,31 @@ predefined_temperature = 20 - absolute_zero
 d_out = 8.5e-3
 height = 80.0e-3
 total_power = 6400.0
-reflect = 0.15
+reflect = 0.18
 emissivity = 0.95
 power_percent_exp_list = [0.3,0.5,0.7,0.9]
 exp_list = []
-#outer_temperature_list = [
-#215,
-#338,
-#495,
-#654,
-#]
-#exp_list.append([power_percent_exp_list,outer_temperature_list,67])
-#outer_temperature_list = [
-#277,
-#435,
-#603,
-#757.5,
-#]
-#exp_list.append([power_percent_exp_list,outer_temperature_list,50])
-#outer_temperature_list = [
-#400,
-#575,
-#730,
-#870,
-#]
-#exp_list.append([power_percent_exp_list,outer_temperature_list,25])
+outer_temperature_list = [
+215,
+338,
+495,
+654,
+]
+exp_list.append([power_percent_exp_list,outer_temperature_list,67])
+outer_temperature_list = [
+277,
+435,
+603,
+757.5,
+]
+exp_list.append([power_percent_exp_list,outer_temperature_list,50])
+outer_temperature_list = [
+400,
+575,
+730,
+870,
+]
+exp_list.append([power_percent_exp_list,outer_temperature_list,25])
 outer_temperature_list = [
 440,
 602.5,
@@ -254,20 +255,29 @@ exp_list.append([power_percent_exp_list,outer_temperature_list,0])
 print exp_list
 plot_list = []
 out_list = []
-threshold = 0.15
+threshold = 0.20
 name = '0001'
+AbaqusWorkDirectory = AbaqusTempDirectory + name + '\\'
 
-for exp in exp_list[:]:
+for exp in exp_list[:1]:
     result_list = []
     for i in range(4):
         outer_temperature = exp[1][i] + 273.15
         power_percent_exp = exp[0][i]
+        if power_percent_exp == 0.3:
+            write_json_file(AbaqusWorkDirectory+'ambient_temperature.txt',ambient_temperature_30)
+        if power_percent_exp == 0.5:
+            write_json_file(AbaqusWorkDirectory+'ambient_temperature.txt',ambient_temperature_50)
+        if power_percent_exp == 0.7:
+            write_json_file(AbaqusWorkDirectory+'ambient_temperature.txt',ambient_temperature_70)
+        if power_percent_exp == 0.9:
+            write_json_file(AbaqusWorkDirectory+'ambient_temperature.txt',ambient_temperature_90)
         volume_flow = exp[2]
         film_coefficient_inner = calculate_film_coefficient(volume_flow) * 1.0
-        film_coefficient_outer = 0.020
+        film_coefficient_outer = 0.025
 #        sink_temperature_inner = 50/0.6*(power_percent_exp-threshold)*(1.0)/(1.0-threshold)+20+273.15
         sink_temperature_inner = 20+273.15
-#        sink_temperature_outer = 500/0.6*(power_percent_exp-threshold)*(1.0)/(1.0-threshold)+20+273.15
+#        sink_temperature_outer = 500/0.9*(power_percent_exp-threshold)*(1.0)/(1.0-threshold)+20+273.15
         sink_temperature_outer = 20+273.15
         heat_flux = emissivity*reflect*total_power*(power_percent_exp-threshold)*(1.0)/(1.0-threshold)/np.pi/d_out/height*1.0e-3
         workbench(name,loading_cycles=1,

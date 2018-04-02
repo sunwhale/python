@@ -11,7 +11,22 @@ from caeModules import *
 from driverUtils import executeOnCaeStartup
 from Constants import *
 from PreprocABAQUSParameters import *
+import json
 import numpy as np
+
+def read_json_file(file_name):
+    """
+    Writing JSON data to file.
+    """
+    with open(file_name,'r') as data_file:
+        return json.loads(data_file.read())
+
+def write_json_file(file_name, data):
+    """
+    Reading JSON data to file.
+    """
+    with open(file_name,'w') as data_file:
+        return json.dump(data, data_file)
 
 executeOnCaeStartup()
 session.viewports['Viewport: 1'].partDisplay.geometryOptions.setValues(referenceRepresentation=ON)
@@ -233,10 +248,13 @@ mdb.models['Model-1'].TabularAmplitude(name='Displacement_3', timeSpan=STEP, smo
 mdb.models['Model-1'].TabularAmplitude(name='Displacement_4', timeSpan=STEP, smooth=SOLVER_DEFAULT, data=((0.0, 0.0), (60.0, 0.0*0.0099)))
 
 mdb.models['Model-1'].TabularAmplitude(name='Amp-Heatflux', timeSpan=STEP, 
-    smooth=SOLVER_DEFAULT, data=((0.0, 0.0), (5.0, 0.0), (5.1, 1.0), (30.0, 1.0), (30.1, 0.0), (
+    smooth=SOLVER_DEFAULT, data=((0.0, 0.0), (5.0, 0.0), (6, 1.0), (31.0, 1.0), (32, 0.0), (
     10000.0, 0.0)))
 
+ambient_temperature = read_json_file('ambient_temperature.txt')
 
+mdb.models['Model-1'].TabularAmplitude(name='Amp-Ambient-Temperature', timeSpan=STEP, 
+    smooth=SOLVER_DEFAULT, data=ambient_temperature)
 
 
 
@@ -288,14 +306,14 @@ a = mdb.models['Model-1'].rootAssembly
 region=a.surfaces['Surf-Outer']
 mdb.models['Model-1'].FilmCondition(name='Int-Outer-Convection', 
     createStepName='Step-1', surface=region, definition=EMBEDDED_COEFF, 
-    filmCoeff=film_coefficient_outer, filmCoeffAmplitude='', sinkTemperature=sink_temperature_outer, 
-    sinkAmplitude='', sinkDistributionType=UNIFORM, sinkFieldName='')
+    filmCoeff=film_coefficient_outer, filmCoeffAmplitude='', sinkTemperature=1.0, 
+    sinkAmplitude='Amp-Ambient-Temperature', sinkDistributionType=UNIFORM, sinkFieldName='')
 
 a = mdb.models['Model-1'].rootAssembly
 region=a.surfaces['Surf-Outer']
 mdb.models['Model-1'].RadiationToAmbient(name='Int-Outer-Radiation', createStepName='Step-1', 
     surface=region, radiationType=AMBIENT, distributionType=UNIFORM, field='', 
-    emissivity=emissivity, ambientTemperature=sink_temperature_outer, ambientTemperatureAmp='')
+    emissivity=emissivity, ambientTemperature=1.0, ambientTemperatureAmp='Amp-Ambient-Temperature')
 
 #a = mdb.models['Model-1'].rootAssembly
 #region=a.surfaces['Surf-Inner']

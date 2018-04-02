@@ -10,8 +10,27 @@ import matplotlib.pyplot as plt
 import re
 import os
 import shutil
+import json
 from scipy.optimize import leastsq
 
+#==============================================================================
+# read_json_file
+#==============================================================================
+def read_json_file(file_name):
+    """
+    Writing JSON data to file.
+    """
+    with open(file_name,'r') as data_file:
+        return json.loads(data_file.read())
+#==============================================================================
+# write_json_file
+#==============================================================================
+def write_json_file(file_name, data):
+    """
+    Reading JSON data to file.
+    """
+    with open(file_name,'w') as data_file:
+        return json.dump(data, data_file)
 #==============================================================================
 # get_files
 #==============================================================================

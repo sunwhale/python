@@ -114,7 +114,6 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
 # show legend
 #==============================================================================
     plt.legend(loc=0)
-    plt.show()
 #==============================================================================
 # save figures
 #==============================================================================
@@ -122,9 +121,10 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
         for save_type in save_types:
             plt.savefig(figure_path + figure_name + save_type, dpi=150, transparent=True)
             print 'save as', figure_path + figure_name + save_type
+#    plt.show()
     plt.close()
 
-#fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
+fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
 fatigue_model_list = ['Zamrik']
 fatigue_model_list = ['Our']
 fatigue_model_list = ['Study2']

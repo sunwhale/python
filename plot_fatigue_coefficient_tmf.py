@@ -8,6 +8,7 @@ Created on Thu Jan 05 11:50:47 2017
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import shutil
+from matplotlib.ticker import MultipleLocator,ScalarFormatter,FormatStrFormatter 
 from Data import FatigueData,PlotData
 from Constants import xylabels,FatigueDirectory,ArticleFigureDirectory
 from plot_format import plot_format
@@ -17,7 +18,7 @@ def create_plot_data_fatigue_coefficient(fatigue_data,figure_path=None,figure_na
 # x,y label
 #==============================================================================
     xlabel = xylabels['experimental_life']
-    ylabel = xylabels['predicted_life']
+    ylabel = 'Fatigue Damage Parameter'
 #==============================================================================
 # plot lines
 #==============================================================================
@@ -66,7 +67,7 @@ def plot_fatigue_coefficient(figure_path=None,figure_name=None,save_types=[]):
 # x,y limite
 #==============================================================================
 #    plt.xlim(1E1,1E5)
-#    plt.ylim(1E1,1E5)
+    plt.ylim(5E0,1E2)
 #==============================================================================
 # xy axial equal
 #==============================================================================
@@ -83,6 +84,15 @@ def plot_fatigue_coefficient(figure_path=None,figure_name=None,save_types=[]):
     plot_data = PlotData()
     plot_data.readFromFile(figure_path,figure_name)
     plot_data.plot()
+#==============================================================================
+# http://stackoverflow.com/questions/21920233/matplotlib-log-scale-tick-label-number-formatting
+#==============================================================================
+#    ax.xaxis.set_major_locator(MultipleLocator(0.5))
+#    ax.xaxis.set_minor_locator(MultipleLocator(0.1))
+#    ax.xaxis.set_major_formatter(ScalarFormatter())
+#    ax.yaxis.set_major_locator(MultipleLocator(5))
+#    ax.yaxis.set_minor_locator(MultipleLocator(5))
+#    ax.yaxis.set_major_formatter(ScalarFormatter())
 #==============================================================================
 # plot 1x lines
 #==============================================================================
@@ -117,8 +127,8 @@ fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
 #fatigue_model_list = ['Our']
 fatigue_model_list = ['Liu1']
 fatigue_model_list = ['Study']
-fatigue_model_list = ['Zamrik']
-fatigue_model_list = ['Vose']
+#fatigue_model_list = ['Zamrik']
+#fatigue_model_list = ['Vose']
 
 ArticleFigureDirectory = 'F:\\Cloud\\Github\\fatigue\\figs\\'
 

@@ -26,10 +26,10 @@ def create_plot_data_exp_temperature(figure_path=None,figure_name=None):
     i = 0
     marker_list = ['s','o','^','D']
     plot_data = PlotData()
-    for name in ['30_0_','50_0_','70_0_','90_0_']:
+#    for name in ['30_0_','50_0_','70_0_','90_0_']:
 #    for name in ['30_25_','50_25_','70_25_','90_25_']:
 #    for name in ['30_50_','50_50_','70_50_','90_50_']:
-#    for name in ['30_67_','50_67_','70_67_','90_67_']:
+    for name in ['30_67_','50_67_','70_67_','90_67_']:
 #    for name in ['90_0_','90_25_','90_50_','90_67_']:
 #    for name in ['70_0_','70_25_','70_50_','70_67_']:
 #    for name in ['50_0_','50_25_','50_50_','50_67_']:
@@ -47,7 +47,7 @@ def create_plot_data_exp_temperature(figure_path=None,figure_name=None):
                           linewidth=2,
                           linestyle='-',
                           marker=marker_list[i],
-                          markersize=12,
+                          markersize=6,
                           color='auto')
         
         SimulationDirectory = 'F:\\Cloud\\Simulation\\Temperature\\'

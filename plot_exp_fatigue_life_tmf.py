@@ -116,6 +116,11 @@ def plot_exp_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
     plot_data.readFromFile(figure_path,figure_name)
     plot_data.plot()
 #==============================================================================
+# Normalized
+#==============================================================================
+#    plt.yticks([])
+#    plt.ylabel('Normalized $\Delta\\varepsilon_{\\rm{ep}}/2$')
+#==============================================================================
 # show legend
 #==============================================================================
     plt.legend(loc=0)

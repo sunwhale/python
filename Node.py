@@ -29,6 +29,7 @@ class Node:
         self.phi_interval = phi_interval
         self.transformation_critical_plane = self.calcTransformation(0,0)
         self.TMFCefficient()
+        self.TGMFCefficient()
         
     def __str__(self):
         return 'node %s at time %s' % (str(int(self.nodelabel)),str(self.time))
@@ -1101,11 +1102,18 @@ class Node:
         thermal_corrected_term = 1.0 + hf_norm/(750.0-temperature_at_sigma_nmax_critical_plane)
         return thermal_corrected_term
 
+#    def TGMFCorrectedTerm(self,heatflux_at_sigma_nmax_critical_plane,temperature_at_sigma_nmax_critical_plane):
+#        hf_norm = 0.0
+#        for hf in heatflux_at_sigma_nmax_critical_plane:
+#            hf_norm += (hf/calculate_conductivity_by_temperature_in718(temperature_at_sigma_nmax_critical_plane))**2
+#        tgmf_corrected_term = 1.0 + 1.0*hf_norm/(850.0-temperature_at_sigma_nmax_critical_plane)
+#        return tgmf_corrected_term
+
     def TGMFCorrectedTerm(self,heatflux_at_sigma_nmax_critical_plane,temperature_at_sigma_nmax_critical_plane):
         hf_norm = 0.0
         for hf in heatflux_at_sigma_nmax_critical_plane:
             hf_norm += (hf/calculate_conductivity_by_temperature_in718(temperature_at_sigma_nmax_critical_plane))**2
-        tgmf_corrected_term = 1.0 + 1.0*hf_norm/(850.0-temperature_at_sigma_nmax_critical_plane)
+        tgmf_corrected_term = 1.0 + self.g*hf_norm/(1300.0-temperature_at_sigma_nmax_critical_plane)
         return tgmf_corrected_term
         
     def TMFCefficient(self,Q0=240,upsilon0=3.50e-4,sigma_ult=1305.0,R=8.31e-3,C=1.28710938e+12,k=1.2):
@@ -1116,6 +1124,9 @@ class Node:
         self.C = C
         self.C = 1.0e+12
         self.k = k
+
+    def TGMFCefficient(self,g=3.47):
+        self.g = g
         
     def TMFCorrectedTerm(self,transformation):
         Q0 = self.Q0

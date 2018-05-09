@@ -177,13 +177,13 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
             """
             使用计算模拟结果。
             """
-#            sim = SimulationData(SimulationDirectory+name+'.csv',period)
-#            data, node, nth = calculate_data_fatigue_life(sim,material,fatigue_model)
+            sim = SimulationData(SimulationDirectory+name+'.csv',period)
+            data, node, nth = calculate_data_fatigue_life(sim,material,fatigue_model)
             """
             使用试验结果。
             """
-            exp = ExperimentData(ExperimentDirectory+name+'.csv')
-            data, node, nth = calculate_data_fatigue_life(exp,material,fatigue_model)
+#            exp = ExperimentData(ExperimentDirectory+name+'.csv')
+#            data, node, nth = calculate_data_fatigue_life(exp,material,fatigue_model)
             """
             取出Nf/2循环数据。
             """
@@ -265,6 +265,51 @@ def fuction(C):
         
     return L
 
+def fuctionTGMF(g):
+    material = material_in718()
+    fatigue_model = 'Study2'
+    file_name = 'node.txt'
+    N_f_list = []
+    N_p_list = []
+    json_data_list = read_file(file_name)
+    L = 1.0
+    for json_data in json_data_list:
+        node = Node()
+        node.inputJson(json_data['node'],2)
+        node.phi_interval = 10
+        node.TGMFCefficient(g=g[0])
+        if fatigue_model == 'SWT':
+            fatigue_data = node.fatigueLifeSWTModel(material)
+        if fatigue_model == 'BM':
+            fatigue_data = node.fatigueLifeBMModel(material,S=0.36)
+        if fatigue_model == 'Liu1':
+            fatigue_data = node.fatigueLifeLiu1Model(material)
+        if fatigue_model == 'Liu2':
+            fatigue_data = node.fatigueLifeLiu2Model(material)
+        if fatigue_model == 'Chu':
+            fatigue_data = node.fatigueLifeChuModel(material)
+        if fatigue_model == 'Zamrik':
+            fatigue_data = node.fatigueLifeZamrikModel(material)
+        if fatigue_model == 'Vose':
+            fatigue_data = node.fatigueLifeVoseModel(material)
+        if fatigue_model == 'Our':
+            fatigue_data = node.fatigueLifeOurModel(material)
+        if fatigue_model == 'Study':
+            fatigue_data = node.fatigueLifeStudyModel(material)
+        if fatigue_model == 'Study2':
+            fatigue_data = node.fatigueLifeStudy2Model(material)
+        N_f = json_data['expriment_life']
+        N_p = fatigue_data[8]
+        print N_f,N_p
+        x = float(N_f)/float(N_p)
+        pi = 1/(np.sqrt(2*np.pi))*np.exp(-0.5*(x-1)**2)
+        
+        L += np.log(x)**2
+#        [  1.28710938e+12] 5.85338825429
+    print g,L
+        
+    return L
+    
 def myfunc(x):
         return x**2-4*x+8
         
@@ -272,15 +317,19 @@ if __name__ == '__main__':
 #    fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu','Our']
 #    fatigue_model_list = ['Our']
 #    fatigue_model_list = ['Zamrik']
-#    fatigue_model_list = ['Study2']
+    fatigue_model_list = ['Study2']
 #    fatigue_model_list = ['Vose']
 #    fatigue_model_list = ['SWT']
-    fatigue_model_list = ['Show']
+#    fatigue_model_list = ['Show']
     for fatigue_model in fatigue_model_list:
         calculate_fatigue_life(fatigue_model,material=material_in718())
 #        calculate_fatigue_life(fatigue_model,material=material_cmsx4())
 #    print fuction(1.2e12)
     
-#    x0 = [1.0e12]    #猜一个初值 
+#    x0 = [3.5]    #猜一个初值 
 #    xopt = fmin(fuction, x0)    #求解
+#    print xopt    #打印结果
+    
+#    x0 = [3.5]    #猜一个初值 
+#    xopt = fmin(fuctionTGMF, x0)    #求解
 #    print xopt    #打印结果

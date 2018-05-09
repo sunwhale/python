@@ -44,7 +44,7 @@ def create_values_at_critical_plane(figure_path=None,figure_name=None):
     plot_data = PlotData()
     experiment_log = ExperimentLog(ExperimentLogFile)
     material=material_in718()
-    for name in ['7205']:
+    for name in ['7046']:
         experiment_log.output(name)
         regular = r'.*'
         load_type = experiment_log.obtainItem(name,'load_type',regular)[0]
@@ -66,7 +66,7 @@ def create_values_at_critical_plane(figure_path=None,figure_name=None):
                
         sim = SimulationData(SimulationDirectory+name+'.csv',period)
         fatigue_model = 'FS'
-        data, node = calculate_data_fatigue_life(sim,material,fatigue_model)
+        data, node, nth = calculate_data_fatigue_life(sim,material,fatigue_model)
         out_data = node.outputValuesAtCriticalPlane(node.transformation_critical_plane)
         
         time_list = list(np.array(out_data[0]) - out_data[0][0])

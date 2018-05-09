@@ -111,9 +111,20 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
     plt.plot([5,1e5],[1,2e4],color='black',linewidth=linewidth)
     plt.plot([1,2e4],[5,1e5],color='black',linewidth=linewidth)
 #==============================================================================
+# text
+#==============================================================================
+#    plt.text(5000,20,r'Zamrik',fontsize=40)
+#    plt.text(5000,20,r'FS',fontsize=40)
+#    plt.text(5000,20,r'BM',fontsize=40)
+#    plt.text(5000,20,r'SWT',fontsize=40)
+#    plt.text(5000,20,r'Liu I',fontsize=40)
+#    plt.text(5000,20,r'Study',fontsize=40)
+    plt.text(100.0,15000.0,r'Non-Conservative',fontsize=20,color='black',rotation=45)
+    plt.text(1500.0,700.0,r'Conservative',fontsize=20,color='black',rotation=45)
+#==============================================================================
 # show legend
 #==============================================================================
-    plt.legend(loc=0)
+    plt.legend(loc=2)
 #==============================================================================
 # save figures
 #==============================================================================
@@ -121,12 +132,12 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
         for save_type in save_types:
             plt.savefig(figure_path + figure_name + save_type, dpi=150, transparent=True)
             print 'save as', figure_path + figure_name + save_type
-#    plt.show()
+    plt.show()
     plt.close()
 
-fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
-fatigue_model_list = ['Zamrik']
-fatigue_model_list = ['Our']
+fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu','Zamrik']
+#fatigue_model_list = ['Zamrik']
+#fatigue_model_list = ['Our']
 fatigue_model_list = ['Study2']
 
 for fatigue_model in fatigue_model_list:

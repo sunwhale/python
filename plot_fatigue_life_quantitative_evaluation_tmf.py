@@ -47,7 +47,7 @@ def saveFigure(figure_path=None,figure_name=None,save_types=[]):
             print 'save as', figure_path + figure_name + save_type
                 
 #fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
-fatigue_model_list = ['BM','FS','SWT','Zamrik','Liu1','Study']
+fatigue_model_list = ['BM','FS','SWT','Chu','Liu1','Zamrik','Study']
 #fatigue_model_list = ['BM']
 
 TN_list = []
@@ -71,8 +71,9 @@ mpl.rcParams['xtick.major.width'] = 0
 #==============================================================================
 # x,y limite
 #==============================================================================
-plt.xlim(-0.5,6.5)
-plt.ylim(0,10)
+plt.xlim(-0.5,7.5)
+#plt.ylim(0,10)
+plt.ylim(0,2)
 #==============================================================================
 # http://blog.csdn.net/lanchunhui/article/details/52931883 关闭坐标刻度
 #==============================================================================
@@ -96,32 +97,32 @@ ax = plt.gca()
 #ax.yaxis.set_minor_locator(MultipleLocator(1))
 #ax.yaxis.set_major_formatter(ScalarFormatter())
 fatigue_model_list = ['BM','FS','SWT','Chu','Liu I','Study']
-fatigue_model_list = ['BM','FS','SWT','Zamrik','Liu I','Study']
+fatigue_model_list = ['BM','FS','SWT','CCB','Liu I','Zamrik','Present']
 #==============================================================================
 # annotate
 #==============================================================================
-#plt.text(0.0,1.3,r'conservative',fontsize=20,color='red')
-#plt.text(0.0,0.7,r'non-conservative',fontsize=20,color='red')
+plt.text(0.0,1.3,r'conservative',fontsize=20,color='red')
+plt.text(0.0,0.7,r'non-conservative',fontsize=20,color='red')
 
-#n = range(len(TN_list))
-#plt.plot([-10,10],[1,1],ls='--',lw='4',color='red')
-#plt.bar(n,TN_list)
+n = range(len(TN_list))
+plt.plot([-10,10],[1,1],ls='--',lw='4',color='red')
+plt.bar(n,TN_list)
     
-n = range(len(TRMS_list))
-plt.bar(n,TRMS_list)
-
-for t in TN_list:
-    print t
+#n = range(len(TRMS_list))
+#plt.bar(n,TRMS_list)
+#
+#for t in TN_list:
+#    print t
+#    
+#for t in TRMS_list:
+#    print t
     
-for t in TRMS_list:
-    print t
-    
-n = [i+0.5 for i in n]
+n = [0.4,1.4,2.4,3.4,4.4,5.45,6.55]
 plt.xticks(n, fatigue_model_list)
 
 figure_path = ArticleFigureDirectory
-figure_name = 'plot_fatigue_life_quantitative_evaluation_tmf_TRMS'
-#figure_name = 'plot_fatigue_life_quantitative_evaluation_tmf_TN'
+#figure_name = 'plot_fatigue_life_quantitative_evaluation_tmf_TRMS'
+figure_name = 'plot_fatigue_life_quantitative_evaluation_tmf_TN'
 saveFigure(figure_path,figure_name,save_types=['.pdf','.png'])
 shutil.copy(__file__,ArticleFigureDirectory)
 plt.show()

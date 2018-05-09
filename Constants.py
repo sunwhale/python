@@ -23,21 +23,22 @@ SimulationDirectory = 'F:\\Cloud\\Temp\\IN718_Sim\\'
 ExperimentLogFile = PythonDirectory + 'Inconel718_test_log.csv'
 #ExperimentLogFile = PythonDirectory + 'CMSX4_test_log.csv'
 #FatigueDirectory = 'F:\\Database\\Fatigue\\'
-FatigueDirectory = 'F:\\Cloud\\GitHub\\fatigue\\model\\'
+FatigueDirectory = 'F:\\Cloud\\GitHub\\fatigue\\model2\\'
 #FatigueDirectory = 'F:\\Cloud\\GitHub\\tgmf\\model\\'
 ArticleFigureDirectory = 'F:\\Cloud\\GitHub\\doctor\\Figs\\python\\'
 #ArticleFigureDirectory = 'F:\\Cloud\\GitHub\\tgmf\\Figs\\'
 
 experiment_type_list = []
-experiment_type_list.append(['TC-IP',['7031','7047','7030','7018']])
-experiment_type_list.append(['TC-OP',['7033','7048','7032','7017']])
-experiment_type_list.append(['PRO-IP',['7040','7029','7039','7038']])
-experiment_type_list.append(['NPR-IP',['7036','7034','7045','7046','7028','7037']])
-experiment_type_list.append(['TC-90',['7025']])
-experiment_type_list.append(['TC-IF',['7110','7111','7112','7113','7114','7115','7116']])
+#experiment_type_list.append(['TC-IP',['7031','7047','7030','7018']])
+#experiment_type_list.append(['TC-OP',['7033','7048','7032','7017']])
+#experiment_type_list.append(['PRO-IP',['7040','7029','7039','7038']])
+#experiment_type_list.append(['NPR-IP',['7036','7034','7045','7046','7028','7037']])
+#experiment_type_list.append(['TC-90',['7025']])
+#experiment_type_list.append(['TC-IF',['7110','7111','7112','7113','7114','7115','7116']])
 #experiment_type_list.append(['TC-IP-TGMF',['7201','7203','7204','7205','7206']])
 #experiment_type_list.append(['TC-OP-TGMF',['7207','7208','7209','7210']])
 #experiment_type_list.append(['TC-IP-TGMF-TBC',['7301','7302']])
+experiment_type_list.append(['NPR-IP',['7046']])
 
 experiment_type_dict = {}
 experiment_type_dict['TC-IP']=['7031','7047','7030','7018']

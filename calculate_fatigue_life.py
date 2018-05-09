@@ -106,6 +106,8 @@ def calculate_data_fatigue_life(data,material,fatigue_model):
         fatigue_data = node.fatigueLifeStudyModel(material)
     if fatigue_model == 'Study2':
         fatigue_data = node.fatigueLifeStudy2Model(material)
+    if fatigue_model == 'Show':
+        fatigue_data = node.fatigueLifeShowModel(material)
     return fatigue_data, node, nth
 
 #==============================================================================
@@ -268,10 +270,12 @@ def myfunc(x):
         
 if __name__ == '__main__':
 #    fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu','Our']
-    fatigue_model_list = ['Our']
+#    fatigue_model_list = ['Our']
 #    fatigue_model_list = ['Zamrik']
-    fatigue_model_list = ['Study2']
-    fatigue_model_list = ['Vose']
+#    fatigue_model_list = ['Study2']
+#    fatigue_model_list = ['Vose']
+#    fatigue_model_list = ['SWT']
+    fatigue_model_list = ['Show']
     for fatigue_model in fatigue_model_list:
         calculate_fatigue_life(fatigue_model,material=material_in718())
 #        calculate_fatigue_life(fatigue_model,material=material_cmsx4())

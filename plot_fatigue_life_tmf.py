@@ -108,6 +108,9 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
 #    plt.text(5000,20,r'SWT',fontsize=40)
 #    plt.text(5000,20,r'Liu I',fontsize=40)
 #    plt.text(5000,20,r'Study',fontsize=40)
+    plt.text(100.0,15000.0,r'Non-Conservative',fontsize=20,color='black',rotation=45)
+    plt.text(1500.0,700.0,r'Conservative',fontsize=20,color='black',rotation=45)
+    
 #==============================================================================
 # show legend
 #==============================================================================
@@ -122,10 +125,10 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
     plt.show()
     plt.close()
 
-fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
+fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu','Zamrik']
 #fatigue_model_list = ['Our']
 #fatigue_model_list = ['Liu1']
-fatigue_model_list = ['Study']
+#fatigue_model_list = ['Study']
 #fatigue_model_list = ['Zamrik']
 #fatigue_model_list = ['Vose']
 #fatigue_model_list = ['SWT']

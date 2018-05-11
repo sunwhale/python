@@ -64,7 +64,7 @@ def create_plot_data(plot_data):
     
     marker_list = ['s','o','^','D']
     
-#    i = 0
+    i = 0
 #    plot_data.addLine(phi_deg,
 #                      delta_gamma,
 #                      xlabel=xlabel,
@@ -98,19 +98,30 @@ def create_plot_data(plot_data):
 #                      markersize=12,
 #                      color='red')
        
+#    plot_data.addLine(phi_deg,
+#                      sigma_nmax*delta_epsilon/2,
+#                      xlabel=xlabel,
+#                      ylabel='',
+#                      linelabel='',
+#                      linewidth=2,
+#                      linestyle='-',
+#                      marker=None,
+#                      markersize=12,
+#                      color='green')
+    
     plot_data.addLine(phi_deg,
-                      sigma_nmax*delta_epsilon/2,
+                      delta_epsilon,
                       xlabel=xlabel,
-                      ylabel='',
-                      linelabel='',
+                      ylabel='$\Delta \\varepsilon$',
+                      linelabel='$\Delta \\varepsilon$',
                       linewidth=2,
                       linestyle='-',
                       marker=None,
                       markersize=12,
-                      color='green')
+                      color='red')
     
     plot_data.addLine(phi_deg,
-                      delta_tau*delta_gamma,
+                      sigma_nmax,
                       xlabel=xlabel,
                       ylabel='',
                       linelabel='',
@@ -119,17 +130,6 @@ def create_plot_data(plot_data):
                       marker=None,
                       markersize=12,
                       color='blue')
-    
-    plot_data.addLine(phi_deg,
-                      delta_gamma,
-                      xlabel=xlabel,
-                      ylabel='Poisson\'s Ratio',
-                      linelabel='',
-                      linewidth=2,
-                      linestyle='-',
-                      marker=None,
-                      markersize=12,
-                      color='red')
                       
     plot_data.writeToFile()
 
@@ -159,7 +159,7 @@ def plot(plot_data):
 # x,y limite
 #==============================================================================
     plt.xlim(0,180)
-    plt.ylim(0,5)
+    plt.ylim(0,0.03)
 #==============================================================================
 # xy log scale
 #==============================================================================
@@ -174,30 +174,37 @@ def plot(plot_data):
 # plot lines
 #==============================================================================
     plot_data.readFromFile()
-    plot_data.lines[0]['ylabel'] = '$\sigma_{\\rm{n,max}}  \Delta \\varepsilon/2$ [MPa]'
-    plot_data.lines[0]['linelabel'] = '$\sigma_{\\rm{n,max}}  \Delta \\varepsilon/2$'
-#    plot_data.lines[1]['ylabel'] = '$\Delta \sigma \Delta \\varepsilon$, $\Delta \\tau \Delta \\gamma$ [MPa]'
     plot_data.plot([0])
     ax1.legend(loc=3)
     
-#    ax2 = ax1.twinx()  # this is the important function
-#    plot_data.plot([1])
-#                
-#    ax2.set_xlim(0,180)
-#    ax2.set_ylim(0.0,30)
-#    ax2.legend(loc=4)
+    ax2 = ax1.twinx()  # this is the important function
+    plot_data.lines[1]['ylabel'] = '$\sigma_{\\rm{n,max}}$ [MPa]'
+    plot_data.lines[1]['linelabel'] = '$\sigma_{\\rm{n,max}}$'
+    plot_data.plot([1])
+    ax2.set_xlim(0,180)
+    ax2.set_ylim(0.0,1000)
+    ax2.legend(loc=4)
+    
+#    ax3 = ax1.twinx()  # this is the important function
+#    plot_data.lines[1]['ylabel'] = '$\sigma_{\\rm{n,max}}  \Delta \\varepsilon/2$ [MPa]'
+#    plot_data.lines[1]['linelabel'] = '$\sigma_{\\rm{n,max}}  \Delta \\varepsilon/2$'
+#    ax3.set_xlim(0,180)
+#    ax3.set_ylim(0.0,1000)
+#    ax3.yaxis.set_ticks_position('right')
+#    ax3.spines['right'].set_position(('data',220))
+#    ax3.legend(loc=4)
 #==============================================================================
 # http://stackoverflow.com/questions/21920233/matplotlib-log-scale-tick-label-number-formatting
 #==============================================================================
     ax1.xaxis.set_major_locator(MultipleLocator(20))
     ax1.xaxis.set_minor_locator(MultipleLocator(10))
     ax1.xaxis.set_major_formatter(ScalarFormatter())
-#    ax1.yaxis.set_major_locator(MultipleLocator(10))
-#    ax1.yaxis.set_minor_locator(MultipleLocator(0.005))
-#    ax1.yaxis.set_major_formatter(ScalarFormatter())
-#    ax2.yaxis.set_major_locator(MultipleLocator(200))
-#    ax2.yaxis.set_minor_locator(MultipleLocator(100))
-#    ax2.yaxis.set_major_formatter(ScalarFormatter())
+    ax1.yaxis.set_major_locator(MultipleLocator(0.01))
+    ax1.yaxis.set_minor_locator(MultipleLocator(0.005))
+    ax1.yaxis.set_major_formatter(ScalarFormatter())
+    ax2.yaxis.set_major_locator(MultipleLocator(200))
+    ax2.yaxis.set_minor_locator(MultipleLocator(100))
+    ax2.yaxis.set_major_formatter(ScalarFormatter())
 #==============================================================================
 # show legend
 #==============================================================================

@@ -107,7 +107,7 @@ def create_plot_data(plot_data):
                       linestyle='-',
                       marker=None,
                       markersize=12,
-                      color='green')
+                      color='red')
     
     plot_data.addLine(phi_deg,
                       delta_epsilon,

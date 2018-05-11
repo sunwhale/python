@@ -62,10 +62,10 @@ for name in ['7205']:
         sink_temperature = air_temperature - 273.15
         temperature_list = []
         
-#        workbench(name,loading_cycles=5,copy=True,
-#                  film_coefficient=film_coefficient,
-#                  sink_temperature=sink_temperature,
-#                  temperature_list=temperature_list)
+        workbench(name,loading_cycles=None,copy=True,
+                  film_coefficient=film_coefficient,
+                  sink_temperature=sink_temperature,
+                  temperature_list=temperature_list)
                   
 #        workbench(name,loading_cycles=10,copy=True,
 #                  film_coefficient=film_coefficient,

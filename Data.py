@@ -367,6 +367,163 @@ class SimulationData:
                 peak.append(maxitem)
                 valley.append(minitem)
         return cycle,peak,valley
+
+#==============================================================================
+# SimulationData 3D
+#==============================================================================
+class SimulationData3D:
+    """
+    Read and analyze simulation data.
+    """
+    def __init__(self, filename, period):
+        data = np.genfromtxt(filename, delimiter=',', skip_header=0, dtype=None)
+        self.header = [i for i in data[0]]
+        del data
+        
+        data = np.genfromtxt(filename, delimiter=',', skip_header=1, dtype=float)
+        self.filename = filename
+        self.axial_count=[]
+        self.frame = []
+        self.runing_time = []
+        self.node_label = []
+        self.temperature = []
+        self.s11 = []
+        self.s22 = []
+        self.s33 = []
+        self.s12 = []
+        self.s13 = []
+        self.s23 = []
+        self.e11 = []
+        self.e22 = []
+        self.e33 = []
+        self.e12 = []
+        self.e13 = []
+        self.e23 = []
+        self.mises_stress = []
+        self.heat_flux_1 = []
+        self.heat_flux_2 = []
+        self.heat_flux_3 = []
+        self.axial_count_index = {}
+        self.axial_count_index_list = []
+        self.total_axial_count = []
+        self.item_list = ['axial_count',
+                          'frame',
+                          'runing_time',
+                          'node_label',
+                          'temperature',
+                          's11',
+                          's22',
+                          's33',
+                          's12',
+                          's13',
+                          's23',
+                          'e11',
+                          'e22',
+                          'e33',
+                          'e12',
+                          'e13',
+                          'e23',
+                          'mises_stress',
+                          'heat_flux_1',
+                          'heat_flux_2',
+                          'heat_flux_3']
+        
+        for h in self.header:
+            if h in ['Frame']:
+                self.frame = data[:,self.header.index(h)]
+            if h in ['Time']:
+                self.runing_time = data[:,self.header.index(h)]
+            if h in ['NodeLabel']:
+                self.node_label = data[:,self.header.index(h)]
+            if h in ['Temperature']:
+                self.temperature = data[:,self.header.index(h)]
+            if h in ['LE11','E11']:
+                self.e11 = data[:,self.header.index(h)]
+            if h in ['LE22','E22']:
+                self.e22 = data[:,self.header.index(h)]
+            if h in ['LE33','E33']:
+                self.e33 = data[:,self.header.index(h)]
+            if h in ['LE12','E12']:
+                self.e12 = data[:,self.header.index(h)]
+            if h in ['LE13','E13']:
+                self.e13 = data[:,self.header.index(h)]
+            if h in ['LE23','E23']:
+                self.e23 = data[:,self.header.index(h)]
+            if h in ['S11']:
+                self.s11 = data[:,self.header.index(h)]
+            if h in ['S22']:
+                self.s22 = data[:,self.header.index(h)]
+            if h in ['S33']:
+                self.s33 = data[:,self.header.index(h)]
+            if h in ['S12']:
+                self.s12 = data[:,self.header.index(h)]
+            if h in ['S13']:
+                self.s13 = data[:,self.header.index(h)]
+            if h in ['S23']:
+                self.s23 = data[:,self.header.index(h)]
+            if h in ['Mises']:
+                self.mises_stress = data[:,self.header.index(h)]
+            if h in ['HFL1']:
+                self.heat_flux_1 = data[:,self.header.index(h)]
+            if h in ['HFL2']:
+                self.heat_flux_2 = data[:,self.header.index(h)]
+            if h in ['HFL3']:
+                self.heat_flux_3 = data[:,self.header.index(h)]
+        del data
+        
+        self.length = len(self.runing_time)
+        self.axial_count = np.zeros(self.length)
+        
+        self.obtainCountIndex(period)
+        
+    def obtainCountIndex(self,period):
+        """
+        建立每个循环开始位置的索引表：axial_count_index。
+        """
+        self.total_axial_count = int(self.runing_time[-1]/period)
+        self.axial_count_index = {}
+        self.axial_count_index[0] = 0
+        self.axial_count_index[1] = 0
+        count = 1
+        for i in range(self.length):
+            if self.runing_time[i] <= count * period and self.runing_time[i] >= (count-1) * period:
+                self.axial_count[i] = count
+            if self.runing_time[i] > count * period:
+                count = int(self.runing_time[i]/period) + 1
+                self.axial_count_index[count] = i
+        self.axial_count_index_list = list(self.axial_count_index.keys())
+        self.half_life_cycle = self.axial_count_index_list[-2]
+
+    def obtainNthCycle(self,item,begin_cycle,end_cycle=None):
+        """
+        截取指定数组的第begin_cycle到end_cycle循环中的数据。
+        """
+        if item in self.item_list:
+            if end_cycle is None:
+                end_cycle = begin_cycle
+            if self.total_axial_count == []:
+                print 'self.total_axial_count is empty.'
+            if self.axial_count_index.has_key(begin_cycle) and self.axial_count_index.has_key(end_cycle+1):
+                return eval('self.'+item)[self.axial_count_index[begin_cycle]:self.axial_count_index[end_cycle+1]]
+        else:
+            return []
+            
+    def obtainPeakValley(self,item):
+        """
+        返回指定数组的峰谷值。
+        """
+        cycle = []
+        peak = []
+        valley = []
+        for n in range(1,self.total_axial_count):
+            data_nth_cycle = self.obtainNthCycle(item,n)
+            if data_nth_cycle <> []:
+                maxitem = max(data_nth_cycle)
+                minitem = min(data_nth_cycle)
+                cycle.append(n)
+                peak.append(maxitem)
+                valley.append(minitem)
+        return cycle,peak,valley
         
 #==============================================================================
 # ExperimentLog

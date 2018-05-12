@@ -8,40 +8,30 @@ Created on Thu Jan 05 11:50:47 2017
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import shutil
+from matplotlib.ticker import MultipleLocator,ScalarFormatter,FormatStrFormatter 
 from Data import FatigueData,PlotData
 from Constants import xylabels,FatigueDirectory,ArticleFigureDirectory
 from plot_format import plot_format
 
-def create_plot_data_fatigue_life(fatigue_data,figure_path=None,figure_name=None):
+def create_plot_data(fatigue_data,figure_path=None,figure_name=None):
 #==============================================================================
 # x,y label
 #==============================================================================
     xlabel = xylabels['experimental_life']
-    ylabel = xylabels['predicted_life']
-    label_dict = {'TC-IP':'TMF-IP',
-              'TC-OP':'TMF-OP',
-              'TC-IP-TGMF':'TGMF-IP',
-              'TC-OP-TGMF':'TGMF-OP',
-              'TC-IF':'IF',
-              'TC-IP-TGMF-TBC':'TGMF-IP-TBC',
-              }
+    ylabel = 'Fatigue Damage Parameter'
 #==============================================================================
 # plot lines
 #==============================================================================
     i = 0
     marker_list = ['s','o','^','<','D','>','*']
     plot_data = PlotData()
-#    for load_type in ['TC-IP','TC-OP','TC-90','PRO-IP','NPR-IP']:
-#    for load_type in ['TC-IP','TC-OP','TC-90','PRO-IP','NPR-IP','TC-IP-TGMF','TC-OP-TGMF']:
     for load_type in ['TC-IF','TC-IP','TC-OP','TC-IP-TGMF','TC-OP-TGMF']:
-#    for load_type in ['IF-1000','TMF-IP','TMF-OP','TGMF-IP','TGMF-OP','TGMF-IP-TBC','TGMF-OP-TBC']:
         experimental_life = fatigue_data.loadTypeFilter(load_type,'experimental_life')
-        predicted_life = fatigue_data.loadTypeFilter(load_type,'predicted_life')
+        fatigue_coefficient = fatigue_data.loadTypeFilter(load_type,'fatigue_coefficient')
         plot_data.addLine(experimental_life,
-                          predicted_life,
+                          fatigue_coefficient,
                           xlabel=xlabel,
                           ylabel=ylabel,
-#                          linelabel=label_dict[load_type],
                           linelabel=load_type,
                           linewidth=2,
                           linestyle='',
@@ -50,7 +40,7 @@ def create_plot_data_fatigue_life(fatigue_data,figure_path=None,figure_name=None
         i += 1
     plot_data.writeToFile(figure_path,figure_name)
     
-def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
+def plot(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # title
 #==============================================================================
@@ -60,7 +50,7 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
 # http://matplotlib.org/users/customizing.html?highlight=rcparams
 #==============================================================================
     plot_format()
-    mpl.rcParams['figure.figsize'] = (8,8)
+    mpl.rcParams['figure.figsize'] = (8,6)
     fig, ax = plt.subplots()
 #==============================================================================
 # grid set up
@@ -76,8 +66,8 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # x,y limite
 #==============================================================================
-    plt.xlim(1E1,1E5)
-    plt.ylim(1E1,1E5)
+#    plt.xlim(1E1,1E5)
+    plt.ylim(5E0,1E2)
 #==============================================================================
 # xy axial equal
 #==============================================================================
@@ -95,36 +85,34 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
     plot_data.readFromFile(figure_path,figure_name)
     plot_data.plot()
 #==============================================================================
+# http://stackoverflow.com/questions/21920233/matplotlib-log-scale-tick-label-number-formatting
+#==============================================================================
+#    ax.xaxis.set_major_locator(MultipleLocator(0.5))
+#    ax.xaxis.set_minor_locator(MultipleLocator(0.1))
+#    ax.xaxis.set_major_formatter(ScalarFormatter())
+#    ax.yaxis.set_major_locator(MultipleLocator(5))
+#    ax.yaxis.set_minor_locator(MultipleLocator(5))
+#    ax.yaxis.set_major_formatter(ScalarFormatter())
+#==============================================================================
 # plot 1x lines
 #==============================================================================
-    linewidth = 1.0
-    plt.plot([1,1e5],[1,1e5],color='black',linewidth=linewidth)
+#    linewidth = 1.0
+#    plt.plot([10,1e5],[10,1e5],color='black',linewidth=linewidth)
 #==============================================================================
 # plot 2x lines
 #==============================================================================
-    linewidth = 0.5
-    plt.plot([2,1e5],[1,5e4],color='black',linewidth=linewidth)
-    plt.plot([1,5e4],[2,1e5],color='black',linewidth=linewidth)
+#    linewidth = 0.5
+#    plt.plot([20,1e5],[10,5e4],color='black',linewidth=linewidth)
+#    plt.plot([10,5e4],[20,1e5],color='black',linewidth=linewidth)
 #==============================================================================
 # plot 5x lines
 #==============================================================================
-    plt.plot([5,1e5],[1,2e4],color='black',linewidth=linewidth)
-    plt.plot([1,2e4],[5,1e5],color='black',linewidth=linewidth)
-#==============================================================================
-# text
-#==============================================================================
-#    plt.text(5000,20,r'Zamrik',fontsize=40)
-#    plt.text(5000,20,r'FS',fontsize=40)
-#    plt.text(5000,20,r'BM',fontsize=40)
-#    plt.text(5000,20,r'SWT',fontsize=40)
-#    plt.text(5000,20,r'Liu I',fontsize=40)
-#    plt.text(5000,20,r'Present',fontsize=40)
-    plt.text(100.0,15000.0,r'Non-Conservative',fontsize=20,color='black',rotation=45)
-    plt.text(1500.0,700.0,r'Conservative',fontsize=20,color='black',rotation=45)
+#    plt.plot([50,1e5],[10,2e4],color='black',linewidth=linewidth)
+#    plt.plot([10,2e4],[50,1e5],color='black',linewidth=linewidth)
 #==============================================================================
 # show legend
 #==============================================================================
-    plt.legend(loc=2)
+    plt.legend(loc=0)
 #==============================================================================
 # save figures
 #==============================================================================
@@ -135,21 +123,25 @@ def plot_fatigue_life(figure_path=None,figure_name=None,save_types=[]):
     plt.show()
     plt.close()
 
-fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu','Zamrik']
-#fatigue_model_list = ['Zamrik']
+fatigue_model_list = ['BM','FS','SWT','Liu1','Liu2','Chu']
 #fatigue_model_list = ['Our']
+fatigue_model_list = ['Liu1']
 fatigue_model_list = ['Study2']
+#fatigue_model_list = ['Zamrik']
+#fatigue_model_list = ['Vose']
+
+ArticleFigureDirectory = 'F:\\Cloud\\Github\\tgmf\\figs\\'
 
 for fatigue_model in fatigue_model_list:
     fatigue_file = '%s%s.csv' % (FatigueDirectory,fatigue_model)
     fatigue_data = FatigueData(fatigue_file)
     figure_path = ArticleFigureDirectory
-    figure_name = 'NF-NP-TGMF-'+fatigue_model
-    create_plot_data_fatigue_life(fatigue_data,figure_path,figure_name)
+    figure_name = 'F-NF-TGMF-'+fatigue_model
+    create_plot_data(fatigue_data,figure_path,figure_name)
     
 for fatigue_model in fatigue_model_list:
     figure_path = ArticleFigureDirectory
-    figure_name = 'NF-NP-TGMF-'+fatigue_model
-    plot_fatigue_life(figure_path,figure_name,save_types=['.pdf','.png'])
+    figure_name = 'F-NF-TGMF-'+fatigue_model
+    plot(figure_path,figure_name,save_types=['.pdf','.png'])
     
 shutil.copy(__file__,ArticleFigureDirectory)

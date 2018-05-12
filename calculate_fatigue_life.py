@@ -249,13 +249,13 @@ def calculate_fatigue_life(fatigue_model,material=material_in718()):
             """
             使用计算模拟结果。
             """
-#            sim = SimulationData(SimulationDirectory+name+'.csv',period)
-#            data, node, nth = calculate_data_fatigue_life(sim,material,fatigue_model)
+            sim = SimulationData(SimulationDirectory+name+'.csv',period)
+            data, node, nth = calculate_data_fatigue_life(sim,material,fatigue_model)
             """
             使用计算模拟结果3D。
             """
-            sim = SimulationData3D(SimulationDirectory+name+'.csv',period)
-            data, node, nth = calculate_data_fatigue_life_3D(sim,material,fatigue_model)
+#            sim = SimulationData3D(SimulationDirectory+name+'.csv',period)
+#            data, node, nth = calculate_data_fatigue_life_3D(sim,material,fatigue_model)
             """
             使用试验结果。
             """

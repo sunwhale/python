@@ -136,7 +136,7 @@ def plot_exp_half_life_cycle_TCOPTGMF(figure_path=None,figure_name=None,save_typ
 
 figure_path=ArticleFigureDirectory
 figure_name='plot_exp_half_life_cycle_TCOPTGMF'
-create_plot_data_exp_half_life_cycle_TCOPTGMF(figure_path,figure_name)
+#create_plot_data_exp_half_life_cycle_TCOPTGMF(figure_path,figure_name)
 plot_exp_half_life_cycle_TCOPTGMF(figure_path,figure_name,save_types=['.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

@@ -196,11 +196,14 @@ C <NONPROPORTIONAL PARAMETERS>
 C <DAMAGE PARAMETERS>
       PD=1000.0D0"""
     outfile.close()
-    
-#for name in experiment_type_dict['NPR-IP']:
-#for name in ['7211']:
-for name in ['7028']:    
+
+if __name__ == '__main__':
     calculate_umat_parameters_in718()
-    workbench(name,copy=False)
-#    compare_exp_sim(name,2,'axial_stress','shear_stress')
-    compare_exp_sim(name,2,'axial_strain','axial_stress')
+
+##for name in experiment_type_dict['NPR-IP']:
+##for name in ['7211']:
+#for name in ['7028']:    
+#    calculate_umat_parameters_in718()
+#    workbench(name,copy=False)
+##    compare_exp_sim(name,2,'axial_stress','shear_stress')
+#    compare_exp_sim(name,2,'axial_strain','axial_stress')

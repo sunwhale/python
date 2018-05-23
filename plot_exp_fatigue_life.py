@@ -37,8 +37,8 @@ def create_plot_data_exp_fatigue_life(fatigue_data,figure_path=None,figure_name=
     i = 0
     marker_list = ['s','o','^','D','<','^','>']
 #    for load_type in ['TC-IP','TC-OP','PRO-IP','NPR-IP','TC-90','TC-IP-TGMF','TC-OP-TGMF']:
-    for load_type in ['TC-IP','TC-OP','TC-IP-TGMF','TC-OP-TGMF','TC-IP-TGMF-TBC']:
-#    for load_type in ['TC-IP-TGMF','TC-IP-TGMF-TBC']:
+#    for load_type in ['TC-IP','TC-OP','TC-IP-TGMF','TC-OP-TGMF','TC-IP-TGMF-TBC']:
+    for load_type in ['TC-IP-TGMF','TC-IP-TGMF-TBC']:
 #    for load_type in ['TC-IP','TC-IP-TGMF']:
 #    for load_type in ['TC-OP','TC-OP-TGMF']:
         experimental_life = fatigue_data.loadTypeFilter(load_type,'experimental_life')
@@ -140,7 +140,8 @@ fatigue_file = '%s%s.csv' % (FatigueDirectory,'BM')
 fatigue_data = FatigueData(fatigue_file)
 figure_path = ArticleFigureDirectory
 #figure_name = 'plot_exp_fatigue_life'
-figure_name = 'plot_exp_fatigue_life_TGMF'
+#figure_name = 'plot_exp_fatigue_life_TGMF'
+figure_name = 'plot_exp_fatigue_life_TGMF-TBC'
 #figure_name = 'plot_exp_fatigue_life_IP'
 #figure_name = 'plot_exp_fatigue_life_OP'
 create_plot_data_exp_fatigue_life(fatigue_data,figure_path,figure_name)

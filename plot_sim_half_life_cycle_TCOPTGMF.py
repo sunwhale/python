@@ -28,7 +28,7 @@ def create_plot_data(figure_path=None,figure_name=None):
     plot_data = PlotData()
     experiment_log = ExperimentLog(ExperimentLogFile)
 #    for name in experiment_type_dict['TC-IP-TGMF']:
-    for name in ['7205']:
+    for name in ['7208']:
 #        print name
         experiment_log.output(name)
         regular = r'.*'
@@ -50,22 +50,6 @@ def create_plot_data(figure_path=None,figure_name=None):
         filename = SimulationDirectory + name + '.csv'
         sim = SimulationData(filename,period)
         print sim.half_life_cycle
-
-#        for i in range(1,sim.half_life_cycle,10):
-#            strain = sim.obtainNthCycle('axial_strain',i)
-#            stress = sim.obtainNthCycle('axial_stress',i)
-#            plot_data.addLine(strain*100,
-#                              stress,
-#                              xlabel=xlabel,
-#                              ylabel=ylabel,
-#                              linelabel=i,
-#                              linewidth=2,
-#                              linestyle='-',
-#                              marker=None,
-#                              markersize=12,
-#                              color='black')
-#            i += 1
-        
         strain = sim.obtainNthCycle('axial_strain',1)
         stress = sim.obtainNthCycle('axial_stress',1)
         plot_data.addLine(strain*100,
@@ -79,19 +63,19 @@ def create_plot_data(figure_path=None,figure_name=None):
                           markersize=12,
                           color=color_list[i])
         i += 1
-#        strain = sim.obtainNthCycle('axial_strain',10)
-#        stress = sim.obtainNthCycle('axial_stress',10)
-#        plot_data.addLine(strain*100,
-#                          stress,
-#                          xlabel=xlabel,
-#                          ylabel=ylabel,
-#                          linelabel='10th',
-#                          linewidth=2,
-#                          linestyle='-',
-#                          marker=None,
-#                          markersize=12,
-#                          color=color_list[i])
-#        i += 1
+        strain = sim.obtainNthCycle('axial_strain',10)
+        stress = sim.obtainNthCycle('axial_stress',10)
+        plot_data.addLine(strain*100,
+                          stress,
+                          xlabel=xlabel,
+                          ylabel=ylabel,
+                          linelabel='10th',
+                          linewidth=2,
+                          linestyle='-',
+                          marker=None,
+                          markersize=12,
+                          color=color_list[i])
+        i += 1
         strain = sim.obtainNthCycle('axial_strain',sim.half_life_cycle)
         stress = sim.obtainNthCycle('axial_stress',sim.half_life_cycle)
         plot_data.addLine(strain*100,
@@ -133,7 +117,7 @@ def plot(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # x,y limite
 #==============================================================================
-    plt.xlim(-1.5,1.5)
+    plt.xlim(-2.5,2.5)
     plt.ylim(-1200,1200)
 #==============================================================================
 # xy log scale
@@ -178,7 +162,7 @@ def plot(figure_path=None,figure_name=None,save_types=[]):
     plt.close()
 
 figure_path=ArticleFigureDirectory
-figure_name='plot_sim_half_life_cycle_TCIPTGMF'
+figure_name='plot_sim_half_life_cycle_TCOPTGMF'
 create_plot_data(figure_path,figure_name)
 plot(figure_path,figure_name,save_types=['.pdf'])
 

@@ -23,8 +23,8 @@ SimulationDirectory = 'F:\\Cloud\\Temp\\IN718_Sim\\'
 ExperimentLogFile = PythonDirectory + 'Inconel718_test_log.csv'
 #ExperimentLogFile = PythonDirectory + 'CMSX4_test_log.csv'
 #FatigueDirectory = 'F:\\Database\\Fatigue\\'
-FatigueDirectory = 'F:\\Cloud\\GitHub\\fatigue\\model\\'
-#FatigueDirectory = 'F:\\Cloud\\GitHub\\tgmf\\model\\'
+#FatigueDirectory = 'F:\\Cloud\\GitHub\\fatigue\\model\\'
+FatigueDirectory = 'F:\\Cloud\\GitHub\\tgmf\\model\\'
 ArticleFigureDirectory = 'F:\\Cloud\\GitHub\\doctor\\Figs\\python\\'
 #ArticleFigureDirectory = 'F:\\Cloud\\GitHub\\tgmf\\Figs\\'
 
@@ -126,7 +126,8 @@ experiment_type_dict['TC-IP-TGMF-TBC']=['7301','7302']
 #==============================================================================
 xylabels = {'axial_count':'N [cycle]',
             'runing_time':'Running Time [s]',
-            'temperature':'Temperature [$^{\circ}$C]',
+#            'temperature':'Temperature [$^{\circ}$C]',
+            'temperature':'Temperature [K]',
             'axial_disp':'Axial Displacement [mm]',
             'axial_force':'Axial Force [N]',
             'axial_strain':'Axial Strain $\\varepsilon$ [%]',
@@ -153,5 +154,5 @@ xylabels = {'axial_count':'N [cycle]',
 #==============================================================================
 # plot
 #==============================================================================
-marker_list = ['s','o','^','D']
-color_list = ['red','green','blue','cyan','magenta','black','yellow','orange']
+marker_list = ['s','o','^','D','p','<','>','v','h','8']
+color_list = ['red','green','blue','cyan','magenta','black','yellow','orange','lightgreen']

@@ -18,18 +18,18 @@ def create_plot_data(figure_path=None,figure_name=None):
 #==============================================================================
 # x,y label
 #==============================================================================
-    xlabel = xylabels['axial_strain']
+    xlabel = xylabels['axial_count']
     ylabel = xylabels['axial_stress']
 #==============================================================================
 # plot lines
 #==============================================================================
     i = 0
-    marker_list = ['s','o','^','D']
+#    marker_list = ['s','o','^','D']
+#    color_list = ['blue','red','black','green','yellow','orange','magenta','cyan']
     plot_data = PlotData()
     experiment_log = ExperimentLog(ExperimentLogFile)
-#    for name in experiment_type_dict['TC-IP-TGMF']:
-    for name in ['7205']:
-#        print name
+#    for name in experiment_type_dict['TC-IP-TGMF']+experiment_type_dict['TC-OP-TGMF']+['7301']:
+    for name in ['7042']:
         experiment_log.output(name)
         regular = r'.*'
         load_type = experiment_log.obtainItem(name,'load_type',regular)[0]
@@ -42,68 +42,91 @@ def create_plot_data(figure_path=None,figure_name=None):
         d_out = float(experiment_log.obtainItem(name,'d_out',regular)[0])
         gauge_length = float(experiment_log.obtainItem(name,'gauge_length',regular)[0])
         axial_strain = float(experiment_log.obtainItem(name,'axial_strain',regular)[0])
+        axial_displacement = float(experiment_log.obtainItem(name,'axial_displacement',regular)[0])
         angel_strain = float(experiment_log.obtainItem(name,'angel_strain',regular)[0])
         equivalent_strain = float(experiment_log.obtainItem(name,'equivalent_strain',regular)[0])
         period = float(experiment_log.obtainItem(name,'period',regular)[0])
         axial_temperature_phase = float(experiment_log.obtainItem(name,'axial_temperature_phase',regular)[0])
-    
-        filename = SimulationDirectory + name + '.csv'
-        sim = SimulationData(filename,period)
-        print sim.half_life_cycle
-
-#        for i in range(1,sim.half_life_cycle,10):
-#            strain = sim.obtainNthCycle('axial_strain',i)
-#            stress = sim.obtainNthCycle('axial_stress',i)
-#            plot_data.addLine(strain*100,
-#                              stress,
-#                              xlabel=xlabel,
-#                              ylabel=ylabel,
-#                              linelabel=i,
-#                              linewidth=2,
-#                              linestyle='-',
-#                              marker=None,
-#                              markersize=12,
-#                              color='black')
-#            i += 1
+        life = float(experiment_log.obtainItem(name,'comments',regular)[0])
         
-        strain = sim.obtainNthCycle('axial_strain',1)
-        stress = sim.obtainNthCycle('axial_stress',1)
-        plot_data.addLine(strain*100,
-                          stress,
+        exp_filename = ExperimentDirectory + name + '.csv'
+        experiment = ExperimentData(exp_filename)
+        cycle,peak,valley = experiment.obtainPeakValley('axial_stress')
+        mean = (np.array(peak) + np.array(valley))/2
+    
+        plot_data.addLine(cycle,
+                          peak,
                           xlabel=xlabel,
                           ylabel=ylabel,
-                          linelabel='1st',
+                          linelabel=str(axial_strain) + '%',
+                          linewidth=2,
+                          linestyle='',
+                          marker=marker_list[i],
+                          markersize=12,
+                          color=color_list[i],
+                          skip=1,
+                          log_skip=2)
+#        plot_data.addLine(cycle,
+#                          mean,
+#                          xlabel=xlabel,
+#                          ylabel=ylabel,
+#                          linelabel='',
+#                          linewidth=2,
+#                          linestyle='',
+#                          marker=marker_list[i],
+#                          markersize=12,
+#                          color=color_list[i],
+#                          skip=1,
+#                          log_skip=2)
+        plot_data.addLine(cycle,
+                          valley,
+                          xlabel=xlabel,
+                          ylabel=ylabel,
+                          linelabel='',
+                          linewidth=2,
+                          linestyle='',
+                          marker=marker_list[i],
+                          markersize=12,
+                          color=color_list[i],
+                          skip=1,
+                          log_skip=2)
+                          
+        sim_filename = SimulationDirectory + name + '.csv'
+        simulation = SimulationData(sim_filename,period)
+        cycle,peak,valley = simulation.obtainPeakValley('axial_stress')
+        mean = (np.array(peak) + np.array(valley))/2
+        
+        plot_data.addLine(cycle,
+                          peak,
+                          xlabel=xlabel,
+                          ylabel=ylabel,
+                          linelabel=str(axial_strain) + '%',
                           linewidth=2,
                           linestyle='-',
                           marker=None,
                           markersize=12,
                           color=color_list[i])
-        i += 1
-#        strain = sim.obtainNthCycle('axial_strain',10)
-#        stress = sim.obtainNthCycle('axial_stress',10)
-#        plot_data.addLine(strain*100,
-#                          stress,
+#        plot_data.addLine(cycle,
+#                          mean,
 #                          xlabel=xlabel,
 #                          ylabel=ylabel,
-#                          linelabel='10th',
+#                          linelabel='',
 #                          linewidth=2,
 #                          linestyle='-',
 #                          marker=None,
 #                          markersize=12,
 #                          color=color_list[i])
-#        i += 1
-        strain = sim.obtainNthCycle('axial_strain',sim.half_life_cycle)
-        stress = sim.obtainNthCycle('axial_stress',sim.half_life_cycle)
-        plot_data.addLine(strain*100,
-                          stress,
+        plot_data.addLine(cycle,
+                          valley,
                           xlabel=xlabel,
                           ylabel=ylabel,
-                          linelabel='$N_{\\rm{f}}/2$',
+                          linelabel='',
                           linewidth=2,
                           linestyle='-',
                           marker=None,
                           markersize=12,
                           color=color_list[i])
+        
         i += 1
     
     plot_data.writeToFile(figure_path,figure_name)
@@ -133,12 +156,12 @@ def plot(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # x,y limite
 #==============================================================================
-    plt.xlim(-1.5,1.5)
-    plt.ylim(-1200,1200)
+    plt.xlim(1,1e4)
+#    plt.ylim(-200,200)
 #==============================================================================
 # xy log scale
 #==============================================================================
-#    plt.xscale('log')
+    plt.xscale('log')
 #    plt.yscale('log')
 #==============================================================================
 # xy axial equal
@@ -155,16 +178,16 @@ def plot(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # http://stackoverflow.com/questions/21920233/matplotlib-log-scale-tick-label-number-formatting
 #==============================================================================
-    ax.xaxis.set_major_locator(MultipleLocator(0.5))
-    ax.xaxis.set_minor_locator(MultipleLocator(0.1))
-    ax.xaxis.set_major_formatter(ScalarFormatter())
-    ax.yaxis.set_major_locator(MultipleLocator(400))
+#    ax.xaxis.set_major_locator(MultipleLocator(0.5))
+#    ax.xaxis.set_minor_locator(MultipleLocator(0.1))
+#    ax.xaxis.set_major_formatter(ScalarFormatter())
+#    ax.yaxis.set_major_locator(MultipleLocator(500))
     ax.yaxis.set_minor_locator(MultipleLocator(100))
-    ax.yaxis.set_major_formatter(ScalarFormatter())
+#    ax.yaxis.set_major_formatter(ScalarFormatter())
 #==============================================================================
 # show legend
 #==============================================================================
-    lg = plt.legend(title='Cycle',loc=0)
+    lg = plt.legend(title='$\Delta\\varepsilon/2$',loc=1)
     title = lg.get_title()
     title.set_fontsize(16)
 #==============================================================================
@@ -178,7 +201,7 @@ def plot(figure_path=None,figure_name=None,save_types=[]):
     plt.close()
 
 figure_path=ArticleFigureDirectory
-figure_name='plot_sim_half_life_cycle_TCIPTGMF'
+figure_name='plot_cmp_pv_TCIF400'
 create_plot_data(figure_path,figure_name)
 plot(figure_path,figure_name,save_types=['.pdf'])
 

@@ -142,7 +142,7 @@ def workbench(name,loading_cycles=None,copy=True):
 #              min_inc = 0.0001, max_inc = 5, nonlinear = 'ON')
     step = Step(predefined_temperature = temperature_mean, 
               time_period = int(load.total_runing_time), initial_inc = 0.005, 
-              min_inc = 0.0001, max_inc = period/200.0, nonlinear = 'OFF')
+              min_inc = 0.0001, max_inc = period/40.0, nonlinear = 'OFF')
 #==============================================================================
 # UMAT
 #==============================================================================
@@ -193,5 +193,8 @@ def workbench(name,loading_cycles=None,copy=True):
 #print number_list
 
 if __name__ == '__main__':
-    for name in ['7101','7102','7103']:
-        workbench(name,loading_cycles=1)
+#    for name in ['7101','7102','7103']:
+#        workbench(name,loading_cycles=1)
+    for name in ['7005','7008','7010']:
+        workbench(name,loading_cycles=150)
+        

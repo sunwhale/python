@@ -63,7 +63,7 @@ def create_plot_data_cmp_pv_TCIPTGMF(figure_path=None,figure_name=None):
                           linewidth=2,
                           linestyle='',
                           marker=marker_list[i],
-                          markersize=12,
+                          markersize=9,
                           color=color_list[i],
                           skip=1,
                           log_skip=2)
@@ -75,7 +75,7 @@ def create_plot_data_cmp_pv_TCIPTGMF(figure_path=None,figure_name=None):
                           linewidth=2,
                           linestyle='',
                           marker=marker_list[i],
-                          markersize=12,
+                          markersize=9,
                           color=color_list[i],
                           skip=1,
                           log_skip=2)
@@ -87,7 +87,7 @@ def create_plot_data_cmp_pv_TCIPTGMF(figure_path=None,figure_name=None):
                           linewidth=2,
                           linestyle='',
                           marker=marker_list[i],
-                          markersize=12,
+                          markersize=9,
                           color=color_list[i],
                           skip=1,
                           log_skip=2)
@@ -203,7 +203,7 @@ def plot_cmp_pv_TCIPTGMF(figure_path=None,figure_name=None,save_types=[]):
 
 figure_path=ArticleFigureDirectory
 figure_name='plot_cmp_pv_TCIPTGMF'
-#create_plot_data_cmp_pv_TCIPTGMF(figure_path,figure_name)
+create_plot_data_cmp_pv_TCIPTGMF(figure_path,figure_name)
 plot_cmp_pv_TCIPTGMF(figure_path,figure_name,save_types=['.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

@@ -116,6 +116,17 @@ def workbench(name,loading_cycles=None,copy=True):
                             [0,axial_strain,0,-1*axial_strain,0],
                             [0,shear_strain,0,-1*shear_strain,0])
 #==============================================================================
+# Monotonic tension
+#==============================================================================
+    if load_type == 'monotonic tension':
+        use_exp_data = False
+        period = 200
+        load.setLoadBiaxial(1,
+                            [0,period],
+                            [temperature_min,temperature_mean],
+                            [0,0.025],
+                            [0,0.0])
+#==============================================================================
 # load from experiment data
 #==============================================================================
     if use_exp_data:
@@ -131,7 +142,7 @@ def workbench(name,loading_cycles=None,copy=True):
 #              min_inc = 0.0001, max_inc = 5, nonlinear = 'ON')
     step = Step(predefined_temperature = temperature_mean, 
               time_period = int(load.total_runing_time), initial_inc = 0.005, 
-              min_inc = 0.0001, max_inc = period/40.0, nonlinear = 'OFF')
+              min_inc = 0.0001, max_inc = period/200.0, nonlinear = 'OFF')
 #==============================================================================
 # UMAT
 #==============================================================================
@@ -181,6 +192,6 @@ def workbench(name,loading_cycles=None,copy=True):
 #number_list += experiment_log.keyFilter("(self.calculate == '1') & (self.load_type == 'cyclic tension compression')")
 #print number_list
 
-#for name in number_list:
-#    work(name)
-#workbench('7116',loading_cycles=1000)
+if __name__ == '__main__':
+    for name in ['7101','7102','7103']:
+        workbench(name,loading_cycles=1)

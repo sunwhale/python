@@ -17,16 +17,18 @@ from compare_exp_sim import compare_exp_sim
 
 def calculate_umat_parameters_in718(name='_output.txt'):
     parameters = []
-    yield_stress = 300.0
+    yield_stress = 500.0
     show = False
-    plastic_strain_list=[0.001,0.002,0.005,0.01,0.02]
+#    plastic_strain_list=[0.001,0.002,0.005,0.01,0.02]
 #    plastic_strain_list=[0.002,0.005,0.01,0.02,0.05]
+    plastic_strain_list=[0.00005,0.0001,0.0002,0.0005,0.001,0.002,0.004,0.01,0.02]
     umat = UMAT(UMATDirectory = UMATDirectory, 
                 UMATMainFile = 'MAIN_IN718.for',
                 ParameterFortranFile = 'PARAMETERS_IN718_TMF.for',
                 OutputFortranFile = 'OUTPUT.for',
                 OutputTextFile = name + '_output.txt')
     outfile = open(umat.ParameterFortranFileFullName, 'w')
+    print outfile.name
 #==============================================================================
 # 300C
 #==============================================================================

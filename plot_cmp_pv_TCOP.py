@@ -158,7 +158,7 @@ def plot_cmp_pv_TCOP(figure_path=None,figure_name=None,save_types=[]):
 # x,y limite
 #==============================================================================
     plt.xlim(1,1e4)
-#    plt.ylim(-200,200)
+#    plt.ylim(0,200)
 #==============================================================================
 # xy log scale
 #==============================================================================
@@ -203,7 +203,7 @@ def plot_cmp_pv_TCOP(figure_path=None,figure_name=None,save_types=[]):
 
 figure_path=ArticleFigureDirectory
 figure_name='plot_cmp_pv_TCOP'
-create_plot_data_cmp_pv_TCOP(figure_path,figure_name)
+#create_plot_data_cmp_pv_TCOP(figure_path,figure_name)
 plot_cmp_pv_TCOP(figure_path,figure_name,save_types=['.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

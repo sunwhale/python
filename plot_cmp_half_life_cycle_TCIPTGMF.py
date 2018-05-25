@@ -135,9 +135,9 @@ def plot_cmp_half_life_cycle_TCIPTGMF(figure_path=None,figure_name=None,save_typ
 #==============================================================================
 # http://stackoverflow.com/questions/21920233/matplotlib-log-scale-tick-label-number-formatting
 #==============================================================================
-    ax.xaxis.set_major_locator(MultipleLocator(0.5))
-    ax.xaxis.set_minor_locator(MultipleLocator(0.1))
-    ax.xaxis.set_major_formatter(ScalarFormatter())
+#    ax.xaxis.set_major_locator(MultipleLocator(0.5))
+#    ax.xaxis.set_minor_locator(MultipleLocator(0.1))
+#    ax.xaxis.set_major_formatter(ScalarFormatter())
     ax.yaxis.set_major_locator(MultipleLocator(400))
     ax.yaxis.set_minor_locator(MultipleLocator(100))
     ax.yaxis.set_major_formatter(ScalarFormatter())

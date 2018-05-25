@@ -61,9 +61,9 @@ def create_plot_data_cmp_pv_TCOPTGMF(figure_path=None,figure_name=None):
                           ylabel=ylabel,
                           linelabel=str(axial_strain) + '%',
                           linewidth=2,
-                          linestyle='--',
-                          marker=None,
-                          markersize=12,
+                          linestyle='',
+                          marker=marker_list[i],
+                          markersize=9,
                           color=color_list[i],
                           skip=10)
         plot_data.addLine(cycle,
@@ -72,9 +72,9 @@ def create_plot_data_cmp_pv_TCOPTGMF(figure_path=None,figure_name=None):
                           ylabel=ylabel,
                           linelabel='',
                           linewidth=2,
-                          linestyle='--',
-                          marker=None,
-                          markersize=12,
+                          linestyle='',
+                          marker=marker_list[i],
+                          markersize=9,
                           color=color_list[i],
                           skip=10)
         plot_data.addLine(cycle,
@@ -83,9 +83,9 @@ def create_plot_data_cmp_pv_TCOPTGMF(figure_path=None,figure_name=None):
                           ylabel=ylabel,
                           linelabel='',
                           linewidth=2,
-                          linestyle='--',
-                          marker=None,
-                          markersize=12,
+                          linestyle='',
+                          marker=marker_list[i],
+                          markersize=9,
                           color=color_list[i],
                           skip=10)
                           

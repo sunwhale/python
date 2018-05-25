@@ -65,3 +65,4 @@ number,din mm,dout mm,gauge length mm,load type,axial control mode,rotational co
 0001,0.00 ,6.50 ,8.50 ,cyclic tension compression,strain,rotation,650,-,ramp:+-0.0,-,0,-,-,0,0 ,0 ,T:1s,0.001mm/mm,2016-11-16,fracture at 1000,1
 0002,0.00 ,6.50 ,8.50 ,cyclic tension compression,strain,rotation,650,-,ramp:+-0.0,-,0,-,-,0,0 ,0 ,T:1s,0.001mm/mm,2016-11-16,fracture at 1000,1
 0003,0.00 ,6.50 ,8.50 ,cyclic tension compression,strain,rotation,650,-,ramp:+-0.0,-,0,-,-,0,0 ,0 ,T:1s,0.001mm/mm,2016-11-16,fracture at 1000,1
+7042-2,10.00 ,12.00 ,25.00 ,cyclic tension compression,strain,rotation,400,-,ramp:+-1,-,0,-,-,+-1,0 ,0 ,T:20s,0.05Hz,2016-01-26,fracture at 600,1

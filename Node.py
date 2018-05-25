@@ -981,6 +981,10 @@ class Node:
         result = fsolve(f, [1])
         fatigue_life = int(result[0])
         
+        print 'self.g',self.g
+        print 'fatigue_coefficient',fatigue_coefficient
+        print 'fatigue_life',fatigue_life
+        
         return self.outputFatigueLife(theta_critical_plane,
                                       phi_critical_plane,
                                       delta_gamma_critical_plane,
@@ -1110,7 +1114,7 @@ class Node:
 #        return tgmf_corrected_term
 
     def TGMFCorrectedTerm(self,heatflux_at_sigma_nmax_critical_plane,temperature_at_sigma_nmax_critical_plane):
-        hf_norm = 0.0
+#        hf_norm = 0.0
         for hf in heatflux_at_sigma_nmax_critical_plane:
             hf_norm += (hf/calculate_conductivity_by_temperature_in718(temperature_at_sigma_nmax_critical_plane))**2
         tgmf_corrected_term = 1.0 + self.g*hf_norm/(1300.0-temperature_at_sigma_nmax_critical_plane)

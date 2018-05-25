@@ -9,28 +9,25 @@ import matplotlib.pyplot as plt
 import shutil
 import matplotlib as mpl
 from matplotlib.ticker import MultipleLocator,ScalarFormatter,FormatStrFormatter 
-from Data import *
+from Data import FatigueData,PlotData,ExperimentData,ExperimentLog,SimulationData
 from Constants import *
 from plot_format import plot_format
 from Material import material_in718,material_in718_NASA,material_in718_BHU
 
-def create_plot_data_cmp_pv_TCIP(figure_path=None,figure_name=None):
+def create_plot_data(figure_path=None,figure_name=None):
 #==============================================================================
 # x,y label
 #==============================================================================
-    xlabel = xylabels['axial_count']
+    xlabel = xylabels['axial_strain']
     ylabel = xylabels['axial_stress']
 #==============================================================================
 # plot lines
 #==============================================================================
     i = 0
-#    marker_list = ['s','o','^','D']
-#    color_list = ['blue','red','black','green','yellow','orange','magenta','cyan']
+    marker_list = ['s','o','^','D']
     plot_data = PlotData()
     experiment_log = ExperimentLog(ExperimentLogFile)
-#    for name in experiment_type_dict['TC-IP-TGMF']+experiment_type_dict['TC-OP-TGMF']+['7301']:
-    for name in experiment_type_dict['TC-IP']:
-#    for name in ['7208']:
+    for name in ['7101','7102','7103']:
         experiment_log.output(name)
         regular = r'.*'
         load_type = experiment_log.obtainItem(name,'load_type',regular)[0]
@@ -43,96 +40,48 @@ def create_plot_data_cmp_pv_TCIP(figure_path=None,figure_name=None):
         d_out = float(experiment_log.obtainItem(name,'d_out',regular)[0])
         gauge_length = float(experiment_log.obtainItem(name,'gauge_length',regular)[0])
         axial_strain = float(experiment_log.obtainItem(name,'axial_strain',regular)[0])
-        axial_displacement = float(experiment_log.obtainItem(name,'axial_displacement',regular)[0])
         angel_strain = float(experiment_log.obtainItem(name,'angel_strain',regular)[0])
         equivalent_strain = float(experiment_log.obtainItem(name,'equivalent_strain',regular)[0])
         period = float(experiment_log.obtainItem(name,'period',regular)[0])
         axial_temperature_phase = float(experiment_log.obtainItem(name,'axial_temperature_phase',regular)[0])
-        life = float(experiment_log.obtainItem(name,'comments',regular)[0])
         
-        exp_filename = ExperimentDirectory + name + '.csv'
-        experiment = ExperimentData(exp_filename)
-        cycle,peak,valley = experiment.obtainPeakValley('axial_stress')
-        mean = (np.array(peak) + np.array(valley))/2
-    
-        plot_data.addLine(cycle,
-                          peak,
+        filename = ExperimentDirectory + name + '.csv'
+        experiment = ExperimentData(filename)
+        strain = experiment.axial_strain
+        stress = experiment.axial_stress
+        
+        plot_data.addLine(strain*100,
+                          stress,
                           xlabel=xlabel,
                           ylabel=ylabel,
-                          linelabel=str(axial_strain) + '%',
+                          linelabel='Exp.' + str(int(temperature_mode[0])+273)+'K',
                           linewidth=2,
                           linestyle='',
                           marker=marker_list[i],
                           markersize=12,
                           color=color_list[i],
-                          skip=1,
-                          log_skip=2)
-        plot_data.addLine(cycle,
-                          mean,
-                          xlabel=xlabel,
-                          ylabel=ylabel,
-                          linelabel='',
-                          linewidth=2,
-                          linestyle='',
-                          marker=marker_list[i],
-                          markersize=12,
-                          color=color_list[i],
-                          skip=1,
-                          log_skip=2)
-        plot_data.addLine(cycle,
-                          valley,
-                          xlabel=xlabel,
-                          ylabel=ylabel,
-                          linelabel='',
-                          linewidth=2,
-                          linestyle='',
-                          marker=marker_list[i],
-                          markersize=12,
-                          color=color_list[i],
-                          skip=1,
-                          log_skip=2)
-                          
+                          skip=20)
+        
         sim_filename = SimulationDirectory + name + '.csv'
+        period = 200
         simulation = SimulationData(sim_filename,period)
-        cycle,peak,valley = simulation.obtainPeakValley('axial_stress')
-        mean = (np.array(peak) + np.array(valley))/2
+        strain = simulation.axial_strain
+        stress = simulation.axial_stress
         
-        plot_data.addLine(cycle,
-                          peak,
+        plot_data.addLine(strain*100,
+                          stress,
                           xlabel=xlabel,
                           ylabel=ylabel,
-                          linelabel=str(axial_strain) + '%',
+                          linelabel='Sim.' + str(int(temperature_mode[0])+273)+'K',
                           linewidth=2,
                           linestyle='-',
                           marker=None,
                           markersize=12,
                           color=color_list[i])
-        plot_data.addLine(cycle,
-                          mean,
-                          xlabel=xlabel,
-                          ylabel=ylabel,
-                          linelabel='',
-                          linewidth=2,
-                          linestyle='-',
-                          marker=None,
-                          markersize=12,
-                          color=color_list[i])
-        plot_data.addLine(cycle,
-                          valley,
-                          xlabel=xlabel,
-                          ylabel=ylabel,
-                          linelabel='',
-                          linewidth=2,
-                          linestyle='-',
-                          marker=None,
-                          markersize=12,
-                          color=color_list[i])
-        
         i += 1
-    
     plot_data.writeToFile(figure_path,figure_name)
     
-def plot_cmp_pv_TCIP(figure_path=None,figure_name=None,save_types=[]):
+def plot(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # title
 #==============================================================================
@@ -157,12 +106,12 @@ def plot_cmp_pv_TCIP(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # x,y limite
 #==============================================================================
-    plt.xlim(1,1e4)
-    plt.ylim(-200,0)
+    plt.xlim(0,2)
+#    plt.ylim(-1400,1400)
 #==============================================================================
 # xy log scale
 #==============================================================================
-    plt.xscale('log')
+#    plt.xscale('log')
 #    plt.yscale('log')
 #==============================================================================
 # xy axial equal
@@ -183,14 +132,12 @@ def plot_cmp_pv_TCIP(figure_path=None,figure_name=None,save_types=[]):
 #    ax.xaxis.set_minor_locator(MultipleLocator(0.1))
 #    ax.xaxis.set_major_formatter(ScalarFormatter())
 #    ax.yaxis.set_major_locator(MultipleLocator(500))
-    ax.yaxis.set_minor_locator(MultipleLocator(100))
+#    ax.yaxis.set_minor_locator(MultipleLocator(100))
 #    ax.yaxis.set_major_formatter(ScalarFormatter())
 #==============================================================================
 # show legend
 #==============================================================================
-    lg = plt.legend(title='$\Delta\\varepsilon/2$',loc=1)
-    title = lg.get_title()
-    title.set_fontsize(16)
+    plt.legend(loc=0)
 #==============================================================================
 # save figures
 #==============================================================================
@@ -202,8 +149,8 @@ def plot_cmp_pv_TCIP(figure_path=None,figure_name=None,save_types=[]):
     plt.close()
 
 figure_path=ArticleFigureDirectory
-figure_name='plot_cmp_pv_TCIP'
-#create_plot_data_cmp_pv_TCIP(figure_path,figure_name)
-plot_cmp_pv_TCIP(figure_path,figure_name,save_types=['.pdf'])
+figure_name='plot_cmp_monotonic_tensile'
+create_plot_data(figure_path,figure_name)
+plot(figure_path,figure_name,save_types=['.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

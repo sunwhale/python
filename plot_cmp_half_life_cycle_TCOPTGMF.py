@@ -59,7 +59,7 @@ def create_plot_data_cmp_half_life_cycle_TCOPTGMF(figure_path=None,figure_name=N
                           stress,
                           xlabel=xlabel,
                           ylabel=ylabel,
-                          linelabel=str(axial_strain) + '%',
+                          linelabel='Exp.' + str(axial_strain) + '%',
                           linewidth=2,
                           linestyle='',
                           marker=marker_list[i],
@@ -77,7 +77,7 @@ def create_plot_data_cmp_half_life_cycle_TCOPTGMF(figure_path=None,figure_name=N
                           stress,
                           xlabel=xlabel,
                           ylabel=ylabel,
-                          linelabel=str(axial_strain) + '%',
+                          linelabel='Sim.' + str(axial_strain) + '%',
                           linewidth=2,
                           linestyle='-',
                           marker=None,
@@ -135,9 +135,9 @@ def plot_cmp_half_life_cycle_TCOPTGMF(figure_path=None,figure_name=None,save_typ
 #==============================================================================
 # http://stackoverflow.com/questions/21920233/matplotlib-log-scale-tick-label-number-formatting
 #==============================================================================
-    ax.xaxis.set_major_locator(MultipleLocator(0.5))
-    ax.xaxis.set_minor_locator(MultipleLocator(0.1))
-    ax.xaxis.set_major_formatter(ScalarFormatter())
+#    ax.xaxis.set_major_locator(MultipleLocator(0.5))
+#    ax.xaxis.set_minor_locator(MultipleLocator(0.1))
+#    ax.xaxis.set_major_formatter(ScalarFormatter())
     ax.yaxis.set_major_locator(MultipleLocator(400))
     ax.yaxis.set_minor_locator(MultipleLocator(100))
     ax.yaxis.set_major_formatter(ScalarFormatter())

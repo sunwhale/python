@@ -20,17 +20,18 @@ def calculate_umat_parameters_in718(name='_output.txt'):
     show = False
 #    plastic_strain_list=[0.001,0.005,0.01,0.02]
     plastic_strain_list=[0.00005,0.0001,0.0002,0.0005,0.001,0.002,0.004,0.01,0.02]
-    umat = UMAT(UMATDirectory = 'F:\\UMAT\\CurrentVersion\\', 
-                UMATMainFile = 'MAIN_IN718.for',
+    umat = UMAT(UMATDirectory = 'F:\\GitHub\\umat\\', 
+                UMATMainFile = 'MAIN_IN718.for', 
                 ParameterFortranFile = 'PARAMETERS_IN718_TMF.for',
                 OutputFortranFile = 'OUTPUT.for',
                 OutputTextFile = name + '_output.txt')
     outfile = open(umat.ParameterFortranFileFullName, 'w')
+    print outfile.name
 #==============================================================================
 # 300C
 #==============================================================================
     temperature = 300.0
-    youngs_modulus, poisson_ratio, shear_modulus = calculate_elastic_by_temperature_in718(temperature)
+    youngs_modulus, poisson_ratio, shear_modulus, yield_stress = calculate_elastic_by_temperature_in718(temperature)
     
     name = '7101'
     exp_full_name = ExperimentDirectory + name + '.csv'
@@ -51,7 +52,7 @@ def calculate_umat_parameters_in718(name='_output.txt'):
 # 550C
 #==============================================================================
     temperature = 550.0
-    youngs_modulus, poisson_ratio, shear_modulus = calculate_elastic_by_temperature_in718(temperature)
+    youngs_modulus, poisson_ratio, shear_modulus, yield_stress = calculate_elastic_by_temperature_in718(temperature)
     
     name = '7103'
     exp_full_name = ExperimentDirectory + name + '.csv'
@@ -72,7 +73,7 @@ def calculate_umat_parameters_in718(name='_output.txt'):
 # 650C
 #==============================================================================
     temperature = 650.0
-    youngs_modulus, poisson_ratio, shear_modulus = calculate_elastic_by_temperature_in718(temperature)
+    youngs_modulus, poisson_ratio, shear_modulus, yield_stress = calculate_elastic_by_temperature_in718(temperature)
     
     name = '7102'
     exp_full_name = ExperimentDirectory + name + '.csv'
@@ -176,5 +177,5 @@ C <DAMAGE PARAMETERS>
     outfile.close()
     
 calculate_umat_parameters_in718()
-for name in ['7036']:
-    workbench(name)
+#for name in ['7036']:
+#    workbench(name)

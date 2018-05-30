@@ -59,7 +59,7 @@ def create_plot_data(figure_path=None,figure_name=None):
                           stress,
                           xlabel=xlabel,
                           ylabel=ylabel,
-                          linelabel=str(axial_strain) + '%',
+                          linelabel='Exp.',
                           linewidth=2,
                           linestyle='',
                           marker=marker_list[i],
@@ -77,7 +77,7 @@ def create_plot_data(figure_path=None,figure_name=None):
                           stress,
                           xlabel=xlabel,
                           ylabel=ylabel,
-                          linelabel=str(axial_strain) + '%',
+                          linelabel='Sim.',
                           linewidth=2,
                           linestyle='-',
                           marker=None,
@@ -144,7 +144,7 @@ def plot(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # show legend
 #==============================================================================
-    lg = plt.legend(title='$\Delta\\varepsilon/2$',loc=0)
+    lg = plt.legend(title='',loc=0)
     title = lg.get_title()
     title.set_fontsize(16)
 #==============================================================================

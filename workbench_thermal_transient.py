@@ -219,7 +219,7 @@ predefined_temperature = 20 - absolute_zero
 d_out = 8.5e-3
 height = 80.0e-3
 total_power = 6400.0
-reflect = 0.10
+reflect = 0.15
 emissivity = 0.95
 power_percent_exp_list = [0.3,0.5,0.7,0.9]
 exp_list = []
@@ -259,7 +259,7 @@ threshold = 0.20
 name = '0001'
 AbaqusWorkDirectory = AbaqusTempDirectory + name + '\\'
 
-for exp in exp_list[:1]:
+for exp in exp_list[:]:
     result_list = []
     for i in range(4):
         outer_temperature = exp[1][i] + 273.15

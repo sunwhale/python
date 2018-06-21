@@ -7,7 +7,7 @@ Created on Thu Jan 05 11:50:47 2017
 
 WorkbenchDirectory = 'F:\\UMAT\\'
 UMATDirectory = 'F:\\GitHub\\umat\\'
-UMATDirectory = 'F:\\UMAT\\CurrentVersion\\'
+#UMATDirectory = 'F:\\UMAT\\CurrentVersion\\'
 PythonDirectory = 'F:\\GitHub\\python\\'
 InputDirectory = WorkbenchDirectory + 'Input\\'
 InputTemplate = 'Tension3DTemplate.inp'
@@ -25,7 +25,9 @@ ExperimentLogFile = PythonDirectory + 'Inconel718_test_log.csv'
 #FatigueDirectory = 'F:\\Database\\Fatigue\\'
 #FatigueDirectory = 'F:\\Cloud\\GitHub\\fatigue\\model\\'
 FatigueDirectory = 'F:\\Cloud\\GitHub\\tgmf\\model\\'
+#FatigueDirectory = 'F:\\Cloud\\GitHub\\tgmf\\model\\test\\'
 ArticleFigureDirectory = 'F:\\Cloud\\GitHub\\doctor\\Figs\\python\\'
+#ArticleFigureDirectory = 'F:\\Cloud\\GitHub\\doctor\\Figs\\test\\'
 #ArticleFigureDirectory = 'F:\\Cloud\\GitHub\\tgmf\\Figs\\'
 
 experiment_type_list = []
@@ -37,7 +39,7 @@ experiment_type_list.append(['TC-90',['7025']])
 experiment_type_list.append(['TC-IF',['7110','7111','7112','7113','7114','7115','7116']])
 experiment_type_list.append(['TC-IP-TGMF',['7201','7203','7204','7205','7206']])
 experiment_type_list.append(['TC-OP-TGMF',['7207','7208','7209','7210']])
-#experiment_type_list.append(['TC-IP-TGMF-TBC',['7301','7302']])
+experiment_type_list.append(['TC-IP-TGMF-TBC',['7301','7302']])
 #experiment_type_list.append(['NPR-IP',['7046']])
 
 experiment_type_dict = {}
@@ -148,7 +150,7 @@ xylabels = {'axial_count':'N [cycle]',
             'equivalent_strain_amplitude':'Equivalent Strain Amplitude $\Delta\\varepsilon_{\\rm{ep}}/2$ [%]',
             'experimental_life':'Experimental Fatigue Lifetime $N_{\\rm{f}}$',
             'predicted_life':'Predicted Fatigue Lifetime $N_{\\rm{p}}$',
-            'mean_stress':'Mean Stress $\sigma_{m}$ [MPa]',
+            'mean_stress':'Mean Stress $\sigma_{\\rm m}$ [MPa]',
             }
             
 #==============================================================================

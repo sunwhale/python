@@ -65,7 +65,8 @@ def create_plot_data_cmp_pv_TCOPTGMF(figure_path=None,figure_name=None):
                           marker=marker_list[i],
                           markersize=9,
                           color=color_list[i],
-                          skip=10)
+                          skip=1,
+                          log_skip=2)
         plot_data.addLine(cycle,
                           mean,
                           xlabel=xlabel,
@@ -76,7 +77,8 @@ def create_plot_data_cmp_pv_TCOPTGMF(figure_path=None,figure_name=None):
                           marker=marker_list[i],
                           markersize=9,
                           color=color_list[i],
-                          skip=10)
+                          skip=1,
+                          log_skip=2)
         plot_data.addLine(cycle,
                           valley,
                           xlabel=xlabel,
@@ -87,7 +89,8 @@ def create_plot_data_cmp_pv_TCOPTGMF(figure_path=None,figure_name=None):
                           marker=marker_list[i],
                           markersize=9,
                           color=color_list[i],
-                          skip=10)
+                          skip=1,
+                          log_skip=2)
                           
         sim_filename = SimulationDirectory + name + '.csv'
         simulation = SimulationData(sim_filename,period)
@@ -154,7 +157,7 @@ def plot_cmp_pv_TCOPTGMF(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # x,y limite
 #==============================================================================
-#    plt.xlim(1,10000)
+    plt.xlim(1,1e5)
 #    plt.ylim(-200,200)
 #==============================================================================
 # xy log scale
@@ -200,7 +203,7 @@ def plot_cmp_pv_TCOPTGMF(figure_path=None,figure_name=None,save_types=[]):
 
 figure_path=ArticleFigureDirectory
 figure_name='plot_cmp_pv_TCOPTGMF'
-create_plot_data_cmp_pv_TCOPTGMF(figure_path,figure_name)
+#create_plot_data_cmp_pv_TCOPTGMF(figure_path,figure_name)
 plot_cmp_pv_TCOPTGMF(figure_path,figure_name,save_types=['.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

@@ -155,8 +155,8 @@ def plot(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # annotate
 #==============================================================================
-    plt.text(5,-100,r'TGMF-IP',fontsize=14)
-    plt.text(5,100,r'TGMF-OP',fontsize=14)
+    plt.text(5,-100,r'TC-IP-TGMF',fontsize=14)
+    plt.text(5,100,r'TC-OP-TGMF',fontsize=14)
 #    plt.text(10,-700,r'Valley stress',fontsize=14)
     
 #    plt.annotate(r'Peak stresses',xy=(1,1000),xytext=(100,1000),fontsize=14,color='black',arrowprops=dict(arrowstyle='->',color='black'))

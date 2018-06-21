@@ -124,7 +124,7 @@ def plot_exp_pv_TCIPTGMFTBC(figure_path=None,figure_name=None,save_types=[]):
 # x,y limite
 #==============================================================================
     plt.xlim(1,10000)
-#    plt.ylim(-200,200)
+    plt.ylim(-1200,1200)
 #==============================================================================
 # xy log scale
 #==============================================================================
@@ -148,9 +148,9 @@ def plot_exp_pv_TCIPTGMFTBC(figure_path=None,figure_name=None,save_types=[]):
 #    ax.xaxis.set_major_locator(MultipleLocator(0.5))
 #    ax.xaxis.set_minor_locator(MultipleLocator(0.1))
 #    ax.xaxis.set_major_formatter(ScalarFormatter())
-#    ax.yaxis.set_major_locator(MultipleLocator(500))
+    ax.yaxis.set_major_locator(MultipleLocator(400))
     ax.yaxis.set_minor_locator(MultipleLocator(100))
-#    ax.yaxis.set_major_formatter(ScalarFormatter())
+    ax.yaxis.set_major_formatter(ScalarFormatter())
 #==============================================================================
 # show legend
 #==============================================================================
@@ -169,7 +169,7 @@ def plot_exp_pv_TCIPTGMFTBC(figure_path=None,figure_name=None,save_types=[]):
 
 figure_path=ArticleFigureDirectory
 figure_name='plot_exp_pv_TCIPTGMFTBC'
-#create_plot_data_exp_pv_TCIPTGMFTBC(figure_path,figure_name)
+create_plot_data_exp_pv_TCIPTGMFTBC(figure_path,figure_name)
 plot_exp_pv_TCIPTGMFTBC(figure_path,figure_name,save_types=['.pdf'])
 
 shutil.copy(__file__,ArticleFigureDirectory)

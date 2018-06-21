@@ -212,9 +212,9 @@ abaqus_input_file.writelines('0.1, 200., 1e-07, 20., ' + '\n')
 #===============================================================================
 # Add boundary conditions
 #===============================================================================
-TracePro_file = TraceProDirectory + 'Heat128Pixels_1mm_1mm.txt'
+TracePro_file = TraceProDirectory + 'Heat128Pixels_D1.0mm_S1.0mm.txt'
 emissivity = 0.95
-efficiency = 0.95
+efficiency = 1.0
 list1 = open(TracePro_file,"r").readlines()	
 list2 = [i.strip() for i in list1]
 list3 = [j.split('\t') for j in list2]

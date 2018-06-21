@@ -19,9 +19,9 @@ def create_plot_data(figure_path=None,figure_name=None):
 # x,y label
 #==============================================================================
     xlabel = xylabels['temperature']
-#    ylabel = '$r_0^k$'
-#    ylabel = '$r_{\Delta \\rm{s}}^k$'
-    ylabel = '$a_1^k$'
+    ylabel = '$r_0^k$ [MPa]'
+#    ylabel = '$r_{\Delta \\rm{s}}^k$ [MPa]'
+#    ylabel = '$a_1^k$'
 #    ylabel = '$b_1^k$'
 #==============================================================================
 # plot lines
@@ -44,17 +44,17 @@ def create_plot_data(figure_path=None,figure_name=None):
     r0 = np.array(r0_list)
     rdelta = np.array(rdelta_list)
 
-#    for i in range(len(r0[0])):
-#        plot_data.addLine(temperature,
-#                          r0[:,i],
-#                          xlabel=xlabel,
-#                          ylabel=ylabel,
-#                          linelabel=('$k=%s$' % str(i+1)),
-#                          linewidth=2,
-#                          linestyle='-',
-#                          marker=marker_list[i],
-#                          markersize=12,
-#                          color=color_list[i])
+    for i in range(len(r0[0])):
+        plot_data.addLine(temperature,
+                          r0[:,i],
+                          xlabel=xlabel,
+                          ylabel=ylabel,
+                          linelabel=('$k=%s$' % str(i+1)),
+                          linewidth=2,
+                          linestyle='-',
+                          marker=marker_list[i],
+                          markersize=12,
+                          color=color_list[i])
 
 #    for i in range(len(r0[0])):
 #        plot_data.addLine(temperature,
@@ -68,17 +68,17 @@ def create_plot_data(figure_path=None,figure_name=None):
 #                          markersize=12,
 #                          color=color_list[i])
                           
-    plot_data.addLine(temperature,
-                      a1_list,
-                      xlabel=xlabel,
-                      ylabel=ylabel,
-                      linelabel='$a_1^k$',
-                      linewidth=2,
-                      linestyle='-',
-                      marker=marker_list[i],
-                      markersize=12,
-                      color=color_list[i])
-    i += 1
+#    plot_data.addLine(temperature,
+#                      a1_list,
+#                      xlabel=xlabel,
+#                      ylabel=ylabel,
+#                      linelabel='$a_1^k$',
+#                      linewidth=2,
+#                      linestyle='-',
+#                      marker=marker_list[i],
+#                      markersize=12,
+#                      color=color_list[i])
+#    i += 1
     
 #    plot_data.addLine(temperature,
 #                      b1_list,
@@ -133,8 +133,8 @@ def plot(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
     plt.xlim(400,1000)
 #    plt.ylim(-150,0)
-#    plt.ylim(0,300)
-    plt.ylim(0.2,0.6)
+    plt.ylim(0,300)
+#    plt.ylim(0.2,0.6)
 #==============================================================================
 # xy log scale
 #==============================================================================
@@ -180,9 +180,9 @@ def plot(figure_path=None,figure_name=None,save_types=[]):
     plt.close()
 
 figure_path=ArticleFigureDirectory
-#figure_name='plot_umat_parameters_r0k'
+figure_name='plot_umat_parameters_r0k'
 #figure_name='plot_umat_parameters_rdeltak'
-figure_name='plot_umat_parameters_a1'
+#figure_name='plot_umat_parameters_a1'
 #figure_name='plot_umat_parameters_b1b2'
 create_plot_data(figure_path,figure_name)
 plot(figure_path,figure_name,save_types=['.pdf'])

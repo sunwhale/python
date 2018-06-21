@@ -24,7 +24,7 @@ def create_plot_data_exp_pv(figure_path=None,figure_name=None):
 # plot lines
 #==============================================================================
     i = 0
-    marker_list = ['s','o','^','D']
+#    marker_list = ['s','o','^','D']
 #    color_list = ['blue','red','black','green','cyan','orange','magenta','yellow']
     plot_data = PlotData()
     experiment_log = ExperimentLog(ExperimentLogFile)
@@ -59,10 +59,11 @@ def create_plot_data_exp_pv(figure_path=None,figure_name=None):
                           ylabel=ylabel,
                           linelabel=str(int(temperature_mode[0])+273)+'K',
                           linewidth=2,
-                          linestyle='-',
-                          marker=None,
+                          linestyle='',
+                          marker=marker_list[i],
                           markersize=12,
-                          color=color_list[i])
+                          color=color_list[i],
+                          skip=5)
 #        plot_data.addLine(cycle,
 #                          mean,
 #                          xlabel=xlabel,
@@ -79,10 +80,11 @@ def create_plot_data_exp_pv(figure_path=None,figure_name=None):
                           ylabel=ylabel,
                           linelabel='',
                           linewidth=2,
-                          linestyle='-',
-                          marker=None,
+                          linestyle='',
+                          marker=marker_list[i],
                           markersize=12,
-                          color=color_list[i])
+                          color=color_list[i],
+                          skip=5)
         i += 1
         
         sim_filename = SimulationDirectory + name + '.csv'

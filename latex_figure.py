@@ -34,9 +34,12 @@ def isTextFile(filename):
 #latex_name = 'F:\\GitHub\\tmf\\tmf.tex'
 #figures_directory = 'F:\\GitHub\\tmf\\figures\\'
 
-latex_name = 'F:\\GitHub\\fatigue\\fatigue.tex'
-figures_directory = 'F:\\GitHub\\fatigue\\figures\\'
+#latex_name = 'F:\\GitHub\\fatigue\\fatigue.tex'
+#figures_directory = 'F:\\GitHub\\fatigue\\figures\\'
 
+latex_name = 'F:\\GitHub\\thermal\\thermal.tex'
+figures_directory = 'F:\\GitHub\\thermal\\figures\\'
+    
 lines = read_file(latex_name)
 
 """

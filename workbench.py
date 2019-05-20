@@ -195,6 +195,6 @@ def workbench(name,loading_cycles=None,copy=True):
 if __name__ == '__main__':
 #    for name in ['7101','7102','7103']:
 #        workbench(name,loading_cycles=1)
-    for name in ['7005','7008','7010']:
-        workbench(name,loading_cycles=150)
+    for name in ['7005']:
+        workbench(name,loading_cycles=10)
         

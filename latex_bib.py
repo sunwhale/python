@@ -57,8 +57,11 @@ latex_name_list = ['F:\\GitHub\\doctor\\chapter1\\chapter1.tex',
                    'F:\\GitHub\\doctor\\chapter9\\chapter9.tex',
 #                   'F:\\GitHub\\doctor\\chapter10\\chapter10.tex',
                    ]
-                   
-bib_name = 'F:\\GitHub\\doctor\\mybib1.bib'
+latex_name_list = ['F:\\GitHub\\yangs\\Paper_1.tex']
+
+
+# bib_name = 'F:\\GitHub\\doctor\\mybib1.bib'
+bib_name = 'F:\\GitHub\\yangs\\Reference.bib'
 
 label_list = []
 for latex_name in latex_name_list:

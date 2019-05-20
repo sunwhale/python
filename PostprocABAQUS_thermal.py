@@ -36,7 +36,7 @@ for filename in filenames:
         frames = odb.steps['Step-1'].frames
 #        for i in range(len(odb.rootAssembly.instances['PART-1-1'].nodes)):
 #            resultfile = open('node_' + str(i+1) + '.csv', 'w')
-        for i in [5]:
+        for i in [7]:
             resultfile = open(filename.split('.')[0] + '.csv', 'w')
             header = ''
             header += 'NodeLabel,'

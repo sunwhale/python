@@ -138,7 +138,7 @@ def obtain_youngs_modulus(strain_stress_curve,elastic_limit=0.002):
         strain_list = []
         stress_list = []
         for i in range(len(strain)):
-            if strain[i]>=0.0 and strain[i]<=elastic_limit:
+            if strain[i]>=0.001 and strain[i]<=elastic_limit:
                 strain_list.append(strain[i])
                 stress_list.append(stress[i])
         x = np.array(strain_list)

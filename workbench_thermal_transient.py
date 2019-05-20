@@ -17,7 +17,7 @@ from ambient_temperature import *
 
 def workbench(name,loading_cycles=None,copy=True,film_coefficient=0.0,sink_temperature=0.0,
               temperature_list=[],thermal_strain_list=[0.0,-0.0],heat_flux=0.0,
-              film_coefficient_outer=0.0,film_coefficient_inner=0.0,emissivity=0.95,
+              film_coefficient_outer=0.0,film_coefficient_inner=0.0,emissivity=0.80,
               sink_temperature_inner=293.15,sink_temperature_outer=293.15,outer_temperature=293.15):
     """
     某试件对应的边界条件下的数值模拟。
@@ -146,7 +146,7 @@ def workbench(name,loading_cycles=None,copy=True,film_coefficient=0.0,sink_tempe
 #    step = Step(predefined_temperature = int(exp.initial_temperature), 
 #              time_period = int(load.total_runing_time), initial_inc = 0.005, 
 #              min_inc = 0.0001, max_inc = 5, nonlinear = 'ON')
-    step = Step(predefined_temperature = 293.5, 
+    step = Step(predefined_temperature = 20.0, 
               time_period = int(load.total_runing_time), initial_inc = 0.00001, 
               min_inc = 0.00000001, max_inc = period/40.0, nonlinear = 'OFF')
 #==============================================================================
@@ -215,12 +215,12 @@ def calculate_film_coefficient(volume_flow):
     return film_coefficient_inner
         
 absolute_zero = -273.15
-predefined_temperature = 20 - absolute_zero
+predefined_temperature = 20
 d_out = 8.5e-3
 height = 80.0e-3
 total_power = 6400.0
-reflect = 0.15
-emissivity = 0.95
+reflect = 0.2
+emissivity = 0.80
 power_percent_exp_list = [0.3,0.5,0.7,0.9]
 exp_list = []
 outer_temperature_list = [
@@ -262,7 +262,7 @@ AbaqusWorkDirectory = AbaqusTempDirectory + name + '\\'
 for exp in exp_list[:]:
     result_list = []
     for i in range(4):
-        outer_temperature = exp[1][i] + 273.15
+        outer_temperature = exp[1][i]
         power_percent_exp = exp[0][i]
         if power_percent_exp == 0.3:
             write_json_file(AbaqusWorkDirectory+'ambient_temperature.txt',ambient_temperature_30)
@@ -274,11 +274,11 @@ for exp in exp_list[:]:
             write_json_file(AbaqusWorkDirectory+'ambient_temperature.txt',ambient_temperature_90)
         volume_flow = exp[2]
         film_coefficient_inner = calculate_film_coefficient(volume_flow) * 1.0
-        film_coefficient_outer = 0.025
+        film_coefficient_outer = 0.005
 #        sink_temperature_inner = 50/0.6*(power_percent_exp-threshold)*(1.0)/(1.0-threshold)+20+273.15
-        sink_temperature_inner = 20+273.15
+        sink_temperature_inner = 20
 #        sink_temperature_outer = 500/0.9*(power_percent_exp-threshold)*(1.0)/(1.0-threshold)+20+273.15
-        sink_temperature_outer = 20+273.15
+        sink_temperature_outer = 20
         heat_flux = emissivity*reflect*total_power*(power_percent_exp-threshold)*(1.0)/(1.0-threshold)/np.pi/d_out/height*1.0e-3
         workbench(name,loading_cycles=1,
                   heat_flux=heat_flux,
@@ -292,7 +292,7 @@ for exp in exp_list[:]:
         out_filename = 'F:\\Cloud\\Simulation\\Temperature\\%s_%s_.csv' % (int(power_percent_exp*100),volume_flow)
         copy_file(sim_filename,out_filename)
         simulation = SimulationData(sim_filename,1)
-        temperature = simulation.temperature[-1] - 273.15
+        temperature = simulation.temperature[-1] + 273.15
         heat_flux_1 = simulation.heat_flux_1[-1]
         heat_flux_2 = simulation.heat_flux_2[-1]
         power_percent_cal = -1.0*heat_flux_1*np.pi*8.5e-3*80e-3/6.4

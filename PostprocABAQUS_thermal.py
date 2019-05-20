@@ -84,7 +84,7 @@ for filename in filenames:
 #                line += '%s,' % (z)
                 line += '%s,' % (frame.frameId)
                 line += '%s,' % (frame.frameValue)
-                line += '%s,' % (T_field_comp.values[0].data)
+                line += '%s,' % (T_field_comp.values[0].data + 273.15)
 #                line += '%s,' % (nset_val_U.data[0])
 #                line += '%s,' % (nset_val_U.data[1])
 #                line += '%s,' % (E_field_comp.getScalarField(componentLabel=E_field_name+'11').values[0].data)

@@ -377,8 +377,25 @@ mdb.models['Model-1'].TabularAmplitude(name='Amp-Ambient-Temperature', timeSpan=
 #==============================================================================
 # predifined field
 #==============================================================================
+#a = mdb.models['Model-1'].rootAssembly
+#region = a.instances['Part-1-1'].sets['Set-1']
+#mdb.models['Model-1'].Temperature(name='Predefined Field-1', createStepName='Initial', region=region, distributionType=UNIFORM, crossSectionDistribution=CONSTANT_THROUGH_THICKNESS, magnitudes=(predefined_temperature, ))
+
 a = mdb.models['Model-1'].rootAssembly
-region = a.instances['Part-1-1'].sets['Set-1']
+f1 = a.instances['Part-1-1'].faces
+faces1 = f1.getSequenceFromMask(mask=('[#f ]', ), )
+e1 = a.instances['Part-1-1'].edges
+edges1 = e1.getSequenceFromMask(mask=('[#1fff ]', ), )
+v1 = a.instances['Part-1-1'].vertices
+verts1 = v1.getSequenceFromMask(mask=('[#3ff ]', ), )
+f2 = a.instances['Part-2-1'].faces
+faces2 = f2.getSequenceFromMask(mask=('[#1ff ]', ), )
+e2 = a.instances['Part-2-1'].edges
+edges2 = e2.getSequenceFromMask(mask=('[#1ffffff ]', ), )
+v2 = a.instances['Part-2-1'].vertices
+verts2 = v2.getSequenceFromMask(mask=('[#1ffff ]', ), )
+region = regionToolset.Region(vertices=verts1+verts2, edges=edges1+edges2, 
+    faces=faces1+faces2)
 mdb.models['Model-1'].Temperature(name='Predefined Field-1', createStepName='Initial', region=region, distributionType=UNIFORM, crossSectionDistribution=CONSTANT_THROUGH_THICKNESS, magnitudes=(predefined_temperature, ))
 
 
@@ -437,7 +454,7 @@ mdb.models['Model-1'].ContactProperty('IntProp-Conduction')
 mdb.models['Model-1'].interactionProperties['IntProp-Conduction'].ThermalConductance(
     definition=TABULAR, clearanceDependency=ON, pressureDependency=OFF, 
     temperatureDependencyC=OFF, massFlowRateDependencyC=OFF, dependenciesC=0, 
-    clearanceDepTable=((1.0, 0.0), (0.0, 1.0)))
+    clearanceDepTable=((0.5, 0.0), (0.0, 1.0)))
 #: The interaction property "IntProp-1" has been created.
 a = mdb.models['Model-1'].rootAssembly
 s1 = a.instances['Part-1-1'].edges

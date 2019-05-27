@@ -35,8 +35,7 @@ def create_plot_data(figure_path=None,figure_name=None):
 #    for name in experiment_type_dict['TC-OP']:
 #    for name in experiment_type_dict['PRO-IP']:
 #    for name in experiment_type_dict['NPR-IP']+experiment_type_dict['PRO-IP']+['7110','7111','7112','7113','7114']:
-    for name in ['7047']:
-        
+    for name in ['7111']:        
         experiment_log.output(name)
         regular = r'.*'
         load_type = experiment_log.obtainItem(name,'load_type',regular)[0]

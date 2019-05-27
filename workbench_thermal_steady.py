@@ -15,6 +15,7 @@ from Work_thermal_transient import Step,UMAT,Load,Job
 from Functions import copy_file,read_json_file,write_json_file
 from ambient_temperature import *
 
+
 def workbench(name,loading_cycles=None,copy=True,film_coefficient=0.0,sink_temperature=0.0,
               temperature_list=[],thermal_strain_list=[0.0,-0.0],heat_flux=0.0,
               film_coefficient_outer=0.0,film_coefficient_inner=0.0,emissivity=0.95,
@@ -221,7 +222,7 @@ height = 80.0e-3
 total_power = 6400.0
 reflect = 0.125
 emissivity = 0.80
-power_percent_exp_list = [0.3,0.5,0.7,0.9]
+power_percent_exp_list = [0.3,0.4,0.5,0.6]
 exp_list = []
 outer_temperature_list = [
 215,
@@ -229,21 +230,21 @@ outer_temperature_list = [
 495,
 654,
 ]
-exp_list.append([power_percent_exp_list,outer_temperature_list,67])
+exp_list.append([power_percent_exp_list,outer_temperature_list,60])
 outer_temperature_list = [
 277,
 435,
 603,
 757.5,
 ]
-exp_list.append([power_percent_exp_list,outer_temperature_list,50])
+exp_list.append([power_percent_exp_list,outer_temperature_list,40])
 outer_temperature_list = [
 400,
 575,
 730,
 870,
 ]
-exp_list.append([power_percent_exp_list,outer_temperature_list,25])
+exp_list.append([power_percent_exp_list,outer_temperature_list,20])
 outer_temperature_list = [
 440,
 602.5,
@@ -252,67 +253,95 @@ outer_temperature_list = [
 ]
 exp_list.append([power_percent_exp_list,outer_temperature_list,0])
 
-print exp_list
+#print exp_list
 plot_list = []
 out_list = []
 threshold = 0.18
 name = '0001'
 AbaqusWorkDirectory = AbaqusTempDirectory + name + '\\'
 
-for exp in exp_list[:]:
-    result_list = []
-    for i in range(4):
-        outer_temperature = exp[1][i]
-        power_percent_exp = exp[0][i]
-        if power_percent_exp == 0.3:
-            write_json_file(AbaqusWorkDirectory+'ambient_temperature.txt',ambient_temperature_30)
-        if power_percent_exp == 0.5:
-            write_json_file(AbaqusWorkDirectory+'ambient_temperature.txt',ambient_temperature_50)
-        if power_percent_exp == 0.7:
-            write_json_file(AbaqusWorkDirectory+'ambient_temperature.txt',ambient_temperature_70)
-        if power_percent_exp == 0.9:
-            write_json_file(AbaqusWorkDirectory+'ambient_temperature.txt',ambient_temperature_90)
-        volume_flow = exp[2]
-        film_coefficient_inner = calculate_film_coefficient(volume_flow) * 0.45
-        film_coefficient_outer = 0.0005
-#        sink_temperature_inner = 50/0.6*(power_percent_exp-threshold)*(1.0)/(1.0-threshold)+20+273.15
-        sink_temperature_inner = 20
-#        sink_temperature_outer = 500/0.9*(power_percent_exp-threshold)*(1.0)/(1.0-threshold)+20+273.15
-        sink_temperature_outer = 20
-        heat_flux = emissivity*reflect*total_power*(power_percent_exp-threshold)*(1.0)/(1.0-threshold)/np.pi/d_out/height*1.0e-3
-        workbench(name,loading_cycles=1,
-                  heat_flux=heat_flux,
-                  film_coefficient_outer=film_coefficient_outer,
-                  film_coefficient_inner=film_coefficient_inner,
-                  emissivity=emissivity,
-                  sink_temperature_inner=sink_temperature_inner,
-                  sink_temperature_outer=sink_temperature_outer,
-                  outer_temperature=outer_temperature)
-        sim_filename = SimulationDirectory + name + '.csv'
-        out_filename = 'F:\\Cloud\\Simulation\\Temperature\\%s_%s_.csv' % (int(power_percent_exp*100),volume_flow)
-        copy_file(sim_filename,out_filename)
-        simulation = SimulationData(sim_filename,1)
-        temperature = simulation.temperature[-1]
-        heat_flux_1 = simulation.heat_flux_1[-1]
-        heat_flux_2 = simulation.heat_flux_2[-1]
-        power_percent_cal = -1.0*heat_flux_1*np.pi*8.5e-3*80e-3/6.4
-        efficiency = power_percent_cal/power_percent_exp
-        result_list.append([power_percent_exp,film_coefficient_inner,temperature,heat_flux_1])
-        out_list.append([exp[2],power_percent_exp,film_coefficient_inner,temperature,heat_flux_1,power_percent_cal,efficiency])
-    plot_list.append([exp[2],result_list])
+#for exp in exp_list[:]:
+#    result_list = []
+#    for i in range(4):
+#        outer_temperature = exp[1][i]
+#        power_percent_exp = exp[0][i]
+#        if power_percent_exp == 0.3:
+#            write_json_file(AbaqusWorkDirectory+'ambient_temperature.txt',ambient_temperature_constant)
+#        if power_percent_exp == 0.4:
+#            write_json_file(AbaqusWorkDirectory+'ambient_temperature.txt',ambient_temperature_constant)
+#        if power_percent_exp == 0.5:
+#            write_json_file(AbaqusWorkDirectory+'ambient_temperature.txt',ambient_temperature_constant)
+#        if power_percent_exp == 0.6:
+#            write_json_file(AbaqusWorkDirectory+'ambient_temperature.txt',ambient_temperature_constant)
+#        volume_flow = exp[2]
+#        film_coefficient_inner = calculate_film_coefficient(volume_flow) * 0.45
+#        film_coefficient_outer = 0.003
+##        sink_temperature_inner = 50/0.6*(power_percent_exp-threshold)*(1.0)/(1.0-threshold)+20+273.15
+#        sink_temperature_inner = 20
+##        sink_temperature_outer = 500/0.9*(power_percent_exp-threshold)*(1.0)/(1.0-threshold)+20+273.15
+#        sink_temperature_outer = 20
+#        heat_flux = emissivity*reflect*total_power*(power_percent_exp-threshold)*(1.0)/(1.0-threshold)/np.pi/d_out/height*1.0e-3
+#        workbench(name,loading_cycles=1,
+#                  heat_flux=heat_flux,
+#                  film_coefficient_outer=film_coefficient_outer,
+#                  film_coefficient_inner=film_coefficient_inner,
+#                  emissivity=emissivity,
+#                  sink_temperature_inner=sink_temperature_inner,
+#                  sink_temperature_outer=sink_temperature_outer,
+#                  outer_temperature=outer_temperature)
+#        sim_filename = SimulationDirectory + name + '.csv'
+#        out_filename = 'F:\\Cloud\\Simulation\\Temperature\\%s_%s_.csv' % (int(power_percent_exp*100),volume_flow)
+#        copy_file(sim_filename,out_filename)
+#        simulation = SimulationData(sim_filename,1)
+#        temperature = simulation.temperature[-1]
+#        heat_flux_1 = simulation.heat_flux_1[-1]
+#        heat_flux_2 = simulation.heat_flux_2[-1]
+#        power_percent_cal = -1.0*heat_flux_1*np.pi*8.5e-3*80e-3/6.4
+#        efficiency = power_percent_cal/power_percent_exp
+#        result_list.append([power_percent_exp,film_coefficient_inner,temperature,heat_flux_1])
+#        out_list.append([exp[2],power_percent_exp,film_coefficient_inner,temperature,heat_flux_1,power_percent_cal,efficiency])
+#    plot_list.append([exp[2],result_list])
 
-AbaqusWorkDirectory = AbaqusTempDirectory + name + '\\'
+#AbaqusWorkDirectory = AbaqusTempDirectory + name + '\\'
+#
+#out_name = '%s_%s_%s_%s' % (film_coefficient_inner,sink_temperature_inner,film_coefficient_outer,sink_temperature_outer)
+#
+#for plot in plot_list:
+#    p = np.array(plot[1])
+#    plt.plot(p[:,0],p[:,2],label=plot[0],marker='s')
+#plt.legend(loc=0)
+#plt.savefig(AbaqusWorkDirectory + out_name + '.png', dpi=150, transparent=False)
+#plt.show()
 
-out_name = '%s_%s_%s_%s' % (film_coefficient_inner,sink_temperature_inner,film_coefficient_outer,sink_temperature_outer)
+#write_json_file('steady.txt',plot_list)
+sim_steady = read_json_file(AbaqusWorkDirectory + 'steady.txt')
 
-for plot in plot_list:
-    p = np.array(plot[1])
-    plt.plot(p[:,0],p[:,2],label=plot[0],marker='s')
-plt.legend(loc=0)
-plt.savefig(AbaqusWorkDirectory + out_name + '.png', dpi=150, transparent=False)
-plt.show()
+exp_steady = [
+[67, [[0.3, 215], [0.4, 338], [0.5, 495], [0.6, 654]]], 
+[50, [[0.3, 277], [0.4, 435], [0.5, 603], [0.6, 757.5]]], 
+[25, [[0.3, 440], [0.4, 602.5], [0.5, 759.5], [0.6, 899]]], 
+[0, [[0.3, 607], [0.4, 770], [0.5, 892], [0.6, 1015]]]
+]
+for i in range(4):
+    print sim_steady[i][0]
+    for j in range(4):
+        print sim_steady[i][1][j][0], int(sim_steady[i][1][j][2]), exp_steady[i][1][j][1]
 
-outfile = open(AbaqusWorkDirectory + out_name + '.csv', 'w')
-for r in out_list:
-    print >>outfile, '%s,%s,%s,%s,%s,%s,%s' % (r[0],r[1],r[2],r[3],r[4],r[5],r[6])
-outfile.close()
+for i in range(4):
+    print sim_steady[i][0]
+    for j in range(4):
+        print sim_steady[i][1][j][0], int(sim_steady[i][1][j][2]), exp_steady[i][1][j][1]
+        
+for exp in exp_steady:
+    p = np.array(exp[1])
+    plt.plot(p[:,0],p[:,1],label='exp'+str(exp[0]),marker='s',ls='')
+    
+for sim in sim_steady:
+    p = np.array(sim[1])
+    plt.plot(p[:,0],p[:,2],label='exp'+str(sim[0]),ls='--')
+#plt.legend(loc=0)
+
+#outfile = open(AbaqusWorkDirectory + out_name + '.csv', 'w')
+#for r in out_list:
+#    print >>outfile, '%s,%s,%s,%s,%s,%s,%s' % (r[0],r[1],r[2],r[3],r[4],r[5],r[6])
+#outfile.close()

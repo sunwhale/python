@@ -26,10 +26,10 @@ def create_plot_data_exp_temperature(figure_path=None,figure_name=None):
     i = 0
     marker_list = ['s','o','^','D']
     plot_data = PlotData()
-    for name in ['30_0_','50_0_','70_0_','90_0_']:
+#    for name in ['30_0_','50_0_','70_0_','90_0_']:
 #    for name in ['30_25_','50_25_','70_25_','90_25_']:
 #    for name in ['30_50_','50_50_','70_50_','90_50_']:
-#    for name in ['30_67_','50_67_','70_67_','90_67_']:
+    for name in ['30_67_','50_67_','70_67_','90_67_']:
 #    for name in ['90_0_','90_25_','90_50_','90_67_']:
 #    for name in ['70_0_','70_25_','70_50_','70_67_']:
 #    for name in ['50_0_','50_25_','50_50_','50_67_']:
@@ -45,8 +45,8 @@ def create_plot_data_exp_temperature(figure_path=None,figure_name=None):
                           ylabel=ylabel,
                           linelabel='Exp.' + name.split('_')[0] + '%',
                           linewidth=2,
-                          linestyle='',
-                          marker=marker_list[i],
+                          linestyle='--',
+                          marker='',
                           markersize=6,
                           color='auto')
         
@@ -54,7 +54,7 @@ def create_plot_data_exp_temperature(figure_path=None,figure_name=None):
         filename = SimulationDirectory + name + '.csv'
         simulation = SimulationData(filename,1)
         time = simulation.runing_time
-        temperature = simulation.temperature - 273.15
+        temperature = simulation.temperature
         plot_data.addLine(time,
                           temperature,
                           xlabel=xlabel,
@@ -94,12 +94,12 @@ def plot_exp_temperature(figure_path=None,figure_name=None,save_types=[]):
 #==============================================================================
 # x,y limite
 #==============================================================================
-    plt.xlim(1,60)
+    plt.xlim(1,1200)
     plt.ylim(0,1100)
 #==============================================================================
 # xy log scale
 #==============================================================================
-#    plt.xscale('log')
+    plt.xscale('log')
 #    plt.yscale('log')
 #==============================================================================
 # xy axial equal

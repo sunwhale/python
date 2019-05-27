@@ -361,9 +361,12 @@ mdb.models['Model-1'].TabularAmplitude(name='Displacement_3', timeSpan=STEP, smo
 # Displacement Triangular Wave 4
 mdb.models['Model-1'].TabularAmplitude(name='Displacement_4', timeSpan=STEP, smooth=SOLVER_DEFAULT, data=((0.0, 0.0), (60.0, 0.0*0.0099)))
 
+#mdb.models['Model-1'].TabularAmplitude(name='Amp-Heatflux', timeSpan=STEP, 
+#    smooth=SOLVER_DEFAULT, data=((0.0, 0.0), (5.0, 0.0), (6, 1.0), (31.0, 1.0), (32, 0.0), (
+#    10000.0, 0.0)))
+
 mdb.models['Model-1'].TabularAmplitude(name='Amp-Heatflux', timeSpan=STEP, 
-    smooth=SOLVER_DEFAULT, data=((0.0, 0.0), (5.0, 0.0), (6, 1.0), (31.0, 1.0), (32, 0.0), (
-    10000.0, 0.0)))
+    smooth=SOLVER_DEFAULT, data=((0.0, 0.0), (5.0, 0.0), (6, 1.0), (10000.0, 1.0)))
 
 ambient_temperature = read_json_file('ambient_temperature.txt')
 

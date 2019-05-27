@@ -14552,15 +14552,20 @@ ambient_temperature_30 = [
 [3630.69,23.40],
 ]
 
+ambient_temperature_constant = [
+[1.0,20.0],
+[10000.0,20.0],
+]
+
 #ambient_temperature_30 = [ [a[0],(a[1]-22.0)/2.0+295.15] for a in ambient_temperature_30]
 #ambient_temperature_50 = [ [a[0],(a[1]-22.0)/2.0+295.15] for a in ambient_temperature_50]
 #ambient_temperature_70 = [ [a[0],(a[1]-22.0)/2.0+295.15] for a in ambient_temperature_70]
 #ambient_temperature_90 = [ [a[0],(a[1]-22.0)/2.0+295.15] for a in ambient_temperature_90]
 
-#ambient_temperature_30 = [ [a[0],(a[1]-22.0)/2.0+20] for a in ambient_temperature_30]
-#ambient_temperature_50 = [ [a[0],(a[1]-22.0)/2.0+20] for a in ambient_temperature_50]
-#ambient_temperature_70 = [ [a[0],(a[1]-22.0)/2.0+20] for a in ambient_temperature_70]
-#ambient_temperature_90 = [ [a[0],(a[1]-22.0)/2.0+20] for a in ambient_temperature_90]
+#ambient_temperature_30 = [ [a[0],(a[1]-22.0)/1.5+20] for a in ambient_temperature_30]
+#ambient_temperature_50 = [ [a[0],(a[1]-22.0)/1.5+20] for a in ambient_temperature_50]
+#ambient_temperature_70 = [ [a[0],(a[1]-22.0)/1.5+20] for a in ambient_temperature_70]
+#ambient_temperature_90 = [ [a[0],(a[1]-22.0)/1.5+20] for a in ambient_temperature_90]
 
 ambient_temperature_30 = [ [a[0],a[1]] for a in ambient_temperature_30]
 ambient_temperature_50 = [ [a[0],a[1]] for a in ambient_temperature_50]

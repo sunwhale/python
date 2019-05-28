@@ -1,0 +1,23 @@
+number,din mm,dout mm,gauge length mm,load type,axial control mode,rotational control mode,temperature mode,axial displacement,axial strain %,axial force,rotation,angel strain deg,torque,equivalent strain %,axial rotational phase deg,axial temperature phase deg,Period,load rate or frequence,test date,comments,calculate
+01,0.00 ,10.00 ,12.00 ,monotonic tension,strain,rotation,20,-,fracture,-,-,-,-,-,0 ,0 ,-,-,2018-11-13,,0
+02,0.00 ,10.00 ,12.00 ,monotonic tension,strain,rotation,300,-,fracture,-,-,-,-,-,0 ,0 ,-,-,2018-11-14,,0
+03,0.00 ,10.00 ,12.00 ,monotonic tension,strain,rotation,550,-,fracture,-,-,-,-,-,0 ,0 ,-,-,2018-11-15,,0
+04,0.00 ,10.00 ,12.00 ,monotonic tension,strain,rotation,650,-,fracture,-,-,-,-,-,0 ,0 ,-,-,2018-11-16,,0
+05,0.00 ,10.00 ,12.00 ,cyclic tension compression,strain,rotation,300,-,ramp:+-1.0,-,-,-,-,+-1.0,0 ,0 ,T:5s,-,2018-11-17,fracture at 40,1
+06,0.00 ,10.00 ,12.00 ,cyclic tension compression,strain,rotation,300,-,ramp:+-0.8,-,-,-,-,+-0.8,0 ,0 ,T:10s,-,2018-11-18,fracture at 407,1
+07,0.00 ,10.00 ,12.00 ,cyclic tension compression,strain,rotation,300,-,ramp:+-0.5,-,-,-,-,+-0.5,0 ,0 ,T:4s,-,2018-11-19,fracture at 3884,1
+08,0.00 ,10.00 ,12.00 ,cyclic tension compression,strain,rotation,300,-,ramp:+-0.3,-,-,-,-,+-0.3,0 ,0 ,T:2s,-,2018-11-20,fracture at 48291,1
+09,0.00 ,10.00 ,12.00 ,cyclic tension compression,strain,rotation,650,-,ramp:+-0.81,-,-,-,-,+-0.81,0 ,0 ,T:10s,-,2018-11-21,fracture at 198,1
+10,0.00 ,10.00 ,12.00 ,cyclic tension compression,strain,rotation,650,-,ramp:+-0.5,-,-,-,-,+-0.5,0 ,0 ,T:4s,-,2018-11-22,fracture at 1303,1
+11,0.00 ,10.00 ,12.00 ,cyclic tension compression,strain,rotation,650,-,ramp:+-0.4,-,-,-,-,+-0.4,0 ,0 ,T:4s,-,2018-11-23,fracture at 2252,1
+12,0.00 ,10.00 ,12.00 ,cyclic tension compression,strain,rotation,650,-,ramp:+-0.3,-,-,-,-,+-0.3,0 ,0 ,T:2s,-,2018-11-24,fracture at 12619,1
+13,9.90 ,12.00 ,25.00 ,cyclic torsion,-,strain,650,-,,-,-,ramp:+-0.8,-,+-0.8,0 ,0 ,T:5s,-,2018-11-25,fracture at 116,1
+14,9.90 ,12.00 ,25.00 ,cyclic torsion,-,strain,650,-,,-,-,ramp:+-0.5,-,+-0.5,0 ,0 ,T:5s,-,2018-11-26,fracture at 1388,1
+15,9.90 ,12.00 ,25.00 ,cyclic torsion,-,strain,650,-,,-,-,ramp:+-0.3,-,+-0.3,0 ,0 ,T:5s,-,2018-11-27,fracture at 4586,1
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,

@@ -297,6 +297,34 @@ def calculate_elastic_by_temperature_in718(temperature):
     yield_stress = SY
     return youngs_modulus,poisson_ratio,shear_modulus,yield_stress
 #==============================================================================
+# calculate_elastic_by_temperature_k4169
+#==============================================================================
+def calculate_elastic_by_temperature_k4169(temperature):
+    """
+    计算杨氏模量应力与温度的函数。
+    temperature_list = [20,300,550,650]
+    youngs_modulus =   [151400,159800,127300,133900]
+    plt.plot(temperature_list,youngs_modulus)
+    x = np.array(temperature_list)
+    y = np.array(youngs_modulus)
+    z = np.polyfit(x,y,3)
+    p = np.poly1d(z)
+    print p
+    print z
+    plt.plot(x,p(x))
+    plt.show()
+    """
+    TEMP = temperature
+    EMOD = 1.676e+05+(7.94504942e+01)*TEMP+(-4.66156334e-01)*TEMP**2+(3.82389937e-04)*TEMP**3
+    ENU = 2.901300E-01+(1.457750E-05)*TEMP+(-2.067420E-07)*TEMP**2+(2.780300E-10)*TEMP**3
+    EG = 0.5*EMOD/(1.0+ENU)
+    SY = 1.15203105E+03+(-1.02927853E-01)*TEMP+7.30935695E-05*TEMP**2+(-2.15967142E-07)*TEMP**3
+    youngs_modulus = EMOD
+    poisson_ratio = ENU
+    shear_modulus = EG
+    yield_stress = SY
+    return youngs_modulus,poisson_ratio,shear_modulus,yield_stress
+#==============================================================================
 # calculate_elastic_by_temperature_in718
 #==============================================================================
 def calculate_conductivity_by_temperature_in718(temperature):

@@ -16,7 +16,7 @@ from Functions import copy_file,read_json_file,write_json_file
 from ambient_temperature import *
 
 
-def workbench(name,loading_cycles=None,copy=None,film_coefficient=0.0,sink_temperature=0.0,
+def workbench(name,loading_cycles=None,copy=True,film_coefficient=0.0,sink_temperature=0.0,
               temperature_list=[],thermal_strain_list=[0.0,-0.0],heat_flux=0.0,
               film_coefficient_outer=0.0,film_coefficient_inner=0.0,emissivity=0.95,
               sink_temperature_inner=293.15,sink_temperature_outer=293.15,outer_temperature=293.15):
@@ -24,7 +24,7 @@ def workbench(name,loading_cycles=None,copy=None,film_coefficient=0.0,sink_tempe
     某试件对应的边界条件下的数值模拟。
     """
     experiment_log = ExperimentLog(ExperimentLogFile)
-    experiment_log.output(name)
+#    experiment_log.output(name)
     regular = r'.*'
     load_type = experiment_log.obtainItem(name,'load_type',regular)[0]
     regular = r'\d+\.?\d*'
@@ -239,13 +239,13 @@ def calc_temperature(volume_flow,power_percent_exp_list):
     plot_list = []
     out_list = []
     temperature_list = []
-    threshold = 0.10
+    threshold = 0.18
     name = '0001'
     AbaqusWorkDirectory = AbaqusTempDirectory + name + '\\'
     
-    for exp in exp_list[:]:
+    for exp in exp_list[1:2]:
         result_list = []
-        for i in range(4):
+        for i in range(len(power_percent_exp_list)):
             outer_temperature = exp[1][i]
             power_percent_exp = exp[0][i]
             if power_percent_exp == 0.3:

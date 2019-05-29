@@ -243,7 +243,7 @@ class Job:
     def createDirectory(self):
         if not os.path.isdir(self.AbaqusWorkDirectory):
             os.makedirs(self.AbaqusWorkDirectory)
-            # print 'Create new directory:',self.AbaqusWorkDirectory
+            print 'Create new directory:',self.AbaqusWorkDirectory
     
     def copyFiles(self):
         shutil.copy(PythonDirectory + self.PythonPostProc, self.AbaqusWorkDirectory)
@@ -253,27 +253,27 @@ class Job:
     def createAbaqusCAE(self):
         self.createDirectory()
         outfile = open(self.AbaqusWorkDirectory + self.PythonPreprocParameters,'w')
-        # print >>outfile, '# -*- coding: utf-8 -*-'
-        # print >>outfile, 'from abaqus import *'
-        # print >>outfile, 'from abaqusConstants import *'
-        # print >>outfile, 'predefined_temperature = %s' % (self.Step.predefined_temperature)
-        # print >>outfile, 'time_period = %s' % (self.Step.time_period)
-        # print >>outfile, 'initial_inc = %s' % (self.Step.initial_inc)
-        # print >>outfile, 'min_inc = %s' % (self.Step.min_inc)
-        # print >>outfile, 'max_inc = %s' % (self.Step.max_inc)
-        # print >>outfile, 'nonlinear = %s' % (self.Step.nonlinear)
-        # print >>outfile, 'JobName = %r' % (self.JobName)
-        # print >>outfile, 'CAEName = %r' % (self.CAEName)
-        # print >>outfile, 'AbaqusWorkDirectory = %r' % (self.AbaqusWorkDirectory)
-        # print >>outfile, 'film_coefficient = %r' % (self.Load.film_coefficient)
-        # print >>outfile, 'sink_temperature = %r' % (self.Load.sink_temperature)
-        # print >>outfile, 'heat_flux = %r' % (self.Load.heat_flux)
-        # print >>outfile, 'emissivity = %r' % (self.Load.emissivity)
-        # print >>outfile, 'sink_temperature_inner = %r' % (self.Load.sink_temperature_inner)
-        # print >>outfile, 'sink_temperature_outer = %r' % (self.Load.sink_temperature_outer)
-        # print >>outfile, 'film_coefficient_outer = %r' % (self.Load.film_coefficient_outer)
-        # print >>outfile, 'film_coefficient_inner = %r' % (self.Load.film_coefficient_inner)
-        # print >>outfile, 'outer_temperature = %r' % (self.Load.outer_temperature)    
+        print >>outfile, '# -*- coding: utf-8 -*-'
+        print >>outfile, 'from abaqus import *'
+        print >>outfile, 'from abaqusConstants import *'
+        print >>outfile, 'predefined_temperature = %s' % (self.Step.predefined_temperature)
+        print >>outfile, 'time_period = %s' % (self.Step.time_period)
+        print >>outfile, 'initial_inc = %s' % (self.Step.initial_inc)
+        print >>outfile, 'min_inc = %s' % (self.Step.min_inc)
+        print >>outfile, 'max_inc = %s' % (self.Step.max_inc)
+        print >>outfile, 'nonlinear = %s' % (self.Step.nonlinear)
+        print >>outfile, 'JobName = %r' % (self.JobName)
+        print >>outfile, 'CAEName = %r' % (self.CAEName)
+        print >>outfile, 'AbaqusWorkDirectory = %r' % (self.AbaqusWorkDirectory)
+        print >>outfile, 'film_coefficient = %r' % (self.Load.film_coefficient)
+        print >>outfile, 'sink_temperature = %r' % (self.Load.sink_temperature)
+        print >>outfile, 'heat_flux = %r' % (self.Load.heat_flux)
+        print >>outfile, 'emissivity = %r' % (self.Load.emissivity)
+        print >>outfile, 'sink_temperature_inner = %r' % (self.Load.sink_temperature_inner)
+        print >>outfile, 'sink_temperature_outer = %r' % (self.Load.sink_temperature_outer)
+        print >>outfile, 'film_coefficient_outer = %r' % (self.Load.film_coefficient_outer)
+        print >>outfile, 'film_coefficient_inner = %r' % (self.Load.film_coefficient_inner)
+        print >>outfile, 'outer_temperature = %r' % (self.Load.outer_temperature)    
         outfile.close()
 
         shutil.copy(PythonDirectory + self.PythonPreproc, self.AbaqusWorkDirectory)
@@ -300,7 +300,7 @@ class Job:
         for i in range(0,self.Load.length,self.Load.segment):
             line = '%-20.10f,%-20.10f\n' % (self.Load.runing_time[i],self.Load.axial_strain[i])
             outfile.writelines(line)
-        # print 'Create ', output_filename
+        print 'Create ', output_filename
         outfile.close()
         #==============================================================================
         # *Amplitude, name=TempTriangularWave
@@ -311,7 +311,7 @@ class Job:
         for i in range(0,self.Load.length,self.Load.segment):
             line = '%-20.10f,%-20.10f\n' % (self.Load.runing_time[i],self.Load.temperature[i])
             outfile.writelines(line)
-        # print 'Create ', output_filename
+        print 'Create ', output_filename
         outfile.close()
         #==============================================================================
         # *Amplitude, name=PressureTriangularWave
@@ -322,7 +322,7 @@ class Job:
         for i in range(0,self.Load.length,self.Load.segment):
             line = '%-20.10f,%-20.10f\n' % (self.Load.runing_time[i],self.Load.axial_stress[i])
             outfile.writelines(line)
-        # print 'Create ', output_filename
+        print 'Create ', output_filename
         outfile.close()
         #==============================================================================
         # *Amplitude, name=RotaTriangularWave
@@ -333,7 +333,7 @@ class Job:
         for i in range(0,self.Load.length,self.Load.segment):
             line = '%-20.10f,%-20.10f\n' % (self.Load.runing_time[i],self.Load.shear_strain[i]/-6.0)
             outfile.writelines(line)
-        # print 'Create ', output_filename
+        print 'Create ', output_filename
         outfile.close()
         #==============================================================================
         # *Amplitude, name=TorqTriangularWave
@@ -344,7 +344,7 @@ class Job:
         for i in range(0,self.Load.length,self.Load.segment):
             line = '%-20.10f,%-20.10f\n' % (self.Load.runing_time[i],self.Load.torque[i])
             outfile.writelines(line)
-        # print 'Create ', output_filename
+        print 'Create ', output_filename
         
         infile = open(self.AbaqusWorkDirectory+self.InputName,'r')
         list1 = infile.readlines()
@@ -356,23 +356,23 @@ class Job:
             if '*Amplitude, name=DispTriangularWave' in list1[i]:
                 line = '*Include, input=%s\n' % (Name1)
                 i=i+1
-                # print line[:-1]
+                print line[:-1]
             elif '*Amplitude, name=TempTriangularWave' in list1[i]:
                 line = '*Include, input=%s\n' % (Name2)
                 i=i+1
-                # print line[:-1]
+                print line[:-1]
             elif '*Amplitude, name=PresTriangularWave' in list1[i]:
                 line = '*Include, input=%s\n' % (Name3)
                 i=i+1
-                # print line[:-1]
+                print line[:-1]
             elif '*Amplitude, name=RotaTriangularWave' in list1[i]:
                 line = '*Include, input=%s\n' % (Name4)
                 i=i+1
-                # print line[:-1]
+                print line[:-1]
             elif '*Amplitude, name=TorqTriangularWave' in list1[i]:
                 line = '*Include, input=%s\n' % (Name5)
                 i=i+1
-                # print line[:-1]
+                print line[:-1]
             else:
                 line = list1[i]
             i=i+1
@@ -381,34 +381,34 @@ class Job:
     
     def creatBatchFile(self):
         outfile = open(self.AbaqusWorkDirectory + 'Run.bat', 'w')
-        # print >>outfile, (r'call set JobName=%s' % self.JobName)
-        # print >>outfile, (r'call set UMAT=%s' % self.UMAT.UMATDirectory + self.UMAT.UMATMainFile) # 使用原始UMAT文件夹
-        # print >>outfile, (r'call set UMAT=%s' % self.AbaqusWorkUMATDirectory + self.UMAT.UMATMainFile) # 使用工作目录下UMAT文件夹
+        print >>outfile, (r'call set JobName=%s' % self.JobName)
+        print >>outfile, (r'call set UMAT=%s' % self.UMAT.UMATDirectory + self.UMAT.UMATMainFile) # 使用原始UMAT文件夹
+        print >>outfile, (r'call set UMAT=%s' % self.AbaqusWorkUMATDirectory + self.UMAT.UMATMainFile) # 使用工作目录下UMAT文件夹
         print >>outfile, r'call del *.rpy.*'
-        # print >>outfile, r'call del *.rpy'
-        # print >>outfile, r'call del %JobName%.com'
-        # print >>outfile, r'call del %JobName%.lck'
-        # print >>outfile, r'call del %JobName%.dat'
-        # print >>outfile, r'call del %JobName%.msg'
-        # print >>outfile, r'call del %JobName%.odb'
-        # print >>outfile, r'call del %JobName%.odb_f'
-        # print >>outfile, r'call del %JobName%.prt'
-        # print >>outfile, r'call del %JobName%.sim'
-        # print >>outfile, r'call del %JobName%.sta'
-#        # print >>outfile, r'call abaqus job=%JobName% user=%UMAT% cpus=1 int'
-        # print >>outfile, r'call abaqus job=%JobName% cpus=1 int'
+        print >>outfile, r'call del *.rpy'
+        print >>outfile, r'call del %JobName%.com'
+        print >>outfile, r'call del %JobName%.lck'
+        print >>outfile, r'call del %JobName%.dat'
+        print >>outfile, r'call del %JobName%.msg'
+        print >>outfile, r'call del %JobName%.odb'
+        print >>outfile, r'call del %JobName%.odb_f'
+        print >>outfile, r'call del %JobName%.prt'
+        print >>outfile, r'call del %JobName%.sim'
+        print >>outfile, r'call del %JobName%.sta'
+#        print >>outfile, r'call abaqus job=%JobName% user=%UMAT% cpus=1 int'
+        print >>outfile, r'call abaqus job=%JobName% cpus=1 int'
         outfile.close()
 
         outfile = open(self.AbaqusWorkDirectory + 'AutoPostProc.bat', 'w')
-        # print >>outfile, (r'call abaqus viewer noGUI=%s' % self.PythonPostProc)
+        print >>outfile, (r'call abaqus viewer noGUI=%s' % self.PythonPostProc)
         outfile.close()
         
         outfile = open(self.AbaqusWorkDirectory + 'AutoPreProc.bat', 'w')
-        # print >>outfile, (r'abaqus cae noGUI=%s' % self.PythonPreproc)
+        print >>outfile, (r'abaqus cae noGUI=%s' % self.PythonPreproc)
         outfile.close()
         
         outfile = open(self.AbaqusWorkDirectory + 'OpenCommandline.bat', 'w')
-        # print >>outfile, r'call cmd'
+        print >>outfile, r'call cmd'
         outfile.close()
         
     def run(self):
@@ -443,12 +443,12 @@ class Job:
             copy_suffix_files(self.AbaqusWorkDirectory,SimulationDirectory,suffixs=['csv'])
         
     def show(self):
-        # print 'PythonDirectory:',PythonDirectory
-        # print 'InputDirectory:',InputDirectory
-        # print 'AbaqusWorkDirectory:',self.AbaqusWorkDirectory
-        # print 'JobName:',self.JobName
-        # print 'CAEName:',self.CAEName
-        # print 'InputName:',self.InputName
-        # print 'PythonPostProc:',self.PythonPostProc
-        # print 'PythonPreproc:',self.PythonPreproc
-        # print 'ExpCSVFile:',self.ExpCSVFile
+        print 'PythonDirectory:',PythonDirectory
+        print 'InputDirectory:',InputDirectory
+        print 'AbaqusWorkDirectory:',self.AbaqusWorkDirectory
+        print 'JobName:',self.JobName
+        print 'CAEName:',self.CAEName
+        print 'InputName:',self.InputName
+        print 'PythonPostProc:',self.PythonPostProc
+        print 'PythonPreproc:',self.PythonPreproc
+        print 'ExpCSVFile:',self.ExpCSVFile

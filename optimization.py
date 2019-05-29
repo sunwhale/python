@@ -9,7 +9,7 @@ from scipy.optimize import fmin
 from workbench_thermal_optimization import calc_temperature
 
 
-volume_flow = 67.0
+volume_flow = 50.0
 power_percent_exp_list = [0.3,0.4,0.5,0.6]
 
 #print calc_temperature(volume_flow,power_percent_exp_list)
@@ -21,18 +21,23 @@ exp_steady = [
 [0, [[0.3, 607], [0.4, 770], [0.5, 892], [0.6, 1015]]]
 ]
 
+outfile = open('optimization.txt', 'w')
 
 def func(x):
+    volume_flow = x[0]
     sim = calc_temperature(volume_flow,power_percent_exp_list)
     exp = exp_steady[0][1]
     y = 0.0
     for i in range(4):
         y += (exp[i][1] - sim[i][1])**2
-    print x, y
+    print >>outfile, sim
+    print >>outfile, x, y
     return y
 
 
 if __name__ == '__main__':
     x0 = [volume_flow]    #猜一个初值 
-    xopt = fmin(func, x0, maxiter=20)    #求解
-    print xopt    #打印结果
+    xopt = fmin(func, x0, maxiter=30)    #求解
+    print xopt
+    print >>outfile, xopt    #打印结果
+    outfile.close()

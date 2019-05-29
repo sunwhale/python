@@ -221,8 +221,8 @@ class Job:
         self.AbaqusWorkUMATDirectory = AbaqusTempDirectory + JobName + '\\UMAT\\'
         self.PythonPostProc = 'PostprocABAQUS_thermal.py'
 #        self.PythonPreproc = 'PreprocABAQUS_thermal_transient.py'
-        self.PythonPreproc = 'PreprocABAQUS_thermal_transient_all.py'
-#        self.PythonPreproc = 'PreprocABAQUS_thermal_steady_all.py'
+#        self.PythonPreproc = 'PreprocABAQUS_thermal_transient_all.py'
+        self.PythonPreproc = 'PreprocABAQUS_thermal_steady_all.py'
         self.PythonConstants = 'Constants.py'
         self.PythonPreprocParameters = 'PreprocABAQUSParameters.py'
         self.ExpCSVFile = []

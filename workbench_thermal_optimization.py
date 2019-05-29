@@ -11,12 +11,12 @@ import matplotlib.pyplot as plt
 from Constants import *
 from Data import SimulationData,ExperimentData,ExperimentLog
 from Material import Material
-from Work_thermal_transient import Step,UMAT,Load,Job
+from Work_thermal_transient_optimization import Step,UMAT,Load,Job
 from Functions import copy_file,read_json_file,write_json_file
 from ambient_temperature import *
 
 
-def workbench(name,loading_cycles=None,copy=True,film_coefficient=0.0,sink_temperature=0.0,
+def workbench(name,loading_cycles=None,copy=None,film_coefficient=0.0,sink_temperature=0.0,
               temperature_list=[],thermal_strain_list=[0.0,-0.0],heat_flux=0.0,
               film_coefficient_outer=0.0,film_coefficient_inner=0.0,emissivity=0.95,
               sink_temperature_inner=293.15,sink_temperature_outer=293.15,outer_temperature=293.15):

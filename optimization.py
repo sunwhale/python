@@ -21,13 +21,14 @@ exp_steady = [
 [0, [[0.3, 607], [0.4, 770], [0.5, 892], [0.6, 1015]]]
 ]
 
+
 def func(x):
-    sim_steady = sim = calc_temperature(volume_flow,power_percent_exp_list)
+    sim = calc_temperature(volume_flow,power_percent_exp_list)
     exp = exp_steady[0][1]
-    sim = sim_steady[1][1]
     y = 0.0
     for i in range(4):
         y += (exp[i][1] - sim[i][1])**2
+    print x, y
     return y
 
 

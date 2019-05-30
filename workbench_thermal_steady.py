@@ -230,21 +230,21 @@ outer_temperature_list = [
 495,
 654,
 ]
-exp_list.append([power_percent_exp_list,outer_temperature_list,60])
+exp_list.append([power_percent_exp_list,outer_temperature_list,62.66])
 outer_temperature_list = [
 277,
 435,
 603,
 757.5,
 ]
-exp_list.append([power_percent_exp_list,outer_temperature_list,40])
+exp_list.append([power_percent_exp_list,outer_temperature_list,40.52])
 outer_temperature_list = [
 400,
 575,
 730,
 870,
 ]
-exp_list.append([power_percent_exp_list,outer_temperature_list,20])
+exp_list.append([power_percent_exp_list,outer_temperature_list,16.39])
 outer_temperature_list = [
 440,
 602.5,
@@ -256,7 +256,7 @@ exp_list.append([power_percent_exp_list,outer_temperature_list,0])
 #print exp_list
 plot_list = []
 out_list = []
-threshold = 0.10
+threshold = 0.18
 name = '0001'
 AbaqusWorkDirectory = AbaqusTempDirectory + name + '\\'
 
@@ -313,7 +313,7 @@ for exp in exp_list[:]:
 #plt.savefig(AbaqusWorkDirectory + out_name + '.png', dpi=150, transparent=False)
 #plt.show()
 
-#write_json_file('steady.txt',plot_list)
+write_json_file('steady.txt',plot_list)
 sim_steady = read_json_file(AbaqusWorkDirectory + 'steady.txt')
 
 exp_steady = [

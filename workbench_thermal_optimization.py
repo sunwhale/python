@@ -243,7 +243,7 @@ def calc_temperature(volume_flow,power_percent_exp_list):
     name = '0001'
     AbaqusWorkDirectory = AbaqusTempDirectory + name + '\\'
     
-    for exp in exp_list[1:2]:
+    for exp in exp_list[0:1]:
         result_list = []
         for i in range(len(power_percent_exp_list)):
             outer_temperature = exp[1][i]
